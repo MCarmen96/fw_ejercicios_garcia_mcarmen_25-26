@@ -1,0 +1,11 @@
+extends ../partials/layout
+block main 
+    h1.mb-4.text-center Recetas MCarmen
+    .row.mb-3
+        .col-md-6.mx-auto
+            .input-group
+                input#buscador.form-control(type="text" placeholder="Buscar por título, autor o género...")
+                button#btnBuscar.btn.btn-primary(type="button") Buscar
+    p#mensaje-vacio.text-center.text-muted.d-none
+
+

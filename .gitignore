@@ -11,8 +11,8 @@
 .pnpm-state/
 
 # Build/Dist Artifacts
-/dist/
-/build/
+#/dist/
+#/build/
 /out/
 /coverage/
 /temp/
