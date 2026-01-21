@@ -11,7 +11,7 @@
   <header>
      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Libreria Carmen</a>
+        <a class="navbar-brand" href="#">Recetas</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -21,9 +21,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="./catalogo.html">Home</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="./autores.html">Libros y Autores</a></li>
-                <li class="nav-item"><a class="nav-link" href="./clientes.html">Clientes</a></li>
-                <li class="nav-item"><a class="nav-link" href="./pedidos.html">Pedidos</a></li>
+
             </ul>
         </div>
     </div>
@@ -34,14 +32,18 @@
     <h1 class="mb-4 text-center">Recetas MCarmen</h1>
     <div class="row mb-3">
       <div class="col-md-6 mx-auto">
-        <div class="input-group">
-          <input class="form-control" id="buscador" type="text" placeholder="Buscar por título, autor o género..."/>
-          <button class="btn btn-primary" id="btnBuscar" type="button">Buscar</button>
+        <div class="form-group">
+          <label for="selectCategorias">Filtrar por categoría:</label>
+          <select class="form-select" id="selectCategorias">
+            <option value="" selected="selected" disabled="disabled">Cargando categorías...</option>
+          </select>
         </div>
+        <div id="recetasHome"></div>
       </div>
     </div>
-    <p class="text-center text-muted d-none" id="mensaje-vacio"></p>
   </main>
   <footer>
-     <script src="dist/app.js"></script></footer>
+     <script src="dist/app.js"></script>
+<script src="dist/ApiService.js"></script>
+  </footer>
 </body>

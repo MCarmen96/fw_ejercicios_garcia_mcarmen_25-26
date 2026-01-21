@@ -2,28 +2,29 @@
 let a: number = 5;
 console.log("holaaa practica typescript ");
 console.log(a);
+//import { ApiService } from '/.ApiService.js';
 
-document.addEventListener("DOMContentLoaded", async function(){
+document.addEventListener("DOMContentLoaded",function(){
     //pintarRecetasHome();
-    await cargarTodasDatosApi()
+    
+    const api=new ApiService();
+    api.recetaAleatoria().then(data=>{
+        console.log(data);
+    });
+    
+    api.obtenerCategorias().then(data=>{
+        console.log("categorias....",data);
+    })
 });
 
 function pintarRecetasHome(){
 
+    //const datos=api.recetaAleatoria();
+
+    const contenedor:HTMLElement|null=document.querySelector("#recetasHome");
+
 }
 
-async function cargarTodasDatosApi(): Promise<Receta>{
-    const data:Receta[]=[];
+function cargarSelectCategoria(){
 
-    try{
-        const respuesta:Response=await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
-        const  data2=await respuesta.json();
-        data.push(...data2);
-        console.log(data2);
-
-    }catch(error:unknown){
-        console.log(error);
-    }
-    
-    return data;
 }

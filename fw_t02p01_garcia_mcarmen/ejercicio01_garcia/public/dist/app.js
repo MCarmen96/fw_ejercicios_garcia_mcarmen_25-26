@@ -3,23 +3,21 @@
 let a = 5;
 console.log("holaaa practica typescript ");
 console.log(a);
-document.addEventListener("DOMContentLoaded", async function () {
+//import { ApiService } from '/.ApiService.js';
+document.addEventListener("DOMContentLoaded", function () {
     //pintarRecetasHome();
-    await cargarTodasDatosApi();
+    const api = new ApiService();
+    api.recetaAleatoria().then(data => {
+        console.log(data);
+    });
+    api.obtenerCategorias().then(data => {
+        console.log("categorias....", data);
+    });
 });
 function pintarRecetasHome() {
+    //const datos=api.recetaAleatoria();
+    const contenedor = document.querySelector("#recetasHome");
 }
-async function cargarTodasDatosApi() {
-    const data = [];
-    try {
-        const respuesta = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
-        const data2 = await respuesta.json();
-        data.push(...data2);
-        console.log(data2);
-    }
-    catch (error) {
-        console.log(error);
-    }
-    return data;
+function cargarSelectCategoria() {
 }
 //# sourceMappingURL=app.js.map
