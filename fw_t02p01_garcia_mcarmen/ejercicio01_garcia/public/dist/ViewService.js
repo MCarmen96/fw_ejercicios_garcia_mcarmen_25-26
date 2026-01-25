@@ -1,16 +1,11 @@
-
-import { MyMeal } from "./MyMeal.js";
-
 export class ViewService {
-
-
-    public pintarRecetasHome(recetas: MyMeal, contenedor: HTMLDivElement) {
+    pintarRecetasHome(recetas, contenedor) {
         //variable vacía para ir guardando los ingredientes
-        let listaIngredientes:string="";
+        let listaIngredientes = "";
         //recorro el array de ingredientes y y cojo cada elemento y la voy añadiendo a mi varaible
-        recetas.ingredients.forEach(ing=>{
-            listaIngredientes+=`<li>${ing.name} - <small>${ing.measure}</small></li>`;
-        })
+        recetas.ingredients.forEach(ing => {
+            listaIngredientes += `<li>${ing.name} - <small>${ing.measure}</small></li>`;
+        });
         contenedor.innerHTML += `
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card shadow" >
@@ -25,15 +20,11 @@ export class ViewService {
                                 </ul>
                         </div>
                 </div>
-            </div>`
-            
-    
+            </div>`;
     }
-
 }
-
 /*
-    todo RESPONSABILIDADES 
+    todo RESPONSABILIDADES
     Renderizar listados de recetas
     Renderizar detalles de receta
     Renderizar planes semanales
@@ -42,4 +33,5 @@ export class ViewService {
     Las funciones siempre reciben el elemento contenedor del DOM y los datos a representar.
 
 
-*/
+*/ 
+//# sourceMappingURL=ViewService.js.map

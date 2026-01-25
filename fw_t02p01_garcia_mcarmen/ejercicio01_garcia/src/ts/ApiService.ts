@@ -13,23 +13,29 @@ export class ApiService {
 
         try{
 
-            let respuesta:Response=await fetch(this.API_URL+"/random.php");
+            const respuesta:Response|null=await fetch(this.API_URL+"/random.php");
             datos=await respuesta.json();
-            //receta=datos.meals[0];//guardo el primer elemento y es lo que devuelvo pero 
 
-            const mealData=datos.meals[0];
+            //guardo el primer elemento dela objeto de la api
+            const mealData=datos.meals[0]; 
+
+            //array auxiliar para los ingredientes
             let ingredientes:{ name: string; measure: string }[]=[];
-
+            //este bucle recojo los 20 ingredientes
             for (let index = 1; index < 20; index++) {
                 //construyo las variables
                 const nombre = mealData[`strIngredient${index}`];
                 const medida = mealData[`strMeasure${index}`];
-                // si el nombre esta no esta vacio 
+
+                // si el nombre existe y no esta vacio 
                 if(nombre&&nombre.trim()!==""){
+
                     ingredientes.push({
                         name:nombre,
-                        
+                        measure:medida
                     });
+                }else{
+                    break;
                 }
             }
             return {
@@ -37,13 +43,14 @@ export class ApiService {
                 strMeal:datos.meals[0].strMeal,
                 strCategory:datos.meals[0].strCategory,
                 strArea:datos.meals[0].strArea,
-                strMealThumb:datos.meals[0].strMealThumb
+                strMealThumb:datos.meals[0].strMealThumb,
+                ingredients:ingredientes
             }
 
 
 
         }catch(error){
-            console.log("Error al obtener la receta aleatoria:");
+            console.log("Error al obtener la receta aleatoria:",error);
             console.log(error);
             return null;
         }
@@ -54,17 +61,34 @@ export class ApiService {
 
 
     public async obtenerCategorias():Promise<Category[]>{
+
         let datos;
-        
+        let categorias:Category[]=[];
+
         try{
             let respuesta:Response=await fetch(this.API_URL+"/categories.php")
             datos=await respuesta.json();
             console.log(datos)
+            // si la clave categories existe y su array es mayor a 0 lo recorro
+            if(datos.categories && datos.categories.lenght>0){
+
+                datos.categories.forEach((categoria:Category)=> {
+                    categorias.push({
+                        idCategory:categoria.idCategory,
+                        strCategory:categoria.strCategory
+                    })
+                });
+            }
 
         }catch(error){
             console.log("Error al obtener las catgorias:");
             console.log(error);
         }
-        return datos;
+        return categorias;
     }
 }
+
+// * Obtener recetas aleatorias (con o sin categoría)
+// Obtener recetas por ingrediente
+// Obtener detalles completos de una receta
+// * Obtener categorías disponibles 

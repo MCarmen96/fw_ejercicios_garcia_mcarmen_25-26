@@ -5,6 +5,6 @@ export interface MyMeal {
     strCategory: string;
     strArea: string;
     strMealThumb: string;//imagen tamaño mediana
-    //ingredients:{name:string; measure:string}[];
+    ingredients:{name:string; measure:string}[];
 
 }

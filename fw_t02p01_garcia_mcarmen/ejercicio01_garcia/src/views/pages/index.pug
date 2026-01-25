@@ -1,5 +1,6 @@
 extends ../partials/layout
 block main 
+    br
     h1.mb-4.text-center Recetas MCarmen
     .row.mb-3
         .col-md-6.mx-auto
@@ -7,5 +8,5 @@ block main
                 label(for="selectCategorias") Filtrar por categoría:
                 select#selectCategorias.form-select
                     option(value="" selected disabled) Cargando categorías...
-            div#recetasHome
+        div#recetasHome.row.g-4
 
