@@ -50,9 +50,9 @@ export class ApiService {
         try {
             let respuesta = await fetch(this.API_URL + "/categories.php");
             datos = await respuesta.json();
-            console.log(datos);
+            console.log("categorias: ", datos);
             // si la clave categories existe y su array es mayor a 0 lo recorro
-            if (datos.categories && datos.categories.lenght > 0) {
+            if (datos.categories && datos.categories.length > 0) {
                 datos.categories.forEach((categoria) => {
                     categorias.push({
                         idCategory: categoria.idCategory,
@@ -66,6 +66,39 @@ export class ApiService {
             console.log(error);
         }
         return categorias;
+    }
+    async obtenerPorCategoria(categoria) {
+        const respuesta = await fetch(`${this.API_URL}/filter.php?c=${categoria}`);
+        const datos = await respuesta.json();
+        return datos.meals; // Esto devuelve una lista de recetas (solo con nombre, ID y foto)
+    }
+    async obtenerPorId(id) {
+        try {
+            const respuesta = await fetch(`${this.API_URL}/lookup.php?i=${id}`);
+            const datos = await respuesta.json();
+            const mealData = datos.meals[0];
+            // Aquí aplicas la misma lógica de los ingredientes que ya tienes 
+            // en tu función recetaAleatoria()
+            let ingredientes = [];
+            for (let i = 1; i <= 20; i++) {
+                const nombre = mealData[`strIngredient${i}`];
+                const medida = mealData[`strMeasure${i}`];
+                if (nombre && nombre.trim() !== "") {
+                    ingredientes.push({ name: nombre, measure: medida });
+                }
+            }
+            return {
+                idMeal: mealData.idMeal,
+                strMeal: mealData.strMeal,
+                strCategory: mealData.strCategory,
+                strArea: mealData.strArea,
+                strMealThumb: mealData.strMealThumb,
+                ingredients: ingredientes
+            };
+        }
+        catch (error) {
+            return null;
+        }
     }
 }
 // * Obtener recetas aleatorias (con o sin categoría)
