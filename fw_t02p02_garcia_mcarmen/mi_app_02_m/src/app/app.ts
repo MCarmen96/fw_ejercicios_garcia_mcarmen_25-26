@@ -9,7 +9,6 @@ import { Component, signal } from '@angular/core';
 })
 export class App {
   protected readonly title = signal('mi_app_02_m');
-
-  public isServerRunning=false;
-
 }
+
+

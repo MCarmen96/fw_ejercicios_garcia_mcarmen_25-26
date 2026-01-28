@@ -1,25 +1,22 @@
-
+<span>Username: {{titleComponent}}</span>
+<br>
 <span>Username: {{userName}} 💚</span>
 <br>
 <p><strong>The Boss: {{sukuna}} 💜</strong> </p>
 
-<div>
 
-    @for (character of characters; track character.id){
-        @if(character.name==="Choso"){
-          <p>{{ character.id }} - {{ character.name }} ❤️</p>
-        }@else if (character.name==="Itadori") {
-            <p>{{ character.id }} - {{ character.name }} 🩷</p>
-        }@else{
-          <p>{{ character.id }} - {{ character.name }}</p>
-        }
-    }
+<span>The user: {{name}}  </span>
 
-</div>
+<ul>
+  <li>
+    Static Image:
+    <img ngSrc="/imgs/logo.svg" alt="Angular logo" width="32" height="32">
+  </li>
+  <li>
+    Dinamic Image:
+    <img [ngSrc]="logoUrl" [alt]="logoAlt" width="32" height="32">
+  </li>
+</ul>
 
-<div [class]="boxClass" (mouseover)="onMouseOverAction()"
-                          (mouseout)="onMouseOutAction()">
-    Mira: {{ message }}
-  </div>
 
 

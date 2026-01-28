@@ -4,29 +4,16 @@
     <h1>Hello, {{ title() }}</h1>
   </div>
 
-  <div>
-      <section>
-        <app-user></app-user>
-      </section>
-  </div>
-  <div>
-    <ul>
-      <li> <app-user></app-user> </li>
-      <li> <app-user></app-user> </li>
-      <li> <app-user></app-user> </li>
-    </ul>
-  </div>
 
-  <div>@if (isServerRunning){
-    <span>Yes, the server is running</span>
-    }
-    @else {
-    <span>No, the server is not running</span>
-    }
-  </div>
+  <nav>
+    <a routerLink="/">HOME</a>
+    <br>
+    <a routerLink="/user">USER</a>
+    <br>
+    <a routerLink="/forms">FORMS</a>
+  </nav>
 
-  
 
-  <router-outlet />
+ <router-outlet></router-outlet>
 
 </main>

@@ -1,0 +1,64 @@
+<p>home works!</p>
+
+<SPAN> {{titleComp}} </SPAN>
+
+
+
+<div>@if (isServerRunning){
+
+    <span>Yes, the server is running</span>
+    }
+    @else {
+    <span>No, the server is not running</span>
+    }
+</div>
+
+<div>
+
+    @for (character of characters; track character.id){
+
+        @if(character.name==="Choso"){
+            <p>{{ character.id }} - {{ character.name }} ❤️</p>
+        }@else if (character.name==="Itadori") {
+            <p>{{ character.id }} - {{ character.name }} 🩷</p>
+        }@else{
+            <p>{{ character.id }} - {{ character.name }}</p>
+        }
+    }
+
+</div>
+
+<div [class]="boxClass" (mouseover)="onMouseOverAction()" (mouseout)="onMouseOutAction()">
+    Mira: {{ message }}
+</div>
+
+
+<div>
+    <section>
+        <app-user name="Master"></app-user>
+    </section>
+</div>
+
+<div>
+
+    <app-child (addItemChildEvent)="addItemParent($event)" />
+    <p>Lista padre:</p>
+    <ul>
+        @for (item of itemsParent; track $index) {
+        <li>{{item}}</li>
+        }
+    </ul>
+
+</div>
+
+<div>
+    @defer (on viewport){
+    <app-comments></app-comments>
+    }@placeholder {
+    <p>Comentarios futuros.</p>
+    }@loading (minimum 2s) {
+    <p>Cargando...</p>
+    }@error {
+    <p>Error en la cargar</p>
+    }
+</div>
