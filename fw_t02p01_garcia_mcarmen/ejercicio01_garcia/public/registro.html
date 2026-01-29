@@ -30,19 +30,39 @@
 </nav>
 
   </header>
-  <main class="container pt-5"><br/>
-    <h1 class="mb-4 text-center">Recetas MCarmen</h1>
-    <div class="row mb-5">
-      <div class="col-md-6 mx-auto">
-        <div class="form-group">
-          <label for="selectCategorias">Filtrar por categoría:</label>
-          <select class="form-select" id="selectCategorias">
-            <option value="" selected="selected" disabled="disabled">Cargando categorías...</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="row g-4 mb-4" id="recetasHome"></div>
+  <main class="container pt-5"><div class="container mt-5">
+<div class="row justify-content-center">
+<div class="col-md-6">
+<div class="card shadow rounded-4 p-4">
+<h2 class="text-center mb-4">Registro de Usuario</h2>
+<form id="registroForm" class="needs-validation" novalidate>
+<div class="mb-3">
+<label for="nombre" class="form-label">Nombre</label>
+<input type="text" class="form-control" id="nombre" required minlength="3">
+<div class="invalid-feedback">Por favor, introduce tu nombre (mín. 3 caracteres).</div>
+<div class="valid-feedback">¡Se ve bien!</div>
+</div>
+<div class="mb-3">
+<label for="email" class="form-label">Correo electrónico</label>
+<input type="email" class="form-control" id="email" required>
+<div class="invalid-feedback">Introduce un email válido.</div>
+</div>
+<div class="mb-3">
+<label for="password" class="form-label">Contraseña</label>
+<input type="password" class="form-control" id="password" required minlength="6">
+<div class="invalid-feedback">La contraseña debe tener al menos 6 caracteres.</div>
+</div>
+<div class="mb-3">
+<label for="confirmPassword" class="form-label">Repetir contraseña</label>
+<input type="password" class="form-control" id="confirmPassword" required>
+<div id="passError" class="invalid-feedback">Las contraseñas no coinciden.</div>
+</div>
+<button class="btn btn-primary w-100 rounded-pill mt-3" type="submit">Crear cuenta</button>
+</form>
+</div>
+</div>
+</div>
+</div>
   </main>
   <footer>
      <script type="module" src="dist/app.js"></script>

@@ -5,6 +5,7 @@ console.log(a);
 
 import { ApiService } from './ApiService.js';
 import { MyMeal } from './MyMeal.js';
+import { Utilities } from './Utilities.js';
 import { ViewService } from './ViewService.js';
 
 
@@ -16,10 +17,11 @@ document.addEventListener("DOMContentLoaded",async function(){
     // clases
     const api:ApiService=new ApiService();
     const view:ViewService=new ViewService();
-
+    
     //elementos html
     const contenedorRecetas=document.querySelector("#recetasHome") as HTMLDivElement;
     const selectCategory=document.querySelector("#selectCategorias") as HTMLSelectElement;
+    const formRegistro=document.getElementById('registroForm') as HTMLFormElement;
 
     //variables con datos de funciones
     const categorias=await api.obtenerCategorias();
@@ -54,9 +56,17 @@ document.addEventListener("DOMContentLoaded",async function(){
                     view.pintarRecetasHome(recetasCompleta,contenedorRecetas);
                 }
             }
-
         }
     })
+
+    formRegistro.addEventListener('submit',(e:SubmitEvent)=>{
+
+        if(Utilities.validarRegistro(formRegistro)){
+            console.log('Formulario valido');
+        }else{
+            console.warn("Hay errores en el formulario.");
+        }
+    });
     
 
 

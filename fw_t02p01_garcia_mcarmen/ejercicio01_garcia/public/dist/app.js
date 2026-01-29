@@ -3,6 +3,7 @@ let a = 5;
 console.log("holaaa practica typescript ");
 console.log(a);
 import { ApiService } from './ApiService.js';
+import { Utilities } from './Utilities.js';
 import { ViewService } from './ViewService.js';
 const api = new ApiService();
 document.addEventListener("DOMContentLoaded", async function () {
@@ -12,6 +13,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     //elementos html
     const contenedorRecetas = document.querySelector("#recetasHome");
     const selectCategory = document.querySelector("#selectCategorias");
+    const formRegistro = document.getElementById('registroForm');
     //variables con datos de funciones
     const categorias = await api.obtenerCategorias();
     //lamada funciones clases
@@ -37,6 +39,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                     view.pintarRecetasHome(recetasCompleta, contenedorRecetas);
                 }
             }
+        }
+    });
+    formRegistro.addEventListener('submit', (e) => {
+        if (Utilities.validarRegistro(formRegistro)) {
+            console.log('Formulario valido');
+        }
+        else {
+            console.warn("Hay errores en el formulario.");
         }
     });
 });
