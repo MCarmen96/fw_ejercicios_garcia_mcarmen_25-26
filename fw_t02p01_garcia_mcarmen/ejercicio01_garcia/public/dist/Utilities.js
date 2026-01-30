@@ -1,7 +1,18 @@
+import { StorageService } from "./StorageService.js";
 export class Utilities {
     static validarRegistro(form) {
+        const local = new StorageService();
         const password = form.querySelector("#password");
         const confirmPass = form.querySelector("#confirmPassword");
+        const email = form.querySelector("#email");
+        //validar si el email ya exite
+        if (local.getEmailUser(email.value)) { //si existe 
+            email.setCustomValidity('este email ya esta registrado');
+        }
+        else {
+            email.setCustomValidity('');
+        }
+        //validar si coninciden las contraseñas
         if (password && confirmPass) {
             if (password.value !== confirmPass.value) {
                 confirmPass.setCustomValidity('Las contraseñas no coinciden');
