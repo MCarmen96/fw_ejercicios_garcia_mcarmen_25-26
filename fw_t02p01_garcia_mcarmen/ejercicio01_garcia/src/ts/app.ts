@@ -9,24 +9,37 @@ import { Utilities } from './Utilities.js';
 import { ViewService } from './ViewService.js';
 import { User } from './User.js';
 import { StorageService } from './StorageService.js';
+import { StorageService } from './StorageService';
 
-const api = new ApiService();
 
 
-document.addEventListener("DOMContentLoaded", async function () {
 
-    // clases
+document.addEventListener("DOMContentLoaded", function () {
+
+    // clases se las envio a quien a las necesite
     const api: ApiService = new ApiService();
     const view: ViewService = new ViewService();
     const local: StorageService = new StorageService();
 
-    //elementos html
+
+    // gestion vistas tmbn puedo hacer una funcion que se encargue de esto
+    if (window.location.pathname.includes("index.html") || window.location.pathname === "/") {
+        cargarIndex(api,view);
+    }
+
+    if (window.location.pathname.includes("registro.html")) {
+        cargarRegistro(local,view);
+    }
+
+});
+
+
+async function cargarIndex(api:ApiService,view:ViewService){
+
+    //elementos html los cojo en las fucniones que los necesite
     const contenedorRecetas = document.querySelector("#recetasHome") as HTMLDivElement;
     const selectCategory = document.querySelector("#selectCategorias") as HTMLSelectElement;
-    const formRegistro = document.getElementById('registroForm') as HTMLFormElement;
-
-    if (window.location.pathname == "index.html") {
-        //variables con datos de funciones
+    //variables con datos de funciones
         const categorias = await api.obtenerCategorias();
 
         //lamada funciones clases
@@ -62,42 +75,55 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
             }
         })
-    }
+}
+
+function cargarRegistro(local:StorageService,view:ViewService){
+
+    const formRegistro = document.getElementById('registroForm') as HTMLFormElement;
+    formRegistro.addEventListener('submit', (e: SubmitEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+            try {
+                if (Utilities.validarRegistro(formRegistro)) {
+
+                    const nameInput = formRegistro.querySelector('#nombre') as HTMLInputElement;
+                    const emailInput = formRegistro.querySelector('#email') as HTMLInputElement;
+                    const passInput = formRegistro.querySelector('#confirmPassword') as HTMLInputElement;
+                    const contenedor = document.getElementById('message') as HTMLDivElement;
+
+                    const new_user: User = {
+                        id: local.getLastUser(),//funcion incremental del id
+                        name: nameInput.value,
+                        email: emailInput.value,
+                        password: passInput.value
+                    };
+                    local.saveUser(new_user);
+                    console.log('Formulario valido\n Usuario crado: ', new_user);
+                    let messageConten = view.cargarAlerts(contenedor, "alert-success");
+                    //contenedor.appendChild(messageConten);
+
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 2000);
 
 
 
-    if (window.location.pathname == "registro.html") {
+                } else {
+                    console.warn("Hay errores en el formulario.");
+                }
+            } catch (error) {
 
-        formRegistro.addEventListener('submit', (e: SubmitEvent) => {
+                console.warn(error);
 
-            if (Utilities.validarRegistro(formRegistro)) {
-
-                const nameInput = formRegistro.querySelector('#nombre') as HTMLInputElement;
-                const emailInput = formRegistro.querySelector('#email') as HTMLInputElement;
-                const passInput = formRegistro.querySelector('#confirmPassword') as HTMLInputElement;
-
-                const new_user: User = {
-                    id: 1,
-                    name: nameInput.value,
-                    email: emailInput.value,
-                    password: passInput.value
-                };
-                local.saveUser(new_user);
-                console.log('Formulario valido\n Usuario crado: ', new_user);
-                window.location.href = "index.html";
-
-            } else {
-                console.warn("Hay errores en el formulario.");
             }
+
+
         });
 
-    }
+}
 
+function cargarLogin(local:StorageService){
 
-
-
-
-
-
-});
+    
+}
 

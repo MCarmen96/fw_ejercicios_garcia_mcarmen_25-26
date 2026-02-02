@@ -21,11 +21,18 @@ export class StorageService{
     private static readonly USER_MINI_MEAL_KEY_ITEM:string="userMiniMeals_"// tambien con el id del usuario
     private static readonly USER_WEEKLY_PLANS:string="weeklyPlans_";// tmabien con el id
 
+    // cojo los usuarios del local storage y los devuelvo mejor hacerlo
+    getUsers():User[]{
+
+        const users= localStorage.getItem(StorageService.USER_KEY_ITEM);
+        return users ? JSON.parse(users):[]; // devuelvo el array 
+    }
     
     saveUser(user:User){
 
-        localStorage.setItem(StorageService.USER_KEY_ITEM,JSON.stringify(user));
-
+        let usersArray=this.getUsers();
+        usersArray.push(user);// aqui guardo el objeto en el array
+        localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(usersArray));//y ahoara aqui lo guardo en storage
     }
 
     getEmailUser(email:string) : boolean | null{
@@ -43,8 +50,23 @@ export class StorageService{
             return false;
         }
     }
+
+    getLastUser(){
+
+        let user=this.getUsers();
+
+        if(user.length>0){// mira si hay algun user
+
+            let lastIndex=user.length-1;//cojo el ultimo indice
+            let lastUser=user[lastIndex];// accedo al objeto que esta en esa posicion
+            return lastUser.id+1; //devuelvo su indice + 1 
+
+        }else{
+            return 1;
+        }
+    }
         
-        
+    
 
 
 }

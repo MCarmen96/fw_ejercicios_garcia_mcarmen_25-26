@@ -26,5 +26,7 @@ export class Utilities {
             return form.checkValidity();
         }
     }
+    static validarLogin() {
+    }
 }
 //# sourceMappingURL=Utilities.js.map

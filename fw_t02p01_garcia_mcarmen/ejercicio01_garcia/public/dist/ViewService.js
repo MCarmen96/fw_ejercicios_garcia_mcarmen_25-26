@@ -35,6 +35,18 @@ export class ViewService {
             select.appendChild(option);
         });
     }
+    cargarAlerts(contenedor, clase) {
+        contenedor.classList.add("alert", clase, "alert-dismissible", "fade", "show");
+        contenedor.innerHTML = " ";
+        let mensageContent = document.createElement("p");
+        mensageContent.textContent = "¡Usuario creado correctamente!";
+        let buttonClose = document.createElement("button");
+        buttonClose.classList.add("btn-close");
+        buttonClose.setAttribute("data-bs-dismiss", "alert");
+        contenedor.appendChild(mensageContent);
+        contenedor.appendChild(buttonClose);
+        return contenedor;
+    }
 }
 /*
     todo RESPONSABILIDADES

@@ -31,4 +31,9 @@ export class Utilities{
             return form.checkValidity();
         }
     }
+
+
+    public static validarLogin(){
+        
+    }
 }

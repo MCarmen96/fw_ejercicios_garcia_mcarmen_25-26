@@ -1,6 +1,13 @@
 export class StorageService {
+    // cojo los usuarios del local storage y los devuelvo mejor hacerlo
+    getUsers() {
+        const users = localStorage.getItem(StorageService.USER_KEY_ITEM);
+        return users ? JSON.parse(users) : []; // devuelvo el array 
+    }
     saveUser(user) {
-        localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(user));
+        let usersArray = this.getUsers();
+        usersArray.push(user); // aqui guardo el objeto en el array
+        localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(usersArray)); //y ahoara aqui lo guardo en storage
     }
     getEmailUser(email) {
         const usersDatos = localStorage.getItem(StorageService.USER_KEY_ITEM); //DEVUELVE EL VALOR DE LA CLAVE USER EN STRING
@@ -14,6 +21,17 @@ export class StorageService {
         }
         catch (error) {
             return false;
+        }
+    }
+    getLastUser() {
+        let user = this.getUsers();
+        if (user.length > 0) { // mira si hay algun user
+            let lastIndex = user.length - 1; //cojo el ultimo indice
+            let lastUser = user[lastIndex]; // accedo al objeto que esta en esa posicion
+            return lastUser.id + 1; //devuelvo su indice + 1 
+        }
+        else {
+            return 1;
         }
     }
 }
