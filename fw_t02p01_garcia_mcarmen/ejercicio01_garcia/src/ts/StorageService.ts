@@ -1,3 +1,4 @@
+import { error } from './../../../../fw_t02p02_garcia_mcarmen/mi_app_03/node_modules/ajv/lib/vocabularies/applicator/dependencies';
 
 import { User } from "./User";
 
@@ -63,6 +64,16 @@ export class StorageService{
 
         }else{
             return 1;
+        }
+    }
+
+    getPasswordUser(password:string):boolean|null{
+
+        let users:User[]=this.getUsers();
+        try{
+            return users.some(user=>user.password===password);
+        }catch(error){
+            return false;
         }
     }
         

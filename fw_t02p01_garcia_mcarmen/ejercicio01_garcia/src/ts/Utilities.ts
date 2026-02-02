@@ -5,7 +5,7 @@ export class Utilities{
     
     
     public static validarRegistro(form:HTMLFormElement) {
-
+        // dividir en funciones mas pequeñas para comprobar el email y la contraseña por si se pueden reutilizar
         const local:StorageService=new StorageService();
         const password=form.querySelector("#password") as HTMLInputElement;
         const confirmPass=form.querySelector("#confirmPassword") as HTMLInputElement;
@@ -34,6 +34,6 @@ export class Utilities{
 
 
     public static validarLogin(){
-        
+
     }
 }

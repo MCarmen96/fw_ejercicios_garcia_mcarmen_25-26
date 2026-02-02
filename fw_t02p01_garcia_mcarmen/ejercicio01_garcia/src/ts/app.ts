@@ -124,6 +124,12 @@ function cargarRegistro(local:StorageService,view:ViewService){
 
 function cargarLogin(local:StorageService){
 
-    
+    const emailInput=document.getElementById("email")as HTMLInputElement;
+    const password=document.getElementById("password") as HTMLInputElement;
+
+    if(local.getPasswordUser(password.value)&&local.getEmailUser(emailInput.value)){
+        
+    }
+
 }
 

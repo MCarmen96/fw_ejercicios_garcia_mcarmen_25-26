@@ -86,5 +86,9 @@ function cargarRegistro(local, view) {
     });
 }
 function cargarLogin(local) {
+    const emailInput = document.getElementById("email");
+    const password = document.getElementById("password");
+    if (local.getPasswordUser(password.value) && local.getEmailUser(emailInput.value)) {
+    }
 }
 //# sourceMappingURL=app.js.map

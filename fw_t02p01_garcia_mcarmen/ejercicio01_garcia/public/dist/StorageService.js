@@ -34,6 +34,15 @@ export class StorageService {
             return 1;
         }
     }
+    getPasswordUser(password) {
+        let users = this.getUsers();
+        try {
+            return users.some(user => user.password === password);
+        }
+        catch (error) {
+            return false;
+        }
+    }
 }
 /*
         USER_KEY_ITEM, USER_MEAL_KEY_ITEM, …

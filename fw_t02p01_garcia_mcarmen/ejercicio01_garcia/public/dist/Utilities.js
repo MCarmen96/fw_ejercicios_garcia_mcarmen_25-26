@@ -1,6 +1,7 @@
 import { StorageService } from "./StorageService.js";
 export class Utilities {
     static validarRegistro(form) {
+        // dividir en funciones mas pequeñas para comprobar el email y la contraseña por si se pueden reutilizar
         const local = new StorageService();
         const password = form.querySelector("#password");
         const confirmPass = form.querySelector("#confirmPassword");
