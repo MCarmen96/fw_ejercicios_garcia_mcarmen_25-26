@@ -5,6 +5,7 @@ import { IFilmSW } from '../interfaces/i-film-sw.interface';
 @Injectable({
   providedIn: 'root',
 })
+
 export class ApiswService {
 
     private readonly API_URL = 'https://swapi.dev/api/films/';
@@ -38,7 +39,7 @@ export class ApiswService {
       );
 
       return films;
-      
+
     } catch (error) {
       console.error('Error fetching films:', error);
       return [];
