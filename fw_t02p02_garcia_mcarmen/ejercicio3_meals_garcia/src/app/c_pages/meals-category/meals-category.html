@@ -1,7 +1,57 @@
-<p>meals-category works!</p>
+
 
 <h2>{{titleComp}}</h2>
 
-@if(loading){
-  
+@if (loading){
+
+  <div class="container">
+
+    <div class="row g-4">
+      <select class="form-select" (change)="onCategoryChange($event)">
+        <option>Todas las categorias</option>
+        @for(category of categorys; track category.idCategory){
+          <option [value]="category.strCategory">{{category.strCategory}}</option>
+        }
+    </select>
+    
+      @for(meal of meals; track meal.idMeal){
+        <div class="col-12 col-md-6 col-lg-3 mb-4">
+          <div class="card shadow h-100">
+            <img [src]="meal.strMealThumb"
+                 class="card-img-top"
+                 [alt]="meal.strMeal">
+
+            <div class="card-body">
+              <h5 class="card-title">{{meal.strMeal}}</h5>
+
+              <p class="card-text">
+                <strong>Categoría:</strong> {{meal.strCategory}}
+              </p>
+
+              <p class="card-text">
+                <strong>Origen:</strong> {{meal.strArea}}
+              </p>
+
+              <h6>Ingredientes:</h6>
+
+              <ul style="max-height: 100px; overflow-y: auto;">
+                @for(ing of meal.ingredients; track $index){
+                  <li>
+                    {{ing.name}} -
+                    <small>{{ing.measure}}</small>
+                  </li>
+                }
+              </ul>
+
+            </div>
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+  </div>
+
 }
+

@@ -70,7 +70,7 @@ export class ApiService  {
 
     }
 
-    public async obtenerCategorias(): Promise<Category[]> {
+    public async getCategorys(): Promise<Category[]> {
 
         let datos;
         let categorias:Category[] = [];
@@ -78,7 +78,7 @@ export class ApiService  {
         try {
             let respuesta: Response = await fetch(this.API_URL + "/categories.php")
             datos = await respuesta.json();
-            console.log("categorias: ", datos)
+            //console.log("categorias: ", datos)
             // si la clave categories existe y su array es mayor a 0 lo recorro
             if (datos.categories && datos.categories.length > 0) {
 
@@ -97,14 +97,14 @@ export class ApiService  {
         return categorias;
     }
 
-    public async obtenerPorCategoria(categoria: string): Promise<any[]> {
+    public async getMealsForCategorys(categoria: string): Promise<any[]> {
 
         const respuesta = await fetch(`${this.API_URL}/filter.php?c=${categoria}`);
         const datos = await respuesta.json();
         return datos.meals; // Esto devuelve una lista de recetas (solo con nombre, ID y foto)
     }
 
-    public async obtenerPorId(id: string): Promise<MyMeal | null> {
+    public async getMealForId(id: string): Promise<MyMeal | null> {
 
         try {
             const respuesta = await fetch(`${this.API_URL}/lookup.php?i=${id}`);
