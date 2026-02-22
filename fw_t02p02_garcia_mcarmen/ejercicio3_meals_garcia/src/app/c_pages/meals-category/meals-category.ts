@@ -1,4 +1,4 @@
-import { Component,inject,OnInit,ChangeDetectorRef} from '@angular/core';
+import { Component,inject,OnInit,signal} from '@angular/core';
 import { ApiService } from '../../services/api-service';
 import { MyMeal } from '../../model/my-meal';
 import { Category } from '../../model/category';
@@ -14,41 +14,45 @@ export class MealsCategory implements OnInit {
 
   public titleComp="MEALS";
   private apiService=inject(ApiService);
-  private changesDetector=inject(ChangeDetectorRef);
-  private _meals:MyMeal[]=[];
+  //private changesDetector=inject(ChangeDetectorRef);
+  private _meals= signal<MyMeal[]>([]);
 
-  private _categorys:Category[]=[];
+  private _categorys=signal<Category[]>([]);
 
   public loading=true;
   public error='';
 
-  get categorys():Category[]{
+   get categorys():Category[]{
 
-    return this._categorys;
+    return this._categorys();
   }
   set categorys(category:Category[]){
-    this._categorys=category;
+    this._categorys.set(category);
   }
 
   get meals():MyMeal[]{
-    return this._meals;
+    return this._meals();
   }
 
   set meals(meal:MyMeal[]){
-    this._meals=meal;
+    this._meals.set(meal);
   }
 
 
   async loadMeals():Promise<void>{
 
     try{
-
+      const arrayAux:MyMeal[]=[];
       for (let index = 0; index < 8; index++) {
         const receta=await this.apiService.getMeals();
-        if(receta){ this._meals.push(receta);}
-      this.changesDetector.detectChanges();
+        if(receta){ arrayAux.push(receta);}
+        //this.changesDetector.markForCheck();
+
+        console.log(arrayAux);
+
 
       }
+       this._meals.set(arrayAux);
 
       }catch(error){
         this.error='Error loading meals';
@@ -60,14 +64,17 @@ export class MealsCategory implements OnInit {
 
   async loadCategorys():Promise<void>{
     try{
-
+      const arrayAux:Category[]=[];
       const categorys=await this.apiService.getCategorys();
-      console.log(categorys);
+      //console.log(categorys);
       for (let index = 0; index < categorys.length; index++) {
         const category=categorys[index];
-        if(category){ this._categorys.push(category);}
+        if(category){ arrayAux.push(category);}
+
+        this._categorys.set(arrayAux);
+
       }
-      this.changesDetector.detectChanges();
+
 
     }catch(error){
       this.error='Error';
@@ -80,17 +87,30 @@ export class MealsCategory implements OnInit {
 
     const selectElement=event.target as HTMLSelectElement;
     const selectedCategory=selectElement.value;// esto es el id de la categoria seleccionada
-    const mealsSelected=await this.apiService.getMealsForCategorys(selectedCategory);
-    console.log(mealsSelected);
 
-    for (let index = 0; index < mealsSelected.length; index++) {
-      const meal=mealsSelected[index];
-      const mealDetails:MyMeal|null=await this.apiService.getMealForId(meal.idMeal.toString());
-      console.log("receta categoria selecionada:", mealDetails);
-      if(mealDetails){this._meals.push(mealDetails);}
+    if(selectedCategory===""){
+      this.loadMeals()
+    }else{
+      this.searchByCategory(selectedCategory);
     }
-    //this.loadCategorys(); esto no funciona
-    this.changesDetector.detectChanges();
+
+
+
+  }
+
+  async searchByCategory(category:string){
+
+    const mealsSelected=await this.apiService.getMealsForCategorys(category);
+    const arrayAux:MyMeal[]=[];
+    console.log(mealsSelected);
+        for (let index = 0; index <8; index++) {
+          const meal=mealsSelected[index];
+          const mealDetails:MyMeal|null=await this.apiService.getMealForId(meal.idMeal.toString());
+          //console.log("receta categoria selecionada:", mealDetails);
+          if(mealDetails){arrayAux.push(mealDetails);}
+        }
+        this._meals.set(arrayAux);
+
   }
     //Angular lo ejecuta automáticamente una vez, justo después de crear el componente.
   async ngOnInit(){
