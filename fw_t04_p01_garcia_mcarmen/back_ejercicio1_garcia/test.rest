@@ -1,0 +1,65 @@
+###
+GET http://localhost:3000/api/characters
+
+###
+
+POST http://localhost:3000/api/characters
+Content-Type: application/json
+
+{
+    "name":"choso",
+    "age":120,
+    "species":"nisu",
+    "role":"maldicion"
+}
+
+###
+GET http://localhost:3000/api/characters/69a567446981aaac9b68c274
+
+###
+
+PUT http://localhost:3000/api/characters/69aaa54561a6f961b3a5ae79
+Content-Type: application/json
+
+{
+    "name":"Choso",
+    "age":125,
+    "species":"Demonio",
+    "role":"Maldicion"
+}
+
+###
+DELETE http://localhost:3000/api/characters/69aaa54561a6f961b3a5ae79
+
+###
+GET http://localhost:3000/api/episodes
+
+###
+POST http://localhost:3000/api/episodes
+Content-Type: application/json
+
+{   
+    "title":"prueba1",
+    "code":"1111",
+    "summary":"nisu",
+    "year":2026
+
+}
+
+###
+GET http://localhost:3000/api/episodes/69aaa6e161a6f961b3a5ae81
+
+###
+
+PUT http://localhost:3000/api/episodes/69aaa6e161a6f961b3a5ae81
+Content-Type: application/json
+
+{
+    "title":"prueba22221",
+    "code":"6666",
+    "summary":"NISU",
+    "year":2026
+}
+
+###
+DELETE http://localhost:3000/api/episodes/69aaa6e161a6f961b3a5ae81

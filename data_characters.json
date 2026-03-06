@@ -1,0 +1,137 @@
+[
+  {
+    "name": "Denji",
+    "img": "https://cdn.myanimelist.net/images/characters/3/492407.jpg",
+    "age": 16,
+    "species": "Híbrido (Humano/Demonio)",
+    "specialTraits": ["Motosierras", "Inmortalidad parcial", "Contrato con Pochita"],
+    "role": "protagonista",
+    "firstAppearance": "S01E01"
+  },
+  {
+    "name": "Aki Hayakawa",
+    "img": "https://cdn.myanimelist.net/images/characters/13/395003.jpg",
+    "age": 20,
+    "species": "Humano",
+    "specialTraits": ["Uso de katanas", "Contrato con Demonio Zorro", "Contrato con Demonio Futuro"],
+    "role": "protagonista",
+    "firstAppearance": "S01E02"
+  },
+  {
+    "name": "Makima",
+    "img": "https://cdn.myanimelist.net/images/characters/4/489561.jpg",
+    "age": 25,
+    "species": "Demonio",
+    "specialTraits": ["Control mental", "Fuerza sobrehumana", "Manipulación de presión"],
+    "role": "protagonista",
+    "firstAppearance": "S01E01"
+  },
+  {
+    "name": "Power",
+    "img": "https://cdn.myanimelist.net/images/characters/7/494969.jpg",
+    "age": 17,
+    "species": "Poseído (Demonio de la Sangre)",
+    "specialTraits": ["Manipulación de sangre", "Creación de armas", "Valentía errática"],
+    "role": "protagonista",
+    "firstAppearance": "S01E02"
+  },
+  {
+    "name": "Himeno",
+    "img": "https://cdn.myanimelist.net/images/characters/14/493356.jpg",
+    "age": 22,
+    "species": "Humano",
+    "specialTraits": ["Contrato con Demonio Fantasma", "Brazo invisible", "Fumadora"],
+    "role": "secundario",
+    "firstAppearance": "S01E04"
+  },
+  {
+    "name": "Kobeni Higashiyama",
+    "img": "https://cdn.myanimelist.net/images/characters/16/493357.jpg",
+    "age": 20,
+    "species": "Humano",
+    "specialTraits": ["Agilidad extrema", "Cuchillo de combate", "Ansiedad"],
+    "role": "secundario",
+    "firstAppearance": "S01E04"
+  },
+  {
+    "name": "Kishibe",
+    "img": "https://cdn.myanimelist.net/images/characters/14/501718.jpg",
+    "age": 50,
+    "species": "Humano",
+    "specialTraits": ["Maestro cazador", "Resistencia sobrehumana", "Contratos múltiples"],
+    "role": "secundario",
+    "firstAppearance": "S01E10"
+  },
+  {
+    "name": "Angel Devil",
+    "img": "https://cdn.myanimelist.net/images/characters/13/586726.jpg",
+    "age": 100,
+    "species": "Demonio",
+    "specialTraits": ["Absorción de vida por contacto", "Creación de armas de luz"],
+    "role": "secundario",
+    "firstAppearance": "S01E11"
+  },
+  {
+    "name": "Beam",
+    "img": "https://cdn.myanimelist.net/images/characters/13/609115.jpg",
+    "age": 18,
+    "species": "Poseído (Demonio Tiburón)",
+    "specialTraits": ["Atravesar superficies sólidas", "Transformación en tiburón"],
+    "role": "secundario",
+    "firstAppearance": "S01E11"
+  },
+  {
+    "name": "Pochita",
+    "img": "https://cdn.myanimelist.net/images/characters/12/385412.jpg",
+    "age": 1000,
+    "species": "Demonio (Motosierra)",
+    "specialTraits": ["Motosierra en la cabeza", "Corazón de Denji", "Lealtad absoluta"],
+    "role": "secundario",
+    "firstAppearance": "S01E01"
+  },
+  {
+    "name": "Katana Man",
+    "img": "https://cdn.myanimelist.net/images/characters/2/495671.jpg",
+    "age": 24,
+    "species": "Híbrido (Humano/Demonio Katana)",
+    "specialTraits": ["Katanas en brazos y cabeza", "Supervelocidad", "Regeneración"],
+    "role": "antagonista",
+    "firstAppearance": "S01E08"
+  },
+  {
+    "name": "Akane Sawatari",
+    "img": "https://cdn.myanimelist.net/images/characters/12/494910.jpg",
+    "age": 19,
+    "species": "Humano",
+    "specialTraits": ["Contrato con Demonio Serpiente", "Invocación de colas y mordidas"],
+    "role": "antagonista",
+    "firstAppearance": "S01E08"
+  },
+  {
+    "name": "Bat Devil",
+    "img": "https://cdn.myanimelist.net/images/characters/2/492352.jpg",
+    "age": 500,
+    "species": "Demonio",
+    "specialTraits": ["Vuelo", "Ondas sonoras", "Regeneración por sangre"],
+    "role": "secundario",
+    "firstAppearance": "S01E02"
+  },
+  {
+    "name": "Eternity Devil",
+    "img": "https://cdn.myanimelist.net/images/characters/4/495670.jpg",
+    "age": 1000,
+    "species": "Demonio",
+    "specialTraits": ["Bucle temporal", "Creación de dimensiones", "Crecimiento por miedo"],
+    "role": "secundario",
+    "firstAppearance": "S01E05"
+  },
+  {
+    "name": "Reze",
+    "img": "https://cdn.myanimelist.net/images/characters/14/403714.jpg",
+    "age": 17,
+    "species": "Híbrido (Humano/Demonio Bomba)",
+    "specialTraits": ["Explosiones", "Transformación en bomba", "Ruso fluido"],
+    "role": "secundario",
+    "firstAppearance": "S01E12"
+  }
+]

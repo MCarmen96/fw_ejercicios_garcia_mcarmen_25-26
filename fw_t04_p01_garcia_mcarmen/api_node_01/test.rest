@@ -1,0 +1,192 @@
+@token= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjlhNTRiZWIzOTM0ZTM1MGQ0MTI2NzNjIiwiaWF0IjoxNzcyNDQxNDYyLCJleHAiOjE3NzI0NDUwNjJ9.4a3SI0soUTBqOP5SQ_dFM4eWXgqEG0AUSEoN7uqfnG4
+
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "alumno2",
+  "email": "alumno2@fwshop.com",
+  "password": "1234"
+}
+###
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "alumno2",
+  "email": "alumno2@fwshop.com",
+  "password": "123456"
+}
+
+###
+
+
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "alumno2",
+  "email": "alumno2@fwshop.com",
+  "password": "1234"
+}
+
+
+###
+GET http://localhost:3000/api/auth/me
+
+###
+
+GET http://localhost:3000/api/auth/me
+Authorization: Bearer {{token}}
+
+###
+### Obtener todos los productos (PÚBLICA)
+GET http://localhost:3000/api/products
+
+###
+
+### Crear producto (PRIVADA - requiere JWT)
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Teclado Mecánico",
+  "price": 59.99,
+  "stock": 10,
+  "department": "informatica"
+}
+
+###
+
+
+GET http://localhost:3000/api/places
+
+###
+
+POST http://localhost:3000/api/places
+Content-Type: application/json
+
+{
+  "name": "Ciudad Real"
+}
+
+###
+
+PUT http://localhost:3000/api/places/1
+Content-Type: application/json
+
+{
+    "name": "Valdepeñas"
+}
+
+###
+
+DELETE http://localhost:3000/api/places/1
+
+###
+
+GET http://localhost:3000/api/products
+
+###
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+{
+  "name": "Sensor de temperatura WiFi",
+  "description": "Sensor IoT compatible con MQTT para monitorización remota",
+  "price": 39.95,
+  "stock": 120,
+  "department": "iot",
+  "available": true
+}
+
+###
+PUT http://localhost:3000/api/products/69a47801273172d973660160
+Content-Type: application/json
+
+{
+  "price": 79.99,
+  "stock": 10
+}
+###
+DELETE http://localhost:3000/api/products/69a47801273172d973660160
+
+###
+
+GET http://localhost:3000/api/products/69a47b34ba5e8ecda3711e40
+
+###
+
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+{
+  "name": "Crucial 16GB DDR4",
+  "description": "Memoria RAM Crucial 16GB 3200MHz",
+  "price": 59.99,
+  "stock": 25,
+  "department": "informatica",
+  "available": true
+}
+
+###
+GET http://localhost:3000/api/products/search?department=iot&available=true
+
+###
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "username": "alumno1",
+  "email": "alumno1@fwshop.com",
+  "password": "1234"
+}
+
+
+###
+
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "username": "alumno2",
+  "email": "alumno1@fwshop.com",
+  "password": "1234"
+}
+
+
+###
+
+
+POST http://localhost:3000/api/users/69a47f4bb69a69abfd100b48/cart
+Content-Type: application/json
+
+{
+  "productId": "69a479207d7bdf2872d7438a"
+}
+
+
+###
+
+GET http://localhost:3000/api/users
+
+###
+
+GET http://localhost:3000/api/users/by-email/alumno1@fwshop.com
+
+###
+
+DELETE http://localhost:3000/api/users/69a47f4bb69a69abfd100b48/cart
+Content-Type: application/json
+
+{
+  "productId": "69a479207d7bdf2872d7438a"
+}
+
+###
+
+DELETE http://localhost:3000/api/users/69a47f4bb69a69abfd100b48/cart/all
+
+###
+

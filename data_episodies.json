@@ -1,0 +1,72 @@
+[
+  {
+    "code": "S01E01",
+    "title": "Dog and Chainsaw",
+    "summary": "Denji, un joven con deudas masivas, es traicionado y asesinado, pero revive tras hacer un contrato con su perro demonio Pochita, convirtiéndose en Chainsaw Man.",
+    "year": 2022,
+    "characters": ["69a567446981aaac9b68c26b", "69a567446981aaac9b68c274", "69a567446981aaac9b68c26d"]
+  },
+  {
+    "code": "S01E02",
+    "title": "Arrival in Tokyo",
+    "summary": "Makima lleva a Denji a la sede de los Cazadores de Demonios en Tokio y lo asigna como compañero del serio Aki Hayakawa.",
+    "year": 2022,
+    "characters": ["69a567446981aaac9b68c26b", "69a567446981aaac9b68c26d", "69a567446981aaac9b68c26c", "69a567446981aaac9b68c277"]
+  },
+  {
+    "code": "S01E03",
+    "title": "Meowy's Whereabouts",
+    "summary": "Denji trabaja con Power, una Poseída impetuosa que le promete un favor especial si rescata a su gato de un demonio.",
+    "year": 2022,
+    "characters": ["69a567446981aaac9b68c26b", "69a567446981aaac9b68c26e", "69a567446981aaac9b68c26d", "69a567446981aaac9b68c277"]
+  },
+  {
+    "code": "S01E04",
+    "title": "Rescue",
+    "summary": "Tras una feroz batalla contra el Demonio Murciélago, Denji logra salvar a Power. Aki comienza a vigilar de cerca a los dos nuevos compañeros.",
+    "year": 2022,
+    "characters": ["69a567446981aaac9b68c26b", "69a567446981aaac9b68c26e", "69a567446981aaac9b68c26c", "69a567446981aaac9b68c277"]
+  },
+  {
+    "code": "S01E05",
+    "title": "Gun Devil",
+    "summary": "Aki revela el trauma de su pasado causado por el Demonio Pistola, mientras el equipo queda atrapado en un hotel por un bucle infinito.",
+    "year": 2022,
+    "characters": ["69a567446981aaac9b68c26c", "69a567446981aaac9b68c26b", "69a567446981aaac9b68c26e", "69a567446981aaac9b68c26f", "69a567446981aaac9b68c270", "69a567446981aaac9b68c278"]
+  },
+  {
+    "code": "S01E08",
+    "title": "Gunfire",
+    "summary": "Un ataque coordinado de la facción de Katana Man diezma a la División 4, resultando en pérdidas trágicas para el equipo de Seguridad Pública.",
+    "year": 2022,
+    "characters": ["69a567446981aaac9b68c26f", "69a567446981aaac9b68c26c", "69a567446981aaac9b68c26b", "69a567446981aaac9b68c26e", "69a567446981aaac9b68c275", "69a567446981aaac9b68c276"]
+  },
+  {
+    "code": "S01E09",
+    "title": "From Kyoto",
+    "summary": "Makima utiliza sus misteriosos y aterradores poderes desde un templo en Kioto para contraatacar a los asesinos en Tokio.",
+    "year": 2022,
+    "characters": ["69a567446981aaac9b68c26d", "69a567446981aaac9b68c270", "69a567446981aaac9b68c275", "69a567446981aaac9b68c276"]
+  },
+  {
+    "code": "S01E12",
+    "title": "Katana vs. Chainsaw",
+    "summary": "Denji tiene un enfrentamiento final contra Katana Man mientras la División 4 asegura el área con sus nuevos integrantes.",
+    "year": 2022,
+    "characters": ["69a567446981aaac9b68c26b", "69a567446981aaac9b68c275", "69a567446981aaac9b68c26c", "69a567446981aaac9b68c26d", "69a567446981aaac9b68c273", "69a567446981aaac9b68c272", "69a567446981aaac9b68c271", "69a567446981aaac9b68c276"]
+  },
+  {
+    "code": "S02E01",
+    "title": "The Movie Date",
+    "summary": "Denji y Makima pasan un día entero en el cine, una experiencia que profundiza la extraña conexión entre ambos.",
+    "year": 2024,
+    "characters": ["69a567446981aaac9b68c26b", "69a567446981aaac9b68c26d"]
+  },
+  {
+    "code": "S02E02",
+    "title": "The Girl in the Rain",
+    "summary": "Denji conoce a Reze en un café bajo la lluvia, una chica que parece mostrar un interés genuino en él.",
+    "year": 2024,
+    "characters": ["69a567446981aaac9b68c26b", "69a567446981aaac9b68c279", "69a567446981aaac9b68c273"]
+  }
+]
