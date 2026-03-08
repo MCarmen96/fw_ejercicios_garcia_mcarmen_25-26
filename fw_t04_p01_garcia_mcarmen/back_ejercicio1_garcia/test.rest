@@ -1,5 +1,13 @@
-###
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjlhYWM1ODczMmYwOWMxZWE3YjE5N2JmIiwiaWF0IjoxNzcyODAyMDA3LCJleHAiOjE3NzM0MDY4MDd9.pNiMNLVg3SV-QDYgWkaCP1DhtMiGQ6OOyYsQ00Uuj6w
+
 GET http://localhost:3000/api/characters
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjlhYWM1ODczMmYwOWMxZWE3YjE5N2JmIiwiaWF0IjoxNzcyODAyMDA3LCJleHAiOjE3NzM0MDY4MDd9.pNiMNLVg3SV-QDYgWkaCP1DhtMiGQ6OOyYsQ00Uuj6w
+
+###
+GET http://localhost:3000/api/characters?page=1&limit=2
+Content-Type: application/json
+Authorization: Bearer {{token}}
 
 ###
 
@@ -15,11 +23,14 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/api/characters/69a567446981aaac9b68c274
+Content-Type: application/json
+Authorization: Bearer {{token}}
 
 ###
 
 PUT http://localhost:3000/api/characters/69aaa54561a6f961b3a5ae79
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "name":"Choso",
@@ -33,7 +44,8 @@ DELETE http://localhost:3000/api/characters/69aaa54561a6f961b3a5ae79
 
 ###
 GET http://localhost:3000/api/episodes
-
+Content-Type: application/json
+Authorization: Bearer { { token } }
 ###
 POST http://localhost:3000/api/episodes
 Content-Type: application/json
@@ -49,6 +61,7 @@ Content-Type: application/json
 ###
 GET http://localhost:3000/api/episodes/69aaa6e161a6f961b3a5ae81
 
+
 ###
 
 PUT http://localhost:3000/api/episodes/69aaa6e161a6f961b3a5ae81
@@ -63,3 +76,23 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:3000/api/episodes/69aaa6e161a6f961b3a5ae81
+
+###
+
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "carmen",
+  "email": "carmen@gmail.com",
+  "password": "1234"
+}
+
+###
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "carmen@gmail.com",
+  "password": "1234"
+}

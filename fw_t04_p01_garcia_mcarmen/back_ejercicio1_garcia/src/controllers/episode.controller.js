@@ -37,7 +37,7 @@ const getEpisodiesById = async (req, res) => {
 }
 const createEpisodies = async (req, res) => {
 
-    const { code,title,summary,year,characters } = req.body;
+    /* const { code,title,summary,year,characters } = req.body;
 
     if (!title || code === undefined || summary === undefined) {
         return res.status(400).json({
@@ -47,7 +47,7 @@ const createEpisodies = async (req, res) => {
     //haccer funcion de bucar personaje por nombre©
     if (typeof year !== 'number' || year < 0) {
         return res.status(400).json({ error: 'year debe ser un número positivo' });
-    }
+    } */
 
     try {
         const newEpisodie = await Episode.create(req.body);

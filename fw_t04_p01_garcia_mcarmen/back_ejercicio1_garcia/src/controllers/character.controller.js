@@ -4,8 +4,28 @@ const Character = require("../models/character.model");
 //Product.find() devuelve una promesa, por eso usamos async/await. Si no hay datos, devolverá [].
 const getAllCharacters = async (req, res) => {
     try {
-        console.log("entro en el get all characters")
-        const characters = await Character.find();
+        const { page, limit } = req.query;
+        let characters;
+        let total = await Character.countDocuments();
+        if (limit) {
+            const pageNumber = parseInt(page) || 1;
+            const limitNumber = parseInt(limit);
+            const skip = (pageNumber - 1) * limitNumber;
+            characters = await Character.find().skip(skip).limit(limitNumber);
+            return res.status(200).json({
+                data: characters,
+                pagination: {
+                    total,
+                    page: pageNumber,
+                    limit: limitNumber,
+                    totalPages: Math.ceil(total / limitNumber)
+                }
+            });
+        }
+
+        console.log("entro en el get all characters");
+        //si no hay limite devolvemos todo
+        characters = await Character.find();
         res.status(200).json(characters);
         console.log(characters)
     } catch (error) {
@@ -37,15 +57,15 @@ const getCharactersById = async (req, res) => {
 }
 const createCharacter = async (req, res) => {
 
-    const { name, age, species, role } = req.body;
-    if (!name || species === undefined || role === undefined) {
-        return res.status(400).json({
-            error: 'Faltan campos obligatorios: name, species,role'
-        });
-    }
-    if (typeof age !== 'number' || age < 0) {
-        return res.status(400).json({ error: 'age debe ser un número positivo' });
-    }
+    /*  const { name, age, species, role } = req.body;
+     if (!name || species === undefined || role === undefined) {
+         return res.status(400).json({
+             error: 'Faltan campos obligatorios: name, species,role'
+         });
+     }
+     if (typeof age !== 'number' || age < 0) {
+         return res.status(400).json({ error: 'age debe ser un número positivo' });
+     } */
 
     try {
         const newCharacter = await Character.create(req.body);
