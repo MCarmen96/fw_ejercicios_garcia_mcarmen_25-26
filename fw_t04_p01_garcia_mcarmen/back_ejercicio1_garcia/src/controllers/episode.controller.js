@@ -1,12 +1,18 @@
 const { default: mongoose } = require("mongoose");
 const Episode = require("../models/episode.model");
+const Character = require("../models/character.model");
+
 
 //Product.find() devuelve una promesa, por eso usamos async/await. Si no hay datos, devolverá [].
-const getAllEpisodies= async (req, res) => {
+const getAllEpisodies = async (req, res) => {
     try {
+        const total = await Episode.countDocuments();
         console.log("entro en el get all episode")
         const episode = await Episode.find();
-        res.status(200).json(episode);
+        res.status(200).json({
+            data: episode,
+            total
+        });
         console.log(episode)
     } catch (error) {
         res.status(500).json({
@@ -24,7 +30,7 @@ const getEpisodiesById = async (req, res) => {
             return res.status(400).json({ error: "ID inválido" });
         }
         // mirar que devulev el finById()
-        const episode= await Episode.findById(id);
+        const episode = await Episode.findById(id);
         if (!episode) {
             return res.status(404).json({ error: "Episode no encontrado" });
         }
@@ -50,14 +56,30 @@ const createEpisodies = async (req, res) => {
     } */
 
     try {
+
+        
+        //recojo el campo 
+        const { characters } = req.body;
+        console.log("Personaje que se va a crear es: "+characters);
+
+        characters.forEach(element => {
+            const char = Character.findById(element);
+            console.log(char);
+            // si uno de los ids no es econtrado es que no esta
+            if (char) {
+                return res.status(500).json({ error: "Los ids del array characters no coinciden con los de los personajes en la bbdd" });
+            }
+        });
+
         const newEpisodie = await Episode.create(req.body);
         res.status(201).json(newEpisodie);
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 }
 
-const updateEpisodies= async (req, res) => {
+const updateEpisodies = async (req, res) => {
     try {
         const { id } = req.params;
 

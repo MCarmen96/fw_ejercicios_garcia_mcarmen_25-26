@@ -1,11 +1,11 @@
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjlhYWM1ODczMmYwOWMxZWE3YjE5N2JmIiwiaWF0IjoxNzcyODAyMDA3LCJleHAiOjE3NzM0MDY4MDd9.pNiMNLVg3SV-QDYgWkaCP1DhtMiGQ6OOyYsQ00Uuj6w
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjlhYWM1ODczMmYwOWMxZWE3YjE5N2JmIiwiaWF0IjoxNzczMDQ1MjcxLCJleHAiOjE3NzM2NTAwNzF9.tpVl6WZ9lw3d2a3XDF1deEkFvgw52QCr10CZFuwWgZo
 
 GET http://localhost:3000/api/characters
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjlhYWM1ODczMmYwOWMxZWE3YjE5N2JmIiwiaWF0IjoxNzcyODAyMDA3LCJleHAiOjE3NzM0MDY4MDd9.pNiMNLVg3SV-QDYgWkaCP1DhtMiGQ6OOyYsQ00Uuj6w
+Authorization: Bearer {{token}}
 
 ###
-GET http://localhost:3000/api/characters?page=1&limit=2
+GET http://localhost:3000/api/characters?page=2&limit=2
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -28,15 +28,13 @@ Authorization: Bearer {{token}}
 
 ###
 
-PUT http://localhost:3000/api/characters/69aaa54561a6f961b3a5ae79
+PUT http://localhost:3000/api/characters/69a567446981aaac9b68c26b
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "name":"Choso",
-    "age":125,
-    "species":"Demonio",
-    "role":"Maldicion"
+    "name":"a",
+    "age":"ldfsd"
 }
 
 ###
@@ -45,16 +43,18 @@ DELETE http://localhost:3000/api/characters/69aaa54561a6f961b3a5ae79
 ###
 GET http://localhost:3000/api/episodes
 Content-Type: application/json
-Authorization: Bearer { { token } }
+Authorization: Bearer {{token}}
 ###
 POST http://localhost:3000/api/episodes
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {   
-    "title":"prueba1",
-    "code":"1111",
-    "summary":"nisu",
-    "year":2026
+    "code": "S01E03",
+    "title": "Meowy's Whereabouts",
+    "summary": "Denji trabaja con Power, una Poseída impetuosa que le promete un favor especial si rescata a su gato de un demonio.",
+    "year": 2022,
+    "characters": ["69a572046981aaac9b68c27c", "69a567446981aaac9b68c26e", "69a567446981aaac9b68c26d", "69a567446981aaac9b68c277"]
 
 }
 

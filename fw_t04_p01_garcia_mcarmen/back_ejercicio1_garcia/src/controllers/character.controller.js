@@ -26,7 +26,10 @@ const getAllCharacters = async (req, res) => {
         console.log("entro en el get all characters");
         //si no hay limite devolvemos todo
         characters = await Character.find();
-        res.status(200).json(characters);
+        res.status(200).json({
+            data:characters,
+            total
+        });
         console.log(characters)
     } catch (error) {
         res.status(500).json({
@@ -43,7 +46,7 @@ const getCharactersById = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: "ID inválido" });
         }
-        // mirar que devulev el finById()
+        // mirar que devuleve el finById()
         const character = await Character.findById(id);
         if (!character) {
             return res.status(404).json({ error: "Personaje no encontrado" });
@@ -101,4 +104,17 @@ const deleteCharacter = async (req, res) => {
     }
 };
 
-module.exports = { getAllCharacters, getCharactersById, createCharacter, updateCharacter, deleteCharacter };
+/* async function validateObjetId(arrayCharacters){
+    const valid=false;
+    arrayCharacters.forEach(element => {
+        if(Character.findById(element)){
+            valid=true;
+        }else{
+            valid=false;
+        }
+    
+    });
+    
+} */
+
+module.exports = { getAllCharacters, getCharactersById, createCharacter, updateCharacter, deleteCharacter};

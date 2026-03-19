@@ -13,6 +13,31 @@ const createEpisodiesRules=[
     body('characters.*')
         .isMongoId().withMessage("Los elementos del array deben de ser de tipo MongoId")
 ];
+
+const updateEpisodies=[
+    body('code')
+        .optional()
+        .notEmpty().withMessage("El code es obligatorio")
+        .matches(patron).withMessage("El formato debe ser SxxExx (ejemplo: S01E05)"),
+    body('title')
+        .optional()
+        .isString().withMessage("El valor debe ser una cadena de caracteres")
+        .isLength({ min: 2, max: 100 }).withMessage("Entre 2 y 100 caracteres"),
+    body('summary')
+        .optional()
+        .isString().withMessage("El valor debe ser una cadena de caracteres")
+        .isLength({ min: 2, max: 100 }).withMessage("Entre 2 y 100 caracteres"),
+    body('year')
+        .optional()
+        .notEmpty().withMessage("El año es obligatorio")
+        .isInt({ min: 0 }).isLength({min:1,max:5}).withMessage("La edad debe ser un numero positivo"),
+    body('characters')
+        .optional()
+        .isArray().withMessage("Characters tiene que ser un array"),
+    body('characters.*')
+        .optional()
+        .isMongoId().withMessage("Los elementos del array deben de ser de tipo MongoId")
+];
 const validate = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -20,4 +45,4 @@ const validate = (req, res, next) => {
     }
     next();
 };
-module.exports={createEpisodiesRules,validate}
+module.exports={createEpisodiesRules,updateEpisodies,validate}
