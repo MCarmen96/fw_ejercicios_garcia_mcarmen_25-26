@@ -1,0 +1,56 @@
+<!-- <pre><%= JSON.stringify(locals, null, 2) %></pre> -->
+
+<%- include('partials/header') %>
+  <section>hello!!</section>
+
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4 max-w-7xl mx-auto" id="container-characters">
+    <% if( characters && characters.length> 0){ %>
+      <% characters.forEach(element=> { %>
+        <div class="card bg-base-100 w-full shadow-sm border border-gray-100">
+          <figure>
+            <img src="<%= element.img %>" alt="<%= element.name %>" class="w-full object-cover h-48" />
+          </figure>
+          <div class="card-body">
+            <% if (element.name !=null){ %>
+              <h2 class="card-title text-base">
+                <%= element.name %>
+              </h2>
+              <p class="text-sm">Edad: <%= element.age %>
+              </p>
+              <p class="text-sm">Especie: <%= element.species %>
+              </p>
+
+              <% if( element.specialTraits && element.specialTraits.length>0 ){ %>
+                <ul>
+                  <p class="text-sm">Special traits:</p>
+                  <% element.specialTraits.forEach( special=> { %>
+                    <li>
+                      <%= special %>
+                    </li>
+                    <% }); %>
+                </ul>
+                <% } %>
+
+                  <% } else { %>
+                    <h2 class="card-title text-base text-gray-400">Desconocido</h2>
+                    <% } %>
+
+          </div>
+        </div>
+        <% }); %>
+          <% } else { %>
+            <div
+              class="col-span-1 sm:col-span-2 lg:col-span-4 p-8 text-center bg-gray-50 rounded-lg border-2 border-dashed">
+              <p class="text-gray-500">No hay datos disponibles en este momento.</p>
+              <a href="/crear" class="text-indigo-600 underline">¡Crea el primero!</a>
+            </div>
+            <% } %>
+              <div class="join">
+                <% for (let i=1; i <= paginas; i++) { %>
+                  <button class="join-item btn"  onclick="paginar('<%=i%>')"><%=i%></button>
+                <% } %>
+              </div>
+
+  </section>
+
+  <%- include('partials/footer') %>
