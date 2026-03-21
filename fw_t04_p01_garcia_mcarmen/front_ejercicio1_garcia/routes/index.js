@@ -13,6 +13,9 @@ router.get('/', async (req, res, next) =>{
     console.log(response.data);
     const numPaginas=response.data.pagination.totalPages;
     console.log("Numero de paginas-> "+numPaginas);
+
+
+    
     res.render('index', { title: 'Express',characters:response.data.data ,paginas:numPaginas});
 
   }catch(error){

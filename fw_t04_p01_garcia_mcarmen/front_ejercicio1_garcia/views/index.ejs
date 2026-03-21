@@ -45,12 +45,14 @@
               <a href="/crear" class="text-indigo-600 underline">¡Crea el primero!</a>
             </div>
             <% } %>
-              <div class="join">
+            
+
+  </section>
+
+    <div class="join">
                 <% for (let i=1; i <= paginas; i++) { %>
                   <button class="join-item btn"  onclick="paginar('<%=i%>')"><%=i%></button>
                 <% } %>
-              </div>
-
-  </section>
+    </div>
 
   <%- include('partials/footer') %>
