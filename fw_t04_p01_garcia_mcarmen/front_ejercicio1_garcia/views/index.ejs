@@ -49,10 +49,14 @@
 
   </section>
 
+<div class="flex justify-center my-8"> 
     <div class="join">
-                <% for (let i=1; i <= paginas; i++) { %>
-                  <button class="join-item btn"  onclick="paginar('<%=i%>')"><%=i%></button>
-                <% } %>
+        <% for (let i=1; i <= paginas; i++) { %>
+            <button class="join-item btn" onclick="paginar('<%=i%>')">
+                <%=i%>
+            </button>
+        <% } %>
     </div>
+</div>
 
   <%- include('partials/footer') %>

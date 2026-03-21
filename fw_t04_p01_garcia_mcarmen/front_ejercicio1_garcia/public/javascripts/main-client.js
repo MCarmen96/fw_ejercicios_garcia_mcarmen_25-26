@@ -13,7 +13,12 @@ async function paginar(pagina) {
   const datos = await peticion.json();
   contenedor.innerHTML = "";
   console.log("Datos de la peticion de la paginacion: " + datos.data);
+   let traitsHTML = "";
   datos.data.forEach(element => {
+   
+    element.specialTraits.forEach(special => {
+      traitsHTML += `<li>${special}</li>`;
+    });
     contenedor.innerHTML += `<div class="card bg-base-100 w-full shadow-sm border border-gray-100">
           <figure>
             <img src="${element.img}" alt="${element.name}" class="w-full object-cover h-48" />
@@ -26,19 +31,18 @@ async function paginar(pagina) {
               </p>
               <p class="text-sm">Especie: ${element.species}
               </p>
+              
+              <ul>
+                <p class="text-sm">Special traits:</p>
+                ${traitsHTML}
+              </ul>
           </div>
         </div>
        `
+       traitsHTML = "";
   });
 
-    /*          <ul>
-                  <p class="text-sm">Special traits:</p>
-                  <% element.specialTraits.forEach( special=> { %>
-                    <li>
-                      <%= special %>
-                    </li>
-                   
-                </ul> */
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
