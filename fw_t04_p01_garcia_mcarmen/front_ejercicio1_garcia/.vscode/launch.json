@@ -4,9 +4,9 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Depurar Express (bin/www)",
+      "name": "Depurar Express (bin/www.js)",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/bin/www",
+      "program": "${workspaceFolder}/bin/www.js",
       "envFile": "${workspaceFolder}/.env",
       "console": "integratedTerminal",
       "restart": true
