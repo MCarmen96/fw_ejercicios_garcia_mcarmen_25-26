@@ -1,4 +1,4 @@
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjlhYWM1ODczMmYwOWMxZWE3YjE5N2JmIiwiaWF0IjoxNzczMDQ1MjcxLCJleHAiOjE3NzM2NTAwNzF9.tpVl6WZ9lw3d2a3XDF1deEkFvgw52QCr10CZFuwWgZo
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjlhYWM1ODczMmYwOWMxZWE3YjE5N2JmIiwiaWF0IjoxNzc0NTE3NzE4LCJleHAiOjE3NzUxMjI1MTh9.JTR4To32qohuRNYiyw3-shCV1aVAQm5Ora2A-hXny-Q
 
 GET http://localhost:3000/api/characters
 Content-Type: application/json
@@ -59,8 +59,9 @@ Authorization: Bearer {{token}}
 }
 
 ###
-GET http://localhost:3000/api/episodes/69aaa6e161a6f961b3a5ae81
-
+GET http://localhost:3000/api/episodes/69a572046981aaac9b68c27c
+Content-Type: application/json
+Authorization: Bearer {{token}}
 
 ###
 
@@ -96,3 +97,4 @@ Content-Type: application/json
   "email": "carmen@gmail.com",
   "password": "1234"
 }
+

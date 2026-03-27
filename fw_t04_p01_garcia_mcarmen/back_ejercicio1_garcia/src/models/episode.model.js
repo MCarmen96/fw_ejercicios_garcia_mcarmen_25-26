@@ -6,7 +6,7 @@ const episodesSchema=new Schema(
         title:String,
         summary:String,
         year:Number,
-        characters:Array
+        characters:[{type: Schema.Types.ObjectId, ref: "Character"}]
     },
     {
         timestamps: true,

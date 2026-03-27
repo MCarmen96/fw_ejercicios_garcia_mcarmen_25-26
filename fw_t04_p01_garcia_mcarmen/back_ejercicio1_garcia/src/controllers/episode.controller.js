@@ -7,13 +7,13 @@ const Character = require("../models/character.model");
 const getAllEpisodies = async (req, res) => {
     try {
         const total = await Episode.countDocuments();
-        console.log("entro en el get all episode")
+    
         const episode = await Episode.find();
         res.status(200).json({
             data: episode,
             total
         });
-        console.log(episode)
+        
     } catch (error) {
         res.status(500).json({
             error: "Error al obtener los episode",
@@ -22,25 +22,26 @@ const getAllEpisodies = async (req, res) => {
     }
 };
 const getEpisodiesById = async (req, res) => {
-
     try {
         const { id } = req.params;
-
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: "ID inválido" });
         }
         // mirar que devulev el finById()
-        const episode = await Episode.findById(id);
+        const episode = await Episode.findById(id).populate("characters");
         if (!episode) {
             return res.status(404).json({ error: "Episode no encontrado" });
-        }
+        }   
+        console.log("--PERSONAJE: "+episode.characters[0].name);
+        console.log("--PERSONAJE: "+episode.characters);
 
         res.status(200).json(episode);
-
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
+
+};
+
 const createEpisodies = async (req, res) => {
 
     /* const { code,title,summary,year,characters } = req.body;
@@ -77,7 +78,7 @@ const createEpisodies = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
+};
 
 const updateEpisodies = async (req, res) => {
     try {
@@ -91,7 +92,7 @@ const updateEpisodies = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
+};
 
 const deleteEpisodies = async (req, res) => {
     try {
