@@ -23,15 +23,24 @@
                         <td><%= element.year%> </td>
                         <td>
                             <!-- Open the modal using ID.showModal() method -->
-                            <button class="btn" onclick="infoModal('<%= element._id %>')"">Ver detalles</button>
-                            <dialog id="my_modal" class="modal">
-                            
-                            </dialog>
+                            <button class="btn" onclick="infoModal('<%= element._id %>','box-<%=index%>','my_modal_<%=index%>')">Ver detalles</button>
+                           
                         </td>
                     </tr>
                 <% }); %>
                 
             </tbody>
         </table>
+         <dialog id="my_modal" class="modal">
+                                <div class="modal-box" id="box">
+
+                                </div>
+                            </dialog>
     </div>
+
+    <ul>
+        <li>
+            
+        </li>
+    </ul>
     <%- include('partials/footer') %>

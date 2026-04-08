@@ -10,7 +10,7 @@ const getToken = async () => {
     };
     // realizo el post del login 
     const response = await axios.post(process.env.API_URL+process.env.API_LOGIN_URL, loginData);
-    console.log(response);
+    //console.log(response);
     // Retornamos el token (ajusta la ruta según el JSON de tu API)
     return response.data.token; 
 };

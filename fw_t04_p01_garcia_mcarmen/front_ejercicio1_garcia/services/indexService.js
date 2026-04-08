@@ -7,7 +7,7 @@ const axios = require('axios');
  * @returns {Promise<Object>} Datos de la respuesta de la API.
  */
 
-const getCharacters = async (token, page=1) => {
+const getCharacters = async (token, page = 1) => {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
@@ -15,43 +15,77 @@ const getCharacters = async (token, page=1) => {
     const response = await axios.get(`http://localhost:3000/api/characters?page=${page}&limit=4`, config);
     return response.data;
 };
+const getEpisodios = async (token) => {
 
-
-const getEpisodios=async(token)=>{
-
-    const url="http://localhost:3000/api/episodes";
+    const url = "http://localhost:3000/api/episodes";
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
 
-     const response = await axios.get(url, config);
+    const response = await axios.get(url, config);
     return response.data;
 };
-
-const getCharactersWithPage=async (token,page)=>{
+const getCharactersWithPage = async (token, page) => {
 
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
 
-    const response = await axios.get(`http://localhost:3000/api/characters?page=${page}&limit=4`,config);
+    const response = await axios.get(`http://localhost:3000/api/characters?page=${page}&limit=4`, config);
     return response.data;
 
-}
-
-const getEpisodiosWithId=async(token,id)=>{
-    const url=`http://localhost:3000/api/episodes/${id}`;
+};
+const getCharactersNameId = async (token) => {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
-    console.log("url=> "+url)
-    //const response=await axios.get(url,config);
-    const response =null;
-    console.log("desde el index service: "+response.status);
-    
-    return response;
 
-}
+    const response = await axios.get(`http://localhost:3000/api/characters`, config);
+    console.log("respuesta desde el index controller: " + response.data);
+    return response.data;
+
+};
+const getEpisodiosWithId = async (token, id) => {
+    const url = `http://localhost:3000/api/episodes/${id}`;
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const response = await axios.get(url, config);
+
+    return response.data;
+};
+const saveEpisode = async (token, newEpisode) => {
+
+    const url = "http://localhost:3000/api/episodes";
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+    try {
+        const envio = await axios.post(url, newEpisode, config);
+        console.log("Respuesta del servidor:", envio.data);
+    } catch (error) {
+        console.log("error al guardar el episodio");
+        if (error.response) {
+            
+            console.error("Status:", error.response.status);
+            console.error("Datos del error:", error.response.data);
+        } else if (error.request) {
+
+            console.error("No hubo respuesta del servidor");
+        } else {
+    
+            console.error("Error de configuración:", error.message);
+        }
+    }
+    throw error;
+
+};
+
+
 module.exports = {
-    getCharacters,getEpisodios,getCharactersWithPage,getEpisodiosWithId
+    getCharacters, getEpisodios, getCharactersWithPage, getEpisodiosWithId, getCharactersNameId, saveEpisode
 };

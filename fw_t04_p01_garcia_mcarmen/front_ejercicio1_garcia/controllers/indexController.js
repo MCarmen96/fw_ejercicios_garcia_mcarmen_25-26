@@ -5,7 +5,7 @@ const authService = require('../services/authService');
  */
 const renderIndex = async (req, res) => {
     try {
-        console.log("entrando en render index");
+
         // 1. Recibimos el token directamente del servicio de auth
         const token = await authService.getToken();
         //console.log("Token recibido con éxito");
@@ -47,34 +47,75 @@ const renderEpisodios = async (req, res, net) => {
     }
 };
 
+const renderCreateEpisode = async (req, res) => {
+    try {
+        const token = await authService.getToken();
+        const datos = await indexService.getCharactersNameId(token);
+        const datosNecesarios = [];
+
+        datos.data.forEach(element => {
+            datosNecesarios.push({ "id": element._id, "name": element.name, "img": element.img });
+        });
+        console.log("Datos necesarios: " + datosNecesarios);
+        res.render('createEpisode', {
+            title: 'Express con Token Dinámico',
+            characters: datosNecesarios,
+
+        });
+
+    } catch (error) {
+        console.error("Error en el flujo de petición:", error.message);
+        res.status(500).render('error', { mensaje: 'Error al procesar la petición con el token' });
+    }
+
+
+};
+
 const dataCharacters = async (req, res) => {
     try {
-         console.log("entro en el dataCharacters")
+        console.log("entro en el dataCharacters")
         const token = await authService.getToken();
         const { page } = req.query;
         const data = await indexService.getCharactersWithPage(token, page);
         //console.log("DATOS DEDES DEL DATA CHARACTERS: "+data.data);
-        
+
         res.json(data);
 
 
-    }catch(error){
+    } catch (error) {
         console.error("Error en el flujo de petición:", error.message);
         res.status(500).render('error', { mensaje: 'Error al procesar la petición con el token' });
     }
-  
+
 }
 
-const dataEpisodes=async(req,res)=>{
-    console.log("----------entro en el dataEpisodes----------");
+const dataEpisodes = async (req, res) => {
+
+    const token = await authService.getToken();
+    const { id } = req.params;
+    const data = await indexService.getEpisodiosWithId(token, id);
+    res.json(data);
+}
+
+const createEpisode = async (req, res) => {
+    try {
         const token = await authService.getToken();
-        const { id } = req.params;
-        const data=await indexService.getEpisodiosWithId(token,id);
+        const { title, code, year,characterIds } = req.body;
+        console.log("IDs recibidos del formulario:", characterIds);
+        const newEpisode = {
+            code: code,
+            title: title,
+            characters: Array.isArray(characterIds) ? characterIds : [characterIds],
+            year: year
+        };
 
-        console.log("DATOS DESDE EL DATA EPISODES WITH ID "+ data.data);
-        res.json(data);
-}
+        const peticion=await indexService.saveEpisode(token,newEpisode);
+        res.redirect('/createEpisode');
+    }catch(error){
+        //res.redirect('/create-episode?error=true');
+    }
+};
 
 module.exports = {
-    renderIndex, renderEpisodios, dataCharacters,dataEpisodes
+    renderIndex, renderEpisodios, dataCharacters, dataEpisodes, renderCreateEpisode, createEpisode
 };

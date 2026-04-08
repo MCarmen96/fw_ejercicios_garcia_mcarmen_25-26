@@ -12,6 +12,8 @@ router.get('/', indexController.renderIndex);
 router.get('/episodios', indexController.renderEpisodios);
 router.get('/api/characters',indexController.dataCharacters);
 router.get('/api/episodes/:id',indexController.dataEpisodes);
+router.get('/createEpisode',indexController.renderCreateEpisode);
+router.post('/saveEpisode',indexController.createEpisode);
 
 
 /* /* GET home page.
