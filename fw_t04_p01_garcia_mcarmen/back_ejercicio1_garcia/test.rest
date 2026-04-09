@@ -1,4 +1,4 @@
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjlhYWM1ODczMmYwOWMxZWE3YjE5N2JmIiwiaWF0IjoxNzc0NTE3NzE4LCJleHAiOjE3NzUxMjI1MTh9.JTR4To32qohuRNYiyw3-shCV1aVAQm5Ora2A-hXny-Q
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjlhYWM1ODczMmYwOWMxZWE3YjE5N2JmIiwiaWF0IjoxNzc1NzE5ODkxLCJleHAiOjE3NzYzMjQ2OTF9.dTFUBbn7aZtfpPDsafo_fDnyxPH6TmZ9tLvUvKPdnwc
 
 GET http://localhost:3000/api/characters
 Content-Type: application/json
@@ -54,7 +54,7 @@ Authorization: Bearer {{token}}
     "title": "Meowy's Whereabouts",
     "summary": "Denji trabaja con Power, una Poseída impetuosa que le promete un favor especial si rescata a su gato de un demonio.",
     "year": 2022,
-    "characters": ["69a572046981aaac9b68c27c", "69a567446981aaac9b68c26e", "69a567446981aaac9b68c26d", "69a567446981aaac9b68c277"]
+    "characters": ["69a567447981aaac9b68c26b", "69a567446981aaac9b68c26e", "69a567446981aaac9b68c26d", "69a567446981aaac9b68c277"]
 
 }
 

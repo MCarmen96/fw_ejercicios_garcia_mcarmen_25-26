@@ -32,8 +32,8 @@ const getEpisodiesById = async (req, res) => {
         if (!episode) {
             return res.status(404).json({ error: "Episode no encontrado" });
         }   
-        console.log("--PERSONAJE: "+episode.characters[0].name);
-        console.log("--PERSONAJE: "+episode.characters);
+        //console.log("--PERSONAJE: "+episode.characters[0].name);
+        //console.log("--PERSONAJE: "+episode.characters);
 
         res.status(200).json(episode);
     } catch (error) {
@@ -44,33 +44,26 @@ const getEpisodiesById = async (req, res) => {
 
 const createEpisodies = async (req, res) => {
 
-    /* const { code,title,summary,year,characters } = req.body;
-
-    if (!title || code === undefined || summary === undefined) {
-        return res.status(400).json({
-            error: 'Faltan campos obligatorios:code,title,summary,year'
-        });
-    }
-    //haccer funcion de bucar personaje por nombre©
-    if (typeof year !== 'number' || year < 0) {
-        return res.status(400).json({ error: 'year debe ser un número positivo' });
-    } */
 
     try {
-
-        
         //recojo el campo 
         const { characters } = req.body;
-        console.log("Personaje que se va a crear es: "+characters);
+        console.log("BODY->",req.body);
+        console.log("Personaje que se va a crear es: ",characters);
 
-        characters.forEach(element => {
-            const char = Character.findById(element);
-            console.log(char);
+        for(const element of characters) {
+            
+            console.log("Personaje??? ",element);
+            if (!mongoose.Types.ObjectId.isValid(element)) {
+                        return res.status(400).json({ error: "ID inválido" });
+                    }
+            const personaje = await Character.findById(element);
+            console.log(personaje);
             // si uno de los ids no es econtrado es que no esta
-            if (char) {
+            if (!personaje) {
                 return res.status(500).json({ error: "Los ids del array characters no coinciden con los de los personajes en la bbdd" });
             }
-        });
+        };
 
         const newEpisodie = await Episode.create(req.body);
         res.status(201).json(newEpisodie);
