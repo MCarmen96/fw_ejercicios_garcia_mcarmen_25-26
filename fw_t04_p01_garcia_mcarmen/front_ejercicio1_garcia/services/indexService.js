@@ -64,9 +64,13 @@ const saveEpisode = async (token, newEpisode) => {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
+
     try {
-        const envio = await axios.post(url, newEpisode, config);
+        const envio = await axios.post(url, newEpisode,config);
         console.log("Respuesta del servidor:", envio.data);
+
+        return true;
+
     } catch (error) {
         console.log("error al guardar el episodio");
         if (error.response) {
@@ -85,7 +89,25 @@ const saveEpisode = async (token, newEpisode) => {
 
 };
 
+const deleteEpisode=async(token,id)=>{
+    const url=`http://localhost:3000/api/episodes/${id}`;
+
+     const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+
+    try{
+
+        const respuestaDelete=await axios.delete(url,config);
+        console.log(respuestaDelete.status);
+        console.log(respuestaDelete.message);
+
+    }catch(error){
+        console.log(error);
+    }
+}
+
 
 module.exports = {
-    getCharacters, getEpisodios, getCharactersWithPage, getEpisodiosWithId, getCharactersNameId, saveEpisode
+    getCharacters, getEpisodios, getCharactersWithPage, getEpisodiosWithId, getCharactersNameId, saveEpisode,deleteEpisode
 };

@@ -111,7 +111,7 @@ async function infoModal(id_episodio) {
                                     <p class="py-4">${datos.summary}</p>
                                      <h3 class="text-lg font-bold">Personajes</h3>
                                 `;
-  console.log(datos.characters[2].name);
+  //console.log(datos.characters[2].name);
   for (let index = 0; index < datos.characters.length; index++) {
     contenedor.innerHTML += `        
                                       <ul>
@@ -154,8 +154,7 @@ async function createEpisode() {
     const selectedCharacters = form.querySelectorAll('input[name="characterIds"]:checked');
 
     let isValid = true; 
-
-
+   
     if (titleInput.value.trim().length < 3) {
       e.preventDefault(); 
       errorTitle.textContent = 'El título es obligatorio y debe tener al menos 3 caracteres';
@@ -198,10 +197,12 @@ async function createEpisode() {
       summaryInput.classList.add('textarea-error');
       isValid = false;
     }
+      console.log(selectedCharacters.length);
+      
 
-    
     if (selectedCharacters.length === 0) {
       e.preventDefault();
+      
       alert("Debes seleccionar al menos un personaje para crear el episodio");
       isValid = false;
     }
@@ -210,24 +211,26 @@ async function createEpisode() {
     const alertText = document.getElementById('alert-error-text');
     if (!isValid) {
       e.preventDefault();
-      alertText.innerText = "Por favor, corrige los errores en el formulario.";
-      alertBox.classList.remove('hidden'); 
-    } else {
-      console.log("Todo correcto, enviando al servidor...");
-      alertText.innerText= "Episodio creado!!";
-      alertText.remove("alert-error");
-      alertText.classList.add("alert-success")
-      alertBox.classList.remove('hidden');
-      
     }
   });
 
 }
 
 
+async function deleteEpisode(id){
+  console.log("El id->",id);
+  const peticion = await fetch(`/api/delete/${id}`);
+  console.log("desde el cliente: " + peticion);
 
-createEpisode();
+}
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
   console.log("Hola: El DOM está listo");
 
+  if(document.getElementById('episodeForm')){
+    createEpisode();
+  }
+  
 });

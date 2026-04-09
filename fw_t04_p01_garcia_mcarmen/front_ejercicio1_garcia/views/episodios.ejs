@@ -12,6 +12,8 @@
                     <th>Code</th>
                     <th>Title</th>
                     <th>Year</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -23,15 +25,15 @@
                         <td><%= element.year%> </td>
                         <td>
                             <!-- Open the modal using ID.showModal() method -->
-                            <button class="btn" onclick="infoModal('<%= element._id %>','box-<%=index%>','my_modal_<%=index%>')">Ver detalles</button>
-                           
+                            <button class="btn btn-info" onclick="infoModal('<%= element._id %>','box-<%=index%>','my_modal_<%=index%>')">Ver detalles</button>
                         </td>
+                        <td><button class="btn btn-warning" onclick="deleteEpisode('<%= element._id %>')">Eliminar</button></td>
                     </tr>
                 <% }); %>
                 
             </tbody>
         </table>
-         <dialog id="my_modal" class="modal">
+        <dialog id="my_modal" class="modal">
                                 <div class="modal-box" id="box">
 
                                 </div>

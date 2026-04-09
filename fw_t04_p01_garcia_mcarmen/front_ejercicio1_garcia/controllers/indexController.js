@@ -60,6 +60,7 @@ const renderCreateEpisode = async (req, res) => {
         res.render('createEpisode', {
             title: 'Express con Token Dinámico',
             characters: datosNecesarios,
+            hayErrores:false
 
         });
 
@@ -100,22 +101,57 @@ const dataEpisodes = async (req, res) => {
 const createEpisode = async (req, res) => {
     try {
         const token = await authService.getToken();
-        const { title, code, year,characterIds } = req.body;
+        const { title, code, year,characterChecks,summary } = req.body;
+       
+        console.log(title);
+        console.log(code);
+        console.log(year);
+        console.log(summary);
         console.log("IDs recibidos del formulario:", characterIds);
+        console.log("TIPO->", typeof characterIds );
+        const characterIds=[];
+         if(typeof characterChecks==="string"){
+            console.log("entra ene el id????")
+             characterIds=[characterChecks];
+           
+        }else{
+            characterIds=characterChecks
+        }
+        
+
+        console.log("TIPO->",characterIds instanceof Array);
+        
         const newEpisode = {
             code: code,
             title: title,
-            characters: Array.isArray(characterIds) ? characterIds : [characterIds],
-            year: year
+            summary:summary,
+            year: year,
+            characters: characterIds,
+            
         };
 
-        const peticion=await indexService.saveEpisode(token,newEpisode);
-        res.redirect('/createEpisode');
+        console.log(newEpisode);
+
+        let peticion=await indexService.saveEpisode(token,newEpisode);
+        if(peticion){
+            res.render('renderCreateEpisode', {
+                hayErrores:true
+            });
+        }
     }catch(error){
         //res.redirect('/create-episode?error=true');
     }
 };
 
+const deleteEpisode=async(req,res)=>{
+
+    const token = await authService.getToken();
+    const { id } = req.params;
+
+    const deleteEpisode=await indexService.deleteEpisode(token,id);
+
+}
+
 module.exports = {
-    renderIndex, renderEpisodios, dataCharacters, dataEpisodes, renderCreateEpisode, createEpisode
+    renderIndex, renderEpisodios, dataCharacters, dataEpisodes, renderCreateEpisode, createEpisode,deleteEpisode
 };

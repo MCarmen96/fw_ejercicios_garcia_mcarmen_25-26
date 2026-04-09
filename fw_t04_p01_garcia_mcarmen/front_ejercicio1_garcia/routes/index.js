@@ -14,6 +14,7 @@ router.get('/api/characters',indexController.dataCharacters);
 router.get('/api/episodes/:id',indexController.dataEpisodes);
 router.get('/createEpisode',indexController.renderCreateEpisode);
 router.post('/saveEpisode',indexController.createEpisode);
+router.get('/api/delete/:id',indexController.deleteEpisode);
 
 
 /* /* GET home page.
