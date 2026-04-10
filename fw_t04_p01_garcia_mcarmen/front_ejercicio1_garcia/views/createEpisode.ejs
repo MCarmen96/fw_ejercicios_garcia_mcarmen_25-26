@@ -5,101 +5,127 @@
         <div class="max-w-6xl mx-auto">
 
             <h1 class="text-2xl font-bold mb-8 text-white">HELLO DESDE EL CREATE EPISODE !!</h1>
-            <% if(!hayErrores)  { %>
-                <div id="alert-error-container" class="hidden mb-6">
-                    <div role="alert" class="alert alert-error shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>ERROR NO SE HA GUARDADO EL EPISODIO </span>
-                    </div>
-                </div>
-            <% } else { %>   
-                <div role="alert" class="alert alert-success">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>SE HA GUARDADO EL EPISODIO!</span>
-                </div>
-            <% } %>
+            <% if( error==="true" ) { %>
+                <p>Error= <%= error %>
+                </p>
+                <p>Mensaje= <%= message %>
+                </p>
+                <% }%>
+                    <% if( error==="true" ) { %>
+                        <div role="alert" class="alert alert-error">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>ERROR NO SE HA GUARDADO EL EPISODIO </span>
+                        </div>
+                        <% }%>
+                            <% if( message==="ok" ) { %>
+                                <div role="alert" class="alert alert-success">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>SE HA GUARDADO EL EPISODIO!</span>
+                                </div>
+                                <% }%>
 
-            <form id="episodeForm" class="flex flex-col lg:flex-row gap-8 items-stretch w-full" method="post"
-                action="/saveEpisode">
 
-                <div class="card bg-base-200 shadow-xl w-full lg:w-1/3 h-[600px] flex flex-col">
-                    <div class="p-6">
-                        <h2 class="card-title text-white mb-4">Characters</h2>
+                                    <form id="episodeForm" class="flex flex-col lg:flex-row gap-8 items-stretch w-full"
+                                        method="post" action="/saveEpisode">
 
-                        <div class="overflow-y-auto space-y-2 pr-2 h-[480px]">
-                            <% if (characters && characters.length> 0) { %>
-                                <% characters.forEach(element=> { %>
-                                    <div class="form-control bg-base-300 rounded-lg border border-white/5 p-2">
-                                        <label class="label cursor-pointer flex justify-between items-center">
-                                            <div class="flex items-center gap-3">
-                                                <input type="checkbox" name="characterIds" value="<%=element.id%>"
-                                                    class="checkbox validator checkbox-primary checkbox-sm" />
-                                                <span class="label-text text-white">
-                                                    <%=element.name%>
-                                                </span>
-                                            </div>
-                                            <div class="avatar">
-                                                <div class="w-8 h-8 rounded">
-                                                    <img src="<%= element.img %>" alt="<%= element.name %>" />
+                                        <div class="card bg-base-200 shadow-xl w-full lg:w-1/3 h-[600px] flex flex-col">
+                                            <div class="p-6">
+                                                <h2 class="card-title text-white mb-4">Characters</h2>
+
+                                                <div class="overflow-y-auto space-y-2 pr-2 h-[480px]">
+                                                    <% if (characters && characters.length> 0) { %>
+                                                        <% characters.forEach(element=> { %>
+                                                            <div
+                                                                class="form-control bg-base-300 rounded-lg border border-white/5 p-2">
+                                                                <label
+                                                                    class="label cursor-pointer flex justify-between items-center">
+                                                                    <div class="flex items-center gap-3">
+                                                                        <input type="checkbox" name="characterIds"
+                                                                            value="<%=element.id%>"
+                                                                            class="checkbox validator checkbox-primary checkbox-sm" />
+                                                                        <span class="label-text text-white">
+                                                                            <%=element.name%>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="avatar">
+                                                                        <div class="w-8 h-8 rounded">
+                                                                            <img src="<%= element.img %>"
+                                                                                alt="<%= element.name %>" />
+                                                                        </div>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                            <% }); %>
+                                                                <% } %>
+                                                </div>
+                                                <div>
+                                                    <div id="error-checkbox" class="text-error text-xs mt-1 hidden">
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </label>
-                                    </div>
-                                    <% }); %>
-                                        <% } %>
-                        </div>
-                    </div>
-                </div>
+                                        </div>
 
-                <div class="hidden lg:flex divider divider-horizontal mx-0 opacity-20"></div>
+                                        <div class="hidden lg:flex divider divider-horizontal mx-0 opacity-20"></div>
 
-                <div class="card bg-base-100 shadow-xl w-full lg:w-2/3 h-[600px] flex flex-col p-8">
+                                        <div
+                                            class="card bg-base-100 shadow-xl w-full lg:w-2/3 h-[600px] flex flex-col p-8">
 
-                    <h2 class="card-title text-white mb-8 border-b border-white/5 pb-4">Create episode</h2>
+                                            <h2 class="card-title text-white mb-8 border-b border-white/5 pb-4">Create
+                                                episode
+                                            </h2>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="form-control">
-                            <label class="label"><span class="label-text">Episode title</span></label>
-                            <input type="text" name="title" id="title"
-                                class="input input-bordered w-full bg-base-200" />
-                            <div id="error-title" class="text-error text-xs mt-1 hidden"></div>
-                        </div>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <div class="form-control">
+                                                    <label class="label"><span class="label-text">Episode
+                                                            title</span></label>
+                                                    <input type="text" name="title" id="title"
+                                                        class="input input-bordered w-full bg-base-200" />
+                                                    <div id="error-title" class="text-error text-xs mt-1 hidden"></div>
+                                                </div>
 
-                        <div class="form-control">
-                            <label class="label"><span class="label-text">Episode code</span></label>
-                            <input type="text" name="code" id="code" placeholder="S01E05"
-                                class="input input-bordered w-full bg-base-200" />
-                            <div id="error-code" class="text-error text-xs mt-1 hidden"></div>
-                        </div>
+                                                <div class="form-control">
+                                                    <label class="label"><span class="label-text">Episode
+                                                            code</span></label>
+                                                    <input type="text" name="code" id="code" placeholder="S01E05"
+                                                        class="input input-bordered w-full bg-base-200" />
+                                                    <div id="error-code" class="text-error text-xs mt-1 hidden"></div>
+                                                </div>
 
-                        <div class="form-control md:col-span-1">
-                            <label class="label"><span class="label-text">Year</span></label>
-                            <input type="number" name="year" id="year" placeholder="2020"
-                                class="input input-bordered w-full bg-base-200" />
-                            <div id="error-year" class="text-error text-xs mt-1 hidden"></div>
-                        </div>
+                                                <div class="form-control md:col-span-1">
+                                                    <label class="label"><span class="label-text">Year</span></label>
+                                                    <input type="number" name="year" id="year" placeholder="2020"
+                                                        class="input input-bordered w-full bg-base-200" />
+                                                    <div id="error-year" class="text-error text-xs mt-1 hidden"></div>
+                                                </div>
 
-                        <div class="form-control md:col-span-2">
-                            <label class="label"><span class="label-text">Summary</span></label>
-                            <textarea name="summary" id="summary"
-                                class="textarea textarea-bordered w-full bg-base-200 h-32 resize-none"></textarea>
-                            <div id="error-summary" class="text-error text-xs mt-1 hidden"></div>
-                        </div>
-                    </div>
+                                                <div class="form-control md:col-span-2">
+                                                    <label class="label"><span class="label-text">Summary</span></label>
+                                                    <textarea name="summary" id="summary"
+                                                        class="textarea textarea-bordered w-full bg-base-200 h-32 resize-none"></textarea>
+                                                    <div id="error-summary" class="text-error text-xs mt-1 hidden">
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                    <div class="mt-auto flex justify-end items-center gap-4 pt-6">
-                        <button type="button" class="btn btn-ghost">Cancel</button>
-                        <button type="submit" class="btn btn-primary px-8">Save Episode</button>
-                    </div>
-                </div>
 
-            </form>
+                                            <div class="mt-auto flex justify-end items-center gap-4 pt-6">
+                                                <button type="button" class="btn btn-ghost">Cancel</button>
+                                                <button type="submit" class="btn btn-primary px-8">Save Episode</button>
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </form>
         </div>
     </section>
 

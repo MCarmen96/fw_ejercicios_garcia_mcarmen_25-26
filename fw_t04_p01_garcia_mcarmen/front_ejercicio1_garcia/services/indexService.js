@@ -84,8 +84,9 @@ const saveEpisode = async (token, newEpisode) => {
     
             console.error("Error de configuración:", error.message);
         }
+
+        throw error;
     }
-    throw error;
 
 };
 
@@ -97,13 +98,20 @@ const deleteEpisode=async(token,id)=>{
     };
 
     try{
-
+        
         const respuestaDelete=await axios.delete(url,config);
-        console.log(respuestaDelete.status);
-        console.log(respuestaDelete.message);
+
+            console.log("estado backend "+respuestaDelete.status);
+            console.log("mensaje backend->"+respuestaDelete.message.json());
+        if(respuestaDelete.status===200){
+            console.log("dentro del if");
+            return true;
+        }
+        
 
     }catch(error){
         console.log(error);
+        return false;
     }
 }
 

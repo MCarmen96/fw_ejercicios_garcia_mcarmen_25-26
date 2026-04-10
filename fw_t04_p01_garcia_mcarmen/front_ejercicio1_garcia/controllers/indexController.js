@@ -57,10 +57,17 @@ const renderCreateEpisode = async (req, res) => {
             datosNecesarios.push({ "id": element._id, "name": element.name, "img": element.img });
         });
         console.log("Datos necesarios: " + datosNecesarios);
+
+        const message = req.query.message || null;
+        const error = req.query.error || null;
+        console.log("error->"+error);
+        console.log("mensaje->"+message);
+
         res.render('createEpisode', {
             title: 'Express con Token Dinámico',
             characters: datosNecesarios,
-            hayErrores:false
+            message,
+            error,
 
         });
 
@@ -101,57 +108,60 @@ const dataEpisodes = async (req, res) => {
 const createEpisode = async (req, res) => {
     try {
         const token = await authService.getToken();
-        const { title, code, year,characterChecks,summary } = req.body;
-       
+        const { title, code, year, characterIds, summary } = req.body;
+
+        let arrayCharacterIds = [];
+        //characterIds puede ser: undefined, string o un array
+        if (typeof characterIds === "string") {
+            //si es string porque solo haya uno
+            arrayCharacterIds = [characterIds];
+        } else if (characterIds) {
+            // si no es undefinned
+            arrayCharacterIds = characterIds;
+        }
+
         console.log(title);
         console.log(code);
         console.log(year);
         console.log(summary);
         console.log("IDs recibidos del formulario:", characterIds);
-        console.log("TIPO->", typeof characterIds );
-        const characterIds=[];
-         if(typeof characterChecks==="string"){
-            console.log("entra ene el id????")
-             characterIds=[characterChecks];
-           
-        }else{
-            characterIds=characterChecks
-        }
-        
-
-        console.log("TIPO->",characterIds instanceof Array);
         
         const newEpisode = {
             code: code,
             title: title,
-            summary:summary,
-            year: year,
-            characters: characterIds,
-            
+            summary: summary,
+            year: Number(year),
+            characters: arrayCharacterIds,
         };
 
         console.log(newEpisode);
 
-        let peticion=await indexService.saveEpisode(token,newEpisode);
-        if(peticion){
-            res.render('renderCreateEpisode', {
-                hayErrores:true
-            });
+        let peticion = await indexService.saveEpisode(token, newEpisode);
+        if (peticion) {
+            res.redirect('/createEpisode?message=ok');
         }
-    }catch(error){
+    } catch (error) {
         //res.redirect('/create-episode?error=true');
+        console.error(error);
+        res.redirect('/createEpisode?error=true');
     }
 };
 
-const deleteEpisode=async(req,res)=>{
+const deleteEpisode = async (req, res) => {
 
     const token = await authService.getToken();
     const { id } = req.params;
-
-    const deleteEpisode=await indexService.deleteEpisode(token,id);
+    try{
+         await indexService.deleteEpisode(token, id);
+        res.status(200).send();
+    }catch(error){
+        console.log("error desde el index controller-> "+error);
+        res.status(500).send();
+    }
+    
 
 }
 
 module.exports = {
-    renderIndex, renderEpisodios, dataCharacters, dataEpisodes, renderCreateEpisode, createEpisode,deleteEpisode
+    renderIndex, renderEpisodios, dataCharacters, dataEpisodes, renderCreateEpisode, createEpisode, deleteEpisode
 };

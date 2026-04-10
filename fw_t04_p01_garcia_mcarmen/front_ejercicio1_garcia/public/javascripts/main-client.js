@@ -138,7 +138,9 @@ async function createEpisode() {
   const form = document.getElementById('episodeForm');
 
   form.addEventListener('submit', (e) => {
-    
+
+   
+
     const titleInput = document.getElementById('title');
     const errorTitle = document.getElementById('error-title');
 
@@ -150,13 +152,15 @@ async function createEpisode() {
 
     const summaryInput = document.querySelector('textarea[name="summary"]');
     const errorSummary = document.getElementById('error-summary');
+    const errorCheckbox = document.getElementById('error-checkbox');
 
     const selectedCharacters = form.querySelectorAll('input[name="characterIds"]:checked');
+    e.preventDefault(); 
 
     let isValid = true; 
    
     if (titleInput.value.trim().length < 3) {
-      e.preventDefault(); 
+      
       errorTitle.textContent = 'El título es obligatorio y debe tener al menos 3 caracteres';
       errorTitle.classList.remove('hidden', 'validator-hint'); 
       errorTitle.style.display = 'block'; 
@@ -165,8 +169,7 @@ async function createEpisode() {
     }
 
     if (codeInput.value.trim() === "") {
-      e.preventDefault();
-      
+  
       if (errorCode) {
         errorCode.textContent = 'El código del episodio es obligatorio';
         errorCode.style.display = 'block';
@@ -178,7 +181,7 @@ async function createEpisode() {
   
     const yearValue = parseInt(yearInput.value);
     if (isNaN(yearValue) || yearValue < 2020 || yearValue > 2026) {
-      e.preventDefault();
+    
       if (errorYear) {
         errorYear.textContent = 'Introduce un año válido entre 2020 y 2026';
         errorYear.style.display = 'block';
@@ -189,7 +192,7 @@ async function createEpisode() {
 
 
     if (summaryInput.value.trim().length < 10) {
-      e.preventDefault();
+      
       if (errorSummary) {
         errorSummary.textContent = 'El resumen debe tener al menos 10 caracteres';
         errorSummary.style.display = 'block';
@@ -197,20 +200,22 @@ async function createEpisode() {
       summaryInput.classList.add('textarea-error');
       isValid = false;
     }
-      console.log(selectedCharacters.length);
       
+    
 
     if (selectedCharacters.length === 0) {
-      e.preventDefault();
       
-      alert("Debes seleccionar al menos un personaje para crear el episodio");
+      if (errorCheckbox) {
+        errorCheckbox.textContent = 'Debes selecionar al menos un personaje';
+        errorCheckbox.style.display = 'block';
+      }
+    
       isValid = false;
+      
     }
 
-    const alertBox = document.getElementById('alert-error-container');
-    const alertText = document.getElementById('alert-error-text');
-    if (!isValid) {
-      e.preventDefault();
+    if (isValid) {
+      form.submit();
     }
   });
 
@@ -218,9 +223,16 @@ async function createEpisode() {
 
 
 async function deleteEpisode(id){
-  console.log("El id->",id);
-  const peticion = await fetch(`/api/delete/${id}`);
-  console.log("desde el cliente: " + peticion);
+  
+  try{
+      console.log("dentro de la petcion");
+      const peticion = await fetch(`/api/delete/${id}`);
+      console.log("desde el cliente: " + peticion);
+    }catch(error){
+        console.log("error"+error);
+    }
+
+  
 
 }
 
