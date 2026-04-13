@@ -49,19 +49,19 @@ async function paginarAntigua(pagina) {
 
 async function paginar(pagina) {
 
-  console.log("Paginando...");
+
   const contenedor = document.getElementById("container-characters");
-  const peticion = await fetch(`/api/characters?page=${pagina}&limit=4`);
-  console.log(peticion);
-  const datos = await peticion.json();
   contenedor.innerHTML = "";
-  console.log(datos);
+  try {
+    const response = await fetch(`/api/characters?page=${pagina}&limit=4`);
+    const datos = await response.json();
+    console.log("DATOS DE PAGINAR: "+datos)
+    let traitsHTML = "";
 
-  console.log("Datos de la peticion de la paginacion: " + datos.data);
-  let traitsHTML = "";
-  datos.data.forEach(element => {
-
-    element.specialTraits.forEach(special => {
+    for(let index=0;index<datos.data.length;index++){
+      console.log("datos de la respuesta:"+datos.data[index].name);
+      let element=datos.data[index];
+      element.specialTraits.forEach(special => {
       traitsHTML += `<li>${special}</li>`;
     });
     contenedor.innerHTML += `<div class="card bg-base-100 w-full shadow-sm border border-gray-100">
@@ -85,33 +85,26 @@ async function paginar(pagina) {
         </div>
        `
     traitsHTML = "";
-  });
+    }
 
+  } catch (error) {
+      console.error("Error:"+error)
+  }
 
 }
 
 async function infoModal(id_episodio) {
 
   const contenedor = document.getElementById("box");
-
-  console.log(id_episodio)
-  const peticion = await fetch(`/api/episodes/${id_episodio}`);
-  console.log("desde el cliente: " + peticion);
-
-  const datos = await peticion.json();
-  //contenedor.innerHTML = "";
-  console.log("desde el cliente 2: " + datos.title);
-
-  /*   datos.data.characters.forEach(special => {
-      traitsHTML += `<li>${special}</li>`;
-    }); */
-
-  contenedor.innerHTML = ` 
+  try {
+    const response = await fetch(`/api/episodes/${id_episodio}`);
+    const datos = await response.json();
+     contenedor.innerHTML = ` 
                                   <h3 class="text-lg font-bold">${datos.title}</h3>
                                     <p class="py-4">${datos.summary}</p>
                                      <h3 class="text-lg font-bold">Personajes</h3>
                                 `;
-  //console.log(datos.characters[2].name);
+
   for (let index = 0; index < datos.characters.length; index++) {
     contenedor.innerHTML += `        
                                       <ul>
@@ -119,33 +112,39 @@ async function infoModal(id_episodio) {
                                               ${datos.characters[index].name}
                                           </li>
                                       </ul>`;
-    //console.log(datos.characters[index].name)
+
   }
 
   contenedor.innerHTML += `   <div class="modal-action">
                                         <form method="dialog">
-                                            <!-- if there is a button in form, it will close the modal -->
                                             <button class="btn">Close</button>
                                         </form>
                                     </div>`;
 
   document.getElementById('my_modal').showModal();
+    
+
+  } catch (error) {
+    console.log("Error peticion datos modal: " + error);
+  }
+
+
+ 
 
 }
 
-async function createEpisode() {
+function validateCreateEpisode() {
 
   const form = document.getElementById('episodeForm');
 
   form.addEventListener('submit', (e) => {
 
-   
-
     const titleInput = document.getElementById('title');
     const errorTitle = document.getElementById('error-title');
 
     const codeInput = document.querySelector('input[name="code"]');
-    const errorCode = document.getElementById('error-code'); 
+    const errorCode = document.getElementById('error-code');
+    const patron =new RegExp(/^S\d{2}E\d{2}$/i);
 
     const yearInput = document.querySelector('input[name="year"]');
     const errorYear = document.getElementById('error-year');
@@ -155,33 +154,41 @@ async function createEpisode() {
     const errorCheckbox = document.getElementById('error-checkbox');
 
     const selectedCharacters = form.querySelectorAll('input[name="characterIds"]:checked');
-    e.preventDefault(); 
+    e.preventDefault();
 
-    let isValid = true; 
-   
+    let isValid = true;
+
     if (titleInput.value.trim().length < 3) {
-      
+
       errorTitle.textContent = 'El título es obligatorio y debe tener al menos 3 caracteres';
-      errorTitle.classList.remove('hidden', 'validator-hint'); 
-      errorTitle.style.display = 'block'; 
+      errorTitle.classList.remove('hidden', 'validator-hint');
+      errorTitle.style.display = 'block';
       titleInput.classList.add('input-error');
       isValid = false;
     }
 
     if (codeInput.value.trim() === "") {
-  
+
       if (errorCode) {
-        errorCode.textContent = 'El código del episodio es obligatorio';
+        errorCode.textContent = 'El código del episodio es obligatorio o no cumple el patron';
         errorCode.style.display = 'block';
       }
       codeInput.classList.add('input-error');
       isValid = false;
     }
 
-  
+    if(!patron.test(codeInput.value)){
+      if (errorCode) {
+        errorCode.textContent = 'El codigo no cumple el patron';
+        errorCode.style.display = 'block';
+      }
+      codeInput.classList.add('input-error');
+      isValid = false;
+    }
+
     const yearValue = parseInt(yearInput.value);
     if (isNaN(yearValue) || yearValue < 2020 || yearValue > 2026) {
-    
+
       if (errorYear) {
         errorYear.textContent = 'Introduce un año válido entre 2020 y 2026';
         errorYear.style.display = 'block';
@@ -190,9 +197,8 @@ async function createEpisode() {
       isValid = false;
     }
 
-
     if (summaryInput.value.trim().length < 10) {
-      
+
       if (errorSummary) {
         errorSummary.textContent = 'El resumen debe tener al menos 10 caracteres';
         errorSummary.style.display = 'block';
@@ -200,18 +206,16 @@ async function createEpisode() {
       summaryInput.classList.add('textarea-error');
       isValid = false;
     }
-      
-    
 
     if (selectedCharacters.length === 0) {
-      
+
       if (errorCheckbox) {
         errorCheckbox.textContent = 'Debes selecionar al menos un personaje';
         errorCheckbox.style.display = 'block';
       }
-    
+
       isValid = false;
-      
+
     }
 
     if (isValid) {
@@ -221,18 +225,66 @@ async function createEpisode() {
 
 }
 
+//MODAL DE CONFIRMACIÓN USANDO EL PLUGIN DaisyUI
+function pedirConfirmacion() {
+  const modal = document.getElementById("modal_confirmacion");
+  const btnSi = document.getElementById("btn_si");
+  const btnNo = document.getElementById("btn_no");
 
-async function deleteEpisode(id){
-  
-  try{
-      console.log("dentro de la petcion");
-      const peticion = await fetch(`/api/delete/${id}`);
-      console.log("desde el cliente: " + peticion);
-    }catch(error){
-        console.log("error"+error);
+  return new Promise((resolve) => {
+    modal.showModal();
+
+    // si el btn si es pulsado guardamos en la respuesta de la promesa true y vs con el btn no
+    btnSi.onclick = () => {
+      modal.close();
+      resolve(true);
+    };
+    btnNo.onclick = () => {
+      modal.close();
+      resolve(false);
+    };
+
+    // Si cierran con ESC, devolvemos false
+    modal.onclose = () => resolve(false);
+  });
+}//DEVUELVE UNA PROMESA: no devuelve el resultado al momento, porque el usuario todavía no ha pulsado nada.
+
+async function deleteEpisode(id, botonPulsado) {
+
+  const confirmado = await pedirConfirmacion(); //Ver más abajo
+
+  if (!confirmado) {
+    console.log("Borrado cancelado por el usuario.");
+    return;
+  }
+  try {
+    console.log("dentro de la petcion");
+    const response = await fetch(`/api/delete/${id}`);
+
+    /*
+    Para usar una ruta DELETE:
+    const response = await fetch(`/api/delete/${id}`, {
+    method: "DELETE"
+    });
+    */
+
+    //NO TE PUEDES OLVIDAR DE ESTO AL USAR FETCH:
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log("Respuesta del servidor:", data.message);
+      // primero el td y luego el tr
+      const fila = botonPulsado.parentNode.parentNode;
+      if (fila) {
+        fila.remove();
+      }
+    } else {
+      console.error("Error al borrar");
     }
+  } catch (error) {
+    console.log("error" + error);
+  }
 
-  
 
 }
 
@@ -241,8 +293,8 @@ async function deleteEpisode(id){
 document.addEventListener('DOMContentLoaded', () => {
   console.log("Hola: El DOM está listo");
 
-  if(document.getElementById('episodeForm')){
-    createEpisode();
+  if (document.getElementById('episodeForm')) {
+    validateCreateEpisode();
   }
-  
+
 });

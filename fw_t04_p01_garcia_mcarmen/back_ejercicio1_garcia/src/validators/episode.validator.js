@@ -1,5 +1,5 @@
 const { body, validationResult } = require('express-validator');
-const patron = /^S\d{2}E\d{2}$/;
+const patron = /^S\d{2}E\d{2}$/i;
 
 const createEpisodiesRules=[
     body('code')

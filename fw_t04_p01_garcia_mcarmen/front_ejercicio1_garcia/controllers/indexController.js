@@ -3,6 +3,15 @@ const authService = require('../services/authService');
 /**
  * Renderiza la página de inicio con los personajes obtenidos del servicio.
  */
+
+/*
+* IMPORTANTE:
+Un controller DEBE siempre terminar enviando una respuesta de este tipo:
+res.render(...)
+res.send(...)
+res.redirect(...)
+res.status(...).json(...)
+*/
 const renderIndex = async (req, res) => {
     try {
 
@@ -60,8 +69,8 @@ const renderCreateEpisode = async (req, res) => {
 
         const message = req.query.message || null;
         const error = req.query.error || null;
-        console.log("error->"+error);
-        console.log("mensaje->"+message);
+        console.log("error->" + error);
+        console.log("mensaje->" + message);
 
         res.render('createEpisode', {
             title: 'Express con Token Dinámico',
@@ -125,7 +134,7 @@ const createEpisode = async (req, res) => {
         console.log(year);
         console.log(summary);
         console.log("IDs recibidos del formulario:", characterIds);
-        
+
         const newEpisode = {
             code: code,
             title: title,
@@ -149,16 +158,20 @@ const createEpisode = async (req, res) => {
 
 const deleteEpisode = async (req, res) => {
 
-    const token = await authService.getToken();
     const { id } = req.params;
-    try{
-         await indexService.deleteEpisode(token, id);
-        res.status(200).send();
-    }catch(error){
-        console.log("error desde el index controller-> "+error);
-        res.status(500).send();
+    try {
+        const token = await authService.getToken();
+        const resultado = await indexService.deleteEpisode(token, id);
+        if (resultado) {
+            return res.status(200).json({ message: "Episodio eliminado" });
+        } else {
+            return res.status(404).json({ error: "No se pudo eliminar" });
+        }
+    } catch (error) {
+        console.log("error desde el index controller-> " + error);
+        res.status(500).send().json({error:"error inesperado"});
     }
-    
+
 
 }
 

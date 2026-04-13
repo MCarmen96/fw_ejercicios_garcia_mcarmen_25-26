@@ -26,13 +26,17 @@ const getEpisodios = async (token) => {
     return response.data;
 };
 const getCharactersWithPage = async (token, page) => {
-
-    const config = {
+    try{
+        const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
 
     const response = await axios.get(`http://localhost:3000/api/characters?page=${page}&limit=4`, config);
     return response.data;
+    }catch(error){
+        console.error("error paginar desde index service: "+error);
+    }
+    
 
 };
 const getCharactersNameId = async (token) => {
@@ -66,7 +70,7 @@ const saveEpisode = async (token, newEpisode) => {
     };
 
     try {
-        const envio = await axios.post(url, newEpisode,config);
+        const envio = await axios.post(url, newEpisode, config);
         console.log("Respuesta del servidor:", envio.data);
 
         return true;
@@ -74,14 +78,14 @@ const saveEpisode = async (token, newEpisode) => {
     } catch (error) {
         console.log("error al guardar el episodio");
         if (error.response) {
-            
+
             console.error("Status:", error.response.status);
             console.error("Datos del error:", error.response.data);
         } else if (error.request) {
 
             console.error("No hubo respuesta del servidor");
         } else {
-    
+
             console.error("Error de configuración:", error.message);
         }
 
@@ -90,32 +94,38 @@ const saveEpisode = async (token, newEpisode) => {
 
 };
 
-const deleteEpisode=async(token,id)=>{
-    const url=`http://localhost:3000/api/episodes/${id}`;
+const deleteEpisode = async (token, id) => {
+    const url = `http://localhost:3000/api/episodes/${id}`;
 
-     const config = {
+    const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
 
-    try{
-        
-        const respuestaDelete=await axios.delete(url,config);
+    try {
 
-            console.log("estado backend "+respuestaDelete.status);
-            console.log("mensaje backend->"+respuestaDelete.message.json());
-        if(respuestaDelete.status===200){
+        const respuestaDelete = await axios.delete(url, config);
+        //La respuesta de Axios va así. Siempre nos olvidamos:
+        // - respuestaDelete.status
+        // - respuestaDelete.data
+        console.log("estado backend " + respuestaDelete.status);
+       
+        if (respuestaDelete.status === 200) {
             console.log("dentro del if");
+            console.log("mensaje backend->" + respuestaDelete.data.message);
             return true;
+        } else { //puede ser que el capítulo no se borre y no se lance una excepción
+            console.log("mensaje backend->" + respuestaDelete.data.error);
+            return false;
         }
-        
 
-    }catch(error){
-        console.log(error);
+
+    } catch (error) {
+        console.log("Error en indexService:", error.message);
         return false;
     }
 }
 
 
 module.exports = {
-    getCharacters, getEpisodios, getCharactersWithPage, getEpisodiosWithId, getCharactersNameId, saveEpisode,deleteEpisode
+    getCharacters, getEpisodios, getCharactersWithPage, getEpisodiosWithId, getCharactersNameId, saveEpisode, deleteEpisode
 };
