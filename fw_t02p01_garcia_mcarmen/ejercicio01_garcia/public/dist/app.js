@@ -42,11 +42,15 @@ async function cargarIndex(api, view, local) {
     selectCategory.addEventListener("change", async function () {
         const categorySelect = selectCategory.value;
         contenedorRecetas.innerHTML = "";
+        if (document.querySelector("#saveCategory")?.classList.contains("d-block")) {
+            document.querySelector("#saveCategory")?.removeAttribute("disabled");
+        }
         // url de la api que me devuelve un listado de catgorias con detalles simples de la misma
         const recetasCategoriaSelect = await api.obtenerPorCategoria(categorySelect);
         if (recetasCategoriaSelect) { // si hay algo
             for (let i = 0; i < 8; i++) {
                 const recetasCompleta = await api.obtenerPorId(recetasCategoriaSelect[i].idMeal);
+                console.log("Receta completa desde el select category: " + recetasCompleta);
                 if (recetasCompleta) {
                     view.pintarRecetasHome(recetasCompleta, contenedorRecetas);
                 }
@@ -56,7 +60,9 @@ async function cargarIndex(api, view, local) {
             // cargar algun error
             view.cargarAlerts(contenedorRecetas, "warning", "Error al cargar la categoria" + categorySelect);
         }
+        isLogin(local);
     });
+    document.querySelector("#saveCategory")?.addEventListener;
     isLogin(local);
 }
 function cargarRegistro(local, view) {
@@ -126,6 +132,7 @@ function cargarLogin(local, view) {
 }
 function isLogin(local) {
     const iconLogin = document.querySelector("#icon-login");
+    const divNombreUser = document.querySelector("#nombreUser");
     const nombreUser = local.isLoginUser();
     console.log("Entro en login o no?????");
     if (nombreUser != null) {
@@ -137,7 +144,9 @@ function isLogin(local) {
                 buton.classList.remove("d-none");
                 iconLogin.classList.add("d-block");
                 iconLogin.classList.remove("d-none");
-                iconLogin.innerHTML = `<span>User:${nombreUser}</span>`;
+                document.querySelector("#saveCategory")?.classList.remove("d-none");
+                document.querySelector("#saveCategory")?.classList.add("d-block");
+                divNombreUser.innerHTML = `<span>${nombreUser}</span>`;
             });
         }
     }

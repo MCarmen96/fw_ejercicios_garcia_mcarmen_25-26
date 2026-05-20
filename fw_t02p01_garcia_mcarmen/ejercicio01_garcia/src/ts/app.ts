@@ -67,12 +67,17 @@ async function cargarIndex(api: ApiService, view: ViewService,local:StorageServi
         const categorySelect = selectCategory.value;
         contenedorRecetas.innerHTML = "";
 
+        if(document.querySelector("#saveCategory")?.classList.contains("d-block")){
+            document.querySelector("#saveCategory")?.removeAttribute("disabled");
+        }
+
         // url de la api que me devuelve un listado de catgorias con detalles simples de la misma
         const recetasCategoriaSelect = await api.obtenerPorCategoria(categorySelect);
 
         if (recetasCategoriaSelect) { // si hay algo
             for (let i = 0; i < 8; i++) {
                 const recetasCompleta = await api.obtenerPorId(recetasCategoriaSelect[i].idMeal);
+                console.log("Receta completa desde el select category: "+recetasCompleta);
                 if (recetasCompleta) {
                     view.pintarRecetasHome(recetasCompleta, contenedorRecetas);
                 }
@@ -81,7 +86,10 @@ async function cargarIndex(api: ApiService, view: ViewService,local:StorageServi
             // cargar algun error
             view.cargarAlerts(contenedorRecetas, "warning", "Error al cargar la categoria" + categorySelect);
         }
+        isLogin(local);
     })
+
+    document.querySelector("#saveCategory")?.addEventListener
 
     isLogin(local);
 }
@@ -164,8 +172,10 @@ function cargarLogin(local: StorageService, view: ViewService) {
 
 function isLogin(local: StorageService) {
     const iconLogin = document.querySelector("#icon-login") as HTMLDivElement;
+    const divNombreUser = document.querySelector("#nombreUser") as HTMLDivElement;
     const nombreUser = local.isLoginUser();
     console.log("Entro en login o no?????");
+  
     if (nombreUser != null) {
         console.log(nombreUser)
         if (document.querySelector("#recetasHome")) {
@@ -175,11 +185,16 @@ function isLogin(local: StorageService) {
                 buton.classList.remove("d-none");
                 iconLogin.classList.add("d-block");
                 iconLogin.classList.remove("d-none");
-                iconLogin.innerHTML = `<span>User:${nombreUser}</span>`;
+                document.querySelector("#saveCategory")?.classList.remove("d-none");
+                document.querySelector("#saveCategory")?.classList.add("d-block");
                 
+                divNombreUser.innerHTML= `<span>${nombreUser}</span>`;
+                
+                
+
             })
         }
-    }
+    }  
 
 }
 
