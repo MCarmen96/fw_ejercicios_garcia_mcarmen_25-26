@@ -7,7 +7,7 @@ export class ViewService {
     public pintarRecetasHome(recetas: MyMeal, contenedor: HTMLDivElement) {
         //variable vacía para ir guardando los ingredientes
         let listaIngredientes: string = "";
-        if(recetas.ingredients&& recetas.ingredients!=null){
+        if (recetas.ingredients && recetas.ingredients != null) {
             //recorro el array de ingredientes y y cojo cada elemento y la voy añadiendo a mi varaible
             recetas.ingredients.forEach(ing => {
                 listaIngredientes += `<li>${ing.name} - <small>${ing.measure}</small></li>`;
@@ -27,6 +27,12 @@ export class ViewService {
                                     ${listaIngredientes} 
                                 </ul>
                         </div>
+                        <button type="button" class="btn btn-outline-danger m-3 d-none ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"></path>
+                            </svg>
+                            Guardar receta
+                        </button>
                 </div>
             </div>`
 
@@ -48,19 +54,20 @@ export class ViewService {
 
     }
 
-    public cargarAlerts(contenedor:HTMLDivElement,clase:string){
+    public cargarAlerts(contenedor: HTMLDivElement, tipoAlert: string, mensajeAlerta: string) {
 
-        contenedor.classList.add("alert",clase,"alert-dismissible", "fade", "show");
-        contenedor.innerHTML=" ";
-        let mensageContent=document.createElement("p");
-        mensageContent.textContent="¡Usuario creado correctamente!";
-        let buttonClose=document.createElement("button");
+        contenedor.classList.add("alert", "alert-" + tipoAlert, "alert-dismissible", "fade", "show");
+        contenedor.setAttribute("role", "alert")
+        contenedor.innerHTML = " ";
+        let mensageContent = document.createElement("p");
+        mensageContent.textContent = mensajeAlerta;
+        let buttonClose = document.createElement("button");
         buttonClose.classList.add("btn-close");
-        buttonClose.setAttribute("data-bs-dismiss","alert");
+        buttonClose.setAttribute("data-bs-dismiss", "alert");
         contenedor.appendChild(mensageContent);
         contenedor.appendChild(buttonClose);
-        
-        return contenedor;
+
+
 
     }
 

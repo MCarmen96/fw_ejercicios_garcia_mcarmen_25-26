@@ -68,11 +68,19 @@ export class ApiService {
         let categorias: Category[] = [];
 
         try {
-            let respuesta: Response = await fetch(this.API_URL + "/categories.php")
+
+            let respuesta: Response = await fetch(this.API_URL + "/categories.php");
             datos = await respuesta.json();
-            console.log("categorias: ", datos)
+
+
+            console.log("categorias: ", datos);
+
             // si la clave categories existe y su array es mayor a 0 lo recorro
             if (datos.categories && datos.categories.length > 0) {
+
+                datos.categories.sort((a:MyMeal,b:MyMeal)=>{
+                    return a.strCategory.localeCompare(b.strCategory);
+                });
 
                 datos.categories.forEach((categoria: Category) => {
                     categorias.push({

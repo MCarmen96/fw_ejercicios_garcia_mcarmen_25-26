@@ -1,47 +1,114 @@
 export class StorageService {
+    constructor() {
+        if (!localStorage.getItem(StorageService.USER_KEY_ITEM) && !localStorage.getItem(StorageService.USER_MEAL_KEY_ITEM) && !localStorage.getItem(StorageService.USER_MINI_MEAL_KEY_ITEM) && !localStorage.getItem(StorageService.USER_WEEKLY_PLANS)) {
+            localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify([]));
+            localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM, JSON.stringify([]));
+            localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM, JSON.stringify([]));
+            localStorage.setItem(StorageService.USER_WEEKLY_PLANS, JSON.stringify([]));
+        }
+    }
     // cojo los usuarios del local storage y los devuelvo mejor hacerlo
     getUsers() {
         const users = localStorage.getItem(StorageService.USER_KEY_ITEM);
-        return users ? JSON.parse(users) : []; // devuelvo el array 
+        if (users != null) {
+            return users ? JSON.parse(users) : []; // devuelvo el array
+            /* La función JSON.parse() toma una cadena de texto que tiene formato JSON
+            (un formato estándar para guardar e intercambiar información)
+            y la transforma en un objeto o array real de JavaScript/TypeScript. */
+        }
+        else {
+            return false;
+        }
     }
     saveUser(user) {
+        let ok = true;
         let usersArray = this.getUsers();
-        usersArray.push(user); // aqui guardo el objeto en el array
-        localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(usersArray)); //y ahoara aqui lo guardo en storage
+        if (Array.isArray(usersArray)) {
+            usersArray.push(user);
+        }
+        else {
+            ok = false;
+        }
+        // aqui guardo el objeto en el array
+        // guardo en el local storage cogiendo la clave que e interesa que es la de users
+        if (ok) {
+            try {
+                localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(usersArray)); //y ahora aqui lo guardo en storage sobreescribiendo
+            }
+            catch (error) {
+                console.error(error);
+                ok = false;
+            }
+        }
+        return ok;
     }
     getEmailUser(email) {
-        const usersDatos = localStorage.getItem(StorageService.USER_KEY_ITEM); //DEVUELVE EL VALOR DE LA CLAVE USER EN STRING
-        if (!usersDatos) {
-            return false;
-        } //si no esta esa clave
+        let users = this.getUsers();
+        let ok = true;
         try {
-            const userList = JSON.parse(usersDatos); // convierto el texto en un array de objetos user
-            console.log(userList);
-            return userList.some(user => user.email === email);
+            if (users && Array.isArray(users)) {
+                return users.some(user => user.email === email);
+            }
         }
         catch (error) {
             return false;
         }
-    }
-    getLastUser() {
-        let user = this.getUsers();
-        if (user.length > 0) { // mira si hay algun user
-            let lastIndex = user.length - 1; //cojo el ultimo indice
-            let lastUser = user[lastIndex]; // accedo al objeto que esta en esa posicion
-            return lastUser.id + 1; //devuelvo su indice + 1 
-        }
-        else {
-            return 1;
-        }
+        return ok;
     }
     getPasswordUser(password) {
         let users = this.getUsers();
+        let ok = true;
         try {
-            return users.some(user => user.password === password);
+            if (users && Array.isArray(users)) {
+                return users.some(user => user.password === password);
+            }
         }
         catch (error) {
             return false;
         }
+        return ok;
+    }
+    getLastUser() {
+        let user = this.getUsers();
+        let id = 0;
+        if (user && Array.isArray(user)) { // mira si hay algun user
+            if (user.length == 0) {
+                return 1;
+            }
+            else {
+                let lastIndex = user.length - 1; //cojo el ultimo indice
+                let lastUser = user[lastIndex]; // accedo al objeto que esta en esa posicion
+                id = lastUser.id + 1; //devuelvo su indice + 1 
+            }
+        }
+        else {
+            console.log("fallo al recoger los datos de la clave user del localstorage");
+        }
+        return id;
+    }
+    isLoginUser() {
+        let users = this.getUsers();
+        let userLogin = null;
+        if (Array.isArray(users)) {
+            users.forEach(user => {
+                if (user.login) {
+                    userLogin = user.name;
+                }
+            });
+        }
+        return userLogin;
+    }
+    activeLogin(email) {
+        let users = this.getUsers();
+        if (Array.isArray(users)) {
+            users.forEach(user => {
+                if (user.email == email) {
+                    user.login = true;
+                }
+            });
+        }
+        localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(users));
+        console.log(`Estado de login actualizado en LocalStorage para: ${email}`);
     }
 }
 /*

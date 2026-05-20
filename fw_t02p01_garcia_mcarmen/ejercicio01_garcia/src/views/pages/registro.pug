@@ -3,38 +3,78 @@ block main
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
+                
                 <div class="card shadow rounded-4 p-4">
-                    <h2 class="text-center mb-4">Registro de Usuario</h2>
-                    <div id="message"></div>
-                    <form id="registroForm" class="needs-validation" novalidate>
-                        
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" required minlength="3">
-                            <div class="invalid-feedback">Por favor, introduce tu nombre (mín. 3 caracteres).</div>
-                            <div class="valid-feedback">¡Se ve bien!</div>
+                    <!-- 1. PESTAÑAS (TABS) MODIFICADAS -->
+                    <ul class="nav nav-tabs mb-4" id="authTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-pane" type="button" role="tab" aria-controls="login-pane" aria-selected="false">Iniciar Sesión</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="registro-tab" data-bs-toggle="tab" data-bs-target="#registro-pane" type="button" role="tab" aria-controls="registro-pane" aria-selected="true">Registrarse</button>
+                        </li>
+                    </ul>
+
+                    <!-- 2. CONTENEDOR PRINCIPAL DE LAS PESTAÑAS -->
+                    <div class="tab-content" id="authTabsContent">
+                        <div id="message"></div>
+                        <!-- PESTAÑA DE LOGIN (Oculta por defecto) -->
+                        <div class="tab-pane fade" id="login-pane" role="tabpanel" aria-labelledby="login-tab" tabindex="0">
+                            <h2 class="text-center mb-4">Iniciar Sesión</h2>
+                
+                            <form id="loginForm" class="needs-validation" novalidate>
+                                <div class="mb-3">
+                                    <label for="loginEmail" class="form-label">Correo electrónico</label>
+                                    <input type="email" class="form-control" id="loginEmail" required>
+                                    <div class="invalid-feedback">Introduce un email válido.</div>
+                                    <div class="valid-feedback">¡Se ve bien!</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPassword" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="loginPassword" required>
+                                    <div class="invalid-feedback">Introduce tu contraseña.</div>
+                                    <div class="valid-feedback">¡Se ve bien!</div>
+                                </div>
+                                <button class="btn btn-primary w-100 rounded-pill mt-3" type="submit" id="ingresar">Ingresar</button>
+                            </form>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Correo electrónico</label>
-                            <input type="email" class="form-control" id="email" required>
-                            <div class="invalid-feedback">Introduce un email válido.</div>
+                        <!-- PESTAÑA DE REGISTRO (Tu código original intacto, activo por defecto) -->
+                        <div class="tab-pane fade show active" id="registro-pane" role="tabpanel" aria-labelledby="registro-tab" tabindex="0">
+                            <h2 class="text-center mb-4">Registro de Usuario</h2>
+                            
+                    
+                            <form id="registroForm" class="needs-validation" novalidate>
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombre" required minlength="3">
+                                    <div class="invalid-feedback">Por favor, introduce tu nombre (mín. 3 caracteres).</div>
+                                    <div class="valid-feedback">¡Se ve bien!</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Correo electrónico</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                    <div class="invalid-feedback">Introduce un email válido.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="password" required minlength="6">
+                                    <div class="invalid-feedback">La contraseña debe tener al menos 4 caracteres.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="confirmPassword" class="form-label">Repetir contraseña</label>
+                                    <input type="password" class="form-control" id="confirmPassword" required>
+                                    <div id="passError" class="invalid-feedback">Las contraseñas no coinciden.</div>
+                                </div>
+
+                                <button class="btn btn-primary w-100 rounded-pill mt-3" type="submit">Crear cuenta</button>
+                            </form>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="password" required minlength="6">
-                            <div class="invalid-feedback">La contraseña debe tener al menos 6 caracteres.</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Repetir contraseña</label>
-                            <input type="password" class="form-control" id="confirmPassword" required>
-                            <div id="passError" class="invalid-feedback">Las contraseñas no coinciden.</div>
-                        </div>
-
-                        <button class="btn btn-primary w-100 rounded-pill mt-3" type="submit">Crear cuenta</button>
-                    </form>
+                    </div> <!-- Fin del tab-content -->
                 </div>
             </div>
         </div>

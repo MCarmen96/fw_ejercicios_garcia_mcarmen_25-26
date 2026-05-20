@@ -53,6 +53,9 @@ export class ApiService {
             console.log("categorias: ", datos);
             // si la clave categories existe y su array es mayor a 0 lo recorro
             if (datos.categories && datos.categories.length > 0) {
+                datos.categories.sort((a, b) => {
+                    return a.strCategory.localeCompare(b.strCategory);
+                });
                 datos.categories.forEach((categoria) => {
                     categorias.push({
                         idCategory: categoria.idCategory,
