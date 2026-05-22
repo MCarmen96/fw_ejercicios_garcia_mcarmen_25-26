@@ -1,10 +1,12 @@
 
 import { MyMeal } from "./MyMeal.js";
 import { Category } from "./Category.js";
+import { StorageService } from './StorageService.js';
+import { AuthSession } from "./AuthSession.js";
 export class ViewService {
 
 
-    public pintarRecetasHome(recetas: MyMeal, contenedor: HTMLDivElement) {
+    public pintarRecetasHome(recetas: MyMeal, contenedor: HTMLDivElement,local:StorageService) {
         //variable vacía para ir guardando los ingredientes
         let listaIngredientes: string = "";
         if (recetas.ingredients && recetas.ingredients != null) {
@@ -36,7 +38,7 @@ export class ViewService {
                 </div>
             </div>`
 
-
+        this.cargarElementosLogin(local);
     }
 
     public cargarCategoriasSelect(categorias: Category[], select: HTMLSelectElement) {
@@ -70,6 +72,33 @@ export class ViewService {
 
 
     }
+
+    public cargarElementosLogin(local: StorageService) {
+    const iconLogin = document.querySelector("#icon-login") as HTMLDivElement;
+    const divNombreUser = document.querySelector("#nombreUser") as HTMLDivElement;
+    const nombreUser:AuthSession | null= local.getSession();
+    
+    console.log(nombreUser);
+    if (nombreUser != null) {
+
+        if (document.querySelector("#recetasHome")) {
+
+            document.querySelectorAll("#recetasHome button").forEach(buton => {
+                buton.classList.add("d-block");
+                buton.classList.remove("d-none");
+                iconLogin.classList.add("d-block");
+                iconLogin.classList.remove("d-none");
+                document.querySelector("#saveCategory")?.classList.remove("d-none");
+                document.querySelector("#saveCategory")?.classList.add("d-block");
+                
+                divNombreUser.innerHTML= `<span>${nombreUser.name}</span>`;
+                
+        
+            })
+        }
+    }  
+
+}
 
 }
 

@@ -1,4 +1,5 @@
 
+import { AuthSession } from "./AuthSession";
 import { User } from "./User";
 
 
@@ -17,24 +18,26 @@ export class StorageService {
             Nunca toca el DOM
     */
 
-    private static readonly USER_KEY_ITEM : string = "users";
+    private static readonly USER_KEY_ITEM: string = "users";
     private static readonly USER_MEAL_KEY_ITEM: string = "userMeals_";//Clave: userMeals_56 + el id del user
     private static readonly USER_MINI_MEAL_KEY_ITEM: string = "userMiniMeals_"// tambien con el id del usuario
     private static readonly USER_WEEKLY_PLANS: string = "weeklyPlans_";// tmabien con el id
+    private static readonly USER_SESSION: string = "authSession";
 
-    
-    
 
-    
-    public constructor(){
 
-        if(!localStorage.getItem(StorageService.USER_KEY_ITEM)&&!localStorage.getItem(StorageService.USER_MEAL_KEY_ITEM)&&!localStorage.getItem(StorageService.USER_MINI_MEAL_KEY_ITEM)&&!localStorage.getItem(StorageService.USER_WEEKLY_PLANS)){
-            localStorage.setItem(StorageService.USER_KEY_ITEM,JSON.stringify([]));
-            localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM,JSON.stringify([]));
-            localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM,JSON.stringify([]));
-            localStorage.setItem(StorageService.USER_WEEKLY_PLANS,JSON.stringify([]));
+
+
+    public constructor() {
+
+        if (!localStorage.getItem(StorageService.USER_KEY_ITEM) || !localStorage.getItem(StorageService.USER_MEAL_KEY_ITEM) || !localStorage.getItem(StorageService.USER_MINI_MEAL_KEY_ITEM) || !localStorage.getItem(StorageService.USER_WEEKLY_PLANS)) {
+            localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify([]));
+            localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM, JSON.stringify([]));
+            localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM, JSON.stringify([]));
+            localStorage.setItem(StorageService.USER_WEEKLY_PLANS, JSON.stringify([]));
+            //localStorage.setItem(StorageService.USER_SESSION, JSON.parse(''));
         }
-        
+
     }
 
 
@@ -65,7 +68,7 @@ export class StorageService {
         // guardo en el local storage cogiendo la clave que e interesa que es la de users
         if (ok) {
             try {
-                localStorage.setItem(StorageService.USER_KEY_ITEM,JSON.stringify(usersArray));//y ahora aqui lo guardo en storage sobreescribiendo
+                localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(usersArray));//y ahora aqui lo guardo en storage sobreescribiendo
             } catch (error) {
                 console.error(error);
                 ok = false;
@@ -76,14 +79,14 @@ export class StorageService {
 
     }
 
-    getEmailUser(email: string): boolean  {
+    getEmailUser(email: string): boolean {
 
         let users = this.getUsers();
-        let ok=true;
+        let ok = false;
         try {
-            if(users&& Array.isArray(users)){
+            if (users && Array.isArray(users)) {
                 return users.some(user => user.email === email);
-            } 
+            }
 
         } catch (error) {
             return false;
@@ -93,69 +96,132 @@ export class StorageService {
     }
 
 
-    getPasswordUser(password: string): boolean{// por que me pide el undefined???
+    getPasswordUser(password: string): boolean {// por que me pide el undefined???
 
         let users = this.getUsers();
-        let ok=true;
+        let ok =false;
+
         try {
-            if(users&& Array.isArray(users)){
+            if (users && Array.isArray(users)) {
                 return users.some(user => user.password === password);
-            }   
-            
+            }
+
         } catch (error) {
             return false;
         }
         return ok;
-        
+
     }
 
-    getLastUser():number {
+    getLastUser(): number {
 
         let user = this.getUsers();
-        let id:number=0;
+        let id: number = 0;
         if (user && Array.isArray(user)) {// mira si hay algun user
-            if(user.length==0){
+            if (user.length == 0) {
                 return 1;
-            }else{
+            } else {
                 let lastIndex = user.length - 1;//cojo el ultimo indice
                 let lastUser = user[lastIndex];// accedo al objeto que esta en esa posicion
-                id=lastUser.id + 1; //devuelvo su indice + 1 
+                id = lastUser.id + 1; //devuelvo su indice + 1 
             }
-        
+
         } else {
             console.log("fallo al recoger los datos de la clave user del localstorage");
         }
         return id;
     }
 
-    isLoginUser():String|null{
-        let users=this.getUsers();
-        let userLogin=null;
-        if (Array.isArray(users)) {
-            users.forEach(user=>{
-                if(user.login){
-                    userLogin=user.name;
+    getId(email: string): number {
+        let users = this.getUsers();
+        let id: number = 0;
+        if (users && Array.isArray(users)) {
+            users.forEach(element => {
+                if (element.email == email) {
+                    id = element.id;
                 }
-            })
+            });
         }
 
-        return userLogin;
+        return id;
     }
 
-    activeLogin(email:String):void{
+    getOneUser(email: string): User | null {
+        let users = this.getUsers();
+        let userFound;
 
-        let users=this.getUsers();
-        if (Array.isArray(users)) {
-            users.forEach(user=>{
-                if(user.email==email){
-                    user.login=true;
-                }
-            })
+        if (users && Array.isArray(users)) {
+            userFound = users.find(element => element.email === email);
+        } else {
+            return null;
         }
-        localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(users));
-    
-        console.log(`Estado de login actualizado en LocalStorage para: ${email}`);
+
+        if (userFound) {
+            return userFound;
+        }
+
+        return null;
     }
+
+    getSession():null|AuthSession{
+        const session=localStorage.getItem(StorageService.USER_SESSION);
+        console.log("sesion:"+session);
+        if(session!=null){
+            return session? JSON.parse(session) : null;
+        }
+
+        return null;
+    }
+
+
+    saveSession(user: User) {
+
+        let authSessionUser: AuthSession = {
+            userId: user.id,
+            name: user.name,
+            loginDate: new Date()
+        }
+
+        console.log("Sesion guardada: "+authSessionUser);
+
+        try {
+            localStorage.setItem(StorageService.USER_SESSION, JSON.stringify(authSessionUser));
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+
+    /*  // esta pregunta de si hay usuarios logueados es en el authSession
+     isLoginUser():String|null{
+         let users=this.getUsers();
+         let userName=null;
+         if (Array.isArray(users)) {
+             users.forEach(user=>{
+                 if(user.login){
+                     userName=user.name;
+                 }
+             })
+         }
+ 
+         return userName;
+     }
+ 
+     activeLogin(email:String):void{
+ 
+         let users=this.getUsers();
+         if (Array.isArray(users)) {
+             users.forEach(user=>{
+                 if(user.email==email){
+                     user.login=true;
+                 }
+             })
+         }
+         localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(users));
+     
+         console.log(`Estado de login actualizado en LocalStorage para: ${email}`);
+     } */
 
 
 

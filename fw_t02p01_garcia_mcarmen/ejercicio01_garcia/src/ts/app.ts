@@ -1,3 +1,4 @@
+
 //debugger 
 let a: number = 5;
 console.log("holaaa practica typescript ");
@@ -9,6 +10,7 @@ import { Utilities } from './Utilities.js';
 import { ViewService } from './ViewService.js';
 import { User } from './User.js';
 import { StorageService } from './StorageService.js';
+import { AuthSession } from './AuthSession.js';
 
 
 
@@ -22,11 +24,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const local: StorageService = new StorageService();
 
 
+
     // gestion vistas tmbn puedo hacer una funcion que se encargue de esto
     if (window.location.pathname.includes("index.html") || window.location.pathname === "/") {
-        
-        cargarIndex(api, view,local);
-        
+
+        cargarIndex(api, view, local);
+
     }
 
     if (window.location.pathname.includes("registro.html")) {
@@ -40,9 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-async function cargarIndex(api: ApiService, view: ViewService,local:StorageService) {
-    
-    
+async function cargarIndex(api: ApiService, view: ViewService, local: StorageService) {
+
+
     //elementos html los cojo en las fucniones que los necesite
     const contenedorRecetas = document.querySelector("#recetasHome") as HTMLDivElement;
     const selectCategory = document.querySelector("#selectCategorias") as HTMLSelectElement;
@@ -55,7 +58,7 @@ async function cargarIndex(api: ApiService, view: ViewService,local:StorageServi
         const receta = await api.recetaAleatoria();
         //como puede ser null lo que deveulva lo tengo que compronbar antes
         if (receta != null) {
-            view.pintarRecetasHome(receta, contenedorRecetas);
+            view.pintarRecetasHome(receta, contenedorRecetas, local);
         }
     }
 
@@ -67,7 +70,7 @@ async function cargarIndex(api: ApiService, view: ViewService,local:StorageServi
         const categorySelect = selectCategory.value;
         contenedorRecetas.innerHTML = "";
 
-        if(document.querySelector("#saveCategory")?.classList.contains("d-block")){
+        if (document.querySelector("#saveCategory")?.classList.contains("d-block")) {
             document.querySelector("#saveCategory")?.removeAttribute("disabled");
         }
 
@@ -77,21 +80,20 @@ async function cargarIndex(api: ApiService, view: ViewService,local:StorageServi
         if (recetasCategoriaSelect) { // si hay algo
             for (let i = 0; i < 8; i++) {
                 const recetasCompleta = await api.obtenerPorId(recetasCategoriaSelect[i].idMeal);
-                console.log("Receta completa desde el select category: "+recetasCompleta);
+                console.log("Receta completa desde el select category: " + recetasCompleta);
                 if (recetasCompleta) {
-                    view.pintarRecetasHome(recetasCompleta, contenedorRecetas);
+                    view.pintarRecetasHome(recetasCompleta, contenedorRecetas, local);
                 }
             }
         } else {
             // cargar algun error
             view.cargarAlerts(contenedorRecetas, "warning", "Error al cargar la categoria" + categorySelect);
         }
-        isLogin(local);
+
     })
 
     document.querySelector("#saveCategory")?.addEventListener
 
-    isLogin(local);
 }
 
 function cargarRegistro(local: StorageService, view: ViewService) {
@@ -116,7 +118,6 @@ function cargarRegistro(local: StorageService, view: ViewService) {
                     name: nameInput.value,
                     email: emailInput.value,
                     password: passInput.value,
-                    login: false
                 };
 
                 if (local.saveUser(new_user)) {
@@ -152,15 +153,21 @@ function cargarLogin(local: StorageService, view: ViewService) {
         try {
 
             if (Utilities.validarLogin(formLogin, local)) {
-                view.cargarAlerts(contenedor, "success", "Credenciales validas!")
+                view.cargarAlerts(contenedor, "success", "Credenciales validas!");
+                const emailInput = document.getElementById("loginEmail") as HTMLInputElement;
+                //local.activeLogin(emailInput.value);
+                let user = local.getOneUser(emailInput.value);
+                if (user != null) {
+                    local.saveSession(user);
+                }
+
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 2000); 
 
             } else {
                 view.cargarAlerts(contenedor, "danger", "Credenciales no validas, vuelve a intentarlo")
             }
-
-            setTimeout(() => {
-                window.location.href = "index.html";
-            }, 2000);
 
         } catch (error) {
             console.warn(error);
@@ -170,31 +177,5 @@ function cargarLogin(local: StorageService, view: ViewService) {
 
 }
 
-function isLogin(local: StorageService) {
-    const iconLogin = document.querySelector("#icon-login") as HTMLDivElement;
-    const divNombreUser = document.querySelector("#nombreUser") as HTMLDivElement;
-    const nombreUser = local.isLoginUser();
-    console.log("Entro en login o no?????");
-  
-    if (nombreUser != null) {
-        console.log(nombreUser)
-        if (document.querySelector("#recetasHome")) {
-            console.log("Entro en el recetas???")
-            document.querySelectorAll("#recetasHome button").forEach(buton => {
-                buton.classList.add("d-block");
-                buton.classList.remove("d-none");
-                iconLogin.classList.add("d-block");
-                iconLogin.classList.remove("d-none");
-                document.querySelector("#saveCategory")?.classList.remove("d-none");
-                document.querySelector("#saveCategory")?.classList.add("d-block");
-                
-                divNombreUser.innerHTML= `<span>${nombreUser}</span>`;
-                
-                
 
-            })
-        }
-    }  
-
-}
 

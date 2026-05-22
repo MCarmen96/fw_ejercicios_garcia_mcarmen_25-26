@@ -1,10 +1,11 @@
 export class StorageService {
     constructor() {
-        if (!localStorage.getItem(StorageService.USER_KEY_ITEM) && !localStorage.getItem(StorageService.USER_MEAL_KEY_ITEM) && !localStorage.getItem(StorageService.USER_MINI_MEAL_KEY_ITEM) && !localStorage.getItem(StorageService.USER_WEEKLY_PLANS)) {
+        if (!localStorage.getItem(StorageService.USER_KEY_ITEM) || !localStorage.getItem(StorageService.USER_MEAL_KEY_ITEM) || !localStorage.getItem(StorageService.USER_MINI_MEAL_KEY_ITEM) || !localStorage.getItem(StorageService.USER_WEEKLY_PLANS)) {
             localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify([]));
             localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM, JSON.stringify([]));
             localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM, JSON.stringify([]));
             localStorage.setItem(StorageService.USER_WEEKLY_PLANS, JSON.stringify([]));
+            //localStorage.setItem(StorageService.USER_SESSION, JSON.parse(''));
         }
     }
     // cojo los usuarios del local storage y los devuelvo mejor hacerlo
@@ -44,7 +45,7 @@ export class StorageService {
     }
     getEmailUser(email) {
         let users = this.getUsers();
-        let ok = true;
+        let ok = false;
         try {
             if (users && Array.isArray(users)) {
                 return users.some(user => user.email === email);
@@ -57,7 +58,7 @@ export class StorageService {
     }
     getPasswordUser(password) {
         let users = this.getUsers();
-        let ok = true;
+        let ok = false;
         try {
             if (users && Array.isArray(users)) {
                 return users.some(user => user.password === password);
@@ -86,29 +87,53 @@ export class StorageService {
         }
         return id;
     }
-    isLoginUser() {
+    getId(email) {
         let users = this.getUsers();
-        let userLogin = null;
-        if (Array.isArray(users)) {
-            users.forEach(user => {
-                if (user.login) {
-                    userLogin = user.name;
+        let id = 0;
+        if (users && Array.isArray(users)) {
+            users.forEach(element => {
+                if (element.email == email) {
+                    id = element.id;
                 }
             });
         }
-        return userLogin;
+        return id;
     }
-    activeLogin(email) {
+    getOneUser(email) {
         let users = this.getUsers();
-        if (Array.isArray(users)) {
-            users.forEach(user => {
-                if (user.email == email) {
-                    user.login = true;
-                }
-            });
+        let userFound;
+        if (users && Array.isArray(users)) {
+            userFound = users.find(element => element.email === email);
         }
-        localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(users));
-        console.log(`Estado de login actualizado en LocalStorage para: ${email}`);
+        else {
+            return null;
+        }
+        if (userFound) {
+            return userFound;
+        }
+        return null;
+    }
+    getSession() {
+        const session = localStorage.getItem(StorageService.USER_SESSION);
+        console.log("sesion:" + session);
+        if (session != null) {
+            return session ? JSON.parse(session) : null;
+        }
+        return null;
+    }
+    saveSession(user) {
+        let authSessionUser = {
+            userId: user.id,
+            name: user.name,
+            loginDate: new Date()
+        };
+        console.log("Sesion guardada: " + authSessionUser);
+        try {
+            localStorage.setItem(StorageService.USER_SESSION, JSON.stringify(authSessionUser));
+        }
+        catch (error) {
+            console.error(error);
+        }
     }
 }
 /*
@@ -128,4 +153,5 @@ StorageService.USER_KEY_ITEM = "users";
 StorageService.USER_MEAL_KEY_ITEM = "userMeals_"; //Clave: userMeals_56 + el id del user
 StorageService.USER_MINI_MEAL_KEY_ITEM = "userMiniMeals_"; // tambien con el id del usuario
 StorageService.USER_WEEKLY_PLANS = "weeklyPlans_"; // tmabien con el id
+StorageService.USER_SESSION = "authSession";
 //# sourceMappingURL=StorageService.js.map

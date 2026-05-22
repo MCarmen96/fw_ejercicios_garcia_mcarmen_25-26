@@ -1,5 +1,5 @@
 export class ViewService {
-    pintarRecetasHome(recetas, contenedor) {
+    pintarRecetasHome(recetas, contenedor, local) {
         //variable vacía para ir guardando los ingredientes
         let listaIngredientes = "";
         if (recetas.ingredients && recetas.ingredients != null) {
@@ -29,6 +29,7 @@ export class ViewService {
                         </button>
                 </div>
             </div>`;
+        this.cargarElementosLogin(local);
     }
     cargarCategoriasSelect(categorias, select) {
         // Limpiamos el selector
@@ -52,6 +53,25 @@ export class ViewService {
         buttonClose.setAttribute("data-bs-dismiss", "alert");
         contenedor.appendChild(mensageContent);
         contenedor.appendChild(buttonClose);
+    }
+    cargarElementosLogin(local) {
+        const iconLogin = document.querySelector("#icon-login");
+        const divNombreUser = document.querySelector("#nombreUser");
+        const nombreUser = local.getSession();
+        console.log(nombreUser);
+        if (nombreUser != null) {
+            if (document.querySelector("#recetasHome")) {
+                document.querySelectorAll("#recetasHome button").forEach(buton => {
+                    buton.classList.add("d-block");
+                    buton.classList.remove("d-none");
+                    iconLogin.classList.add("d-block");
+                    iconLogin.classList.remove("d-none");
+                    document.querySelector("#saveCategory")?.classList.remove("d-none");
+                    document.querySelector("#saveCategory")?.classList.add("d-block");
+                    divNombreUser.innerHTML = `<span>${nombreUser.name}</span>`;
+                });
+            }
+        }
     }
 }
 /*

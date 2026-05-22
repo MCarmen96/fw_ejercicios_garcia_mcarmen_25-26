@@ -66,9 +66,12 @@ export class Utilities {
         // verificamos que estan los inputs
         if(emailInput.value!=""&&password.value!=""){
             if(local.getPasswordUser(password.value) && local.getEmailUser(emailInput.value)){
-                local.activeLogin(emailInput.value)
+                /* local.activeLogin(emailInput.value) */
                 emailInput.setCustomValidity("");
                 password.setCustomValidity("");
+            }else{
+                emailInput.setCustomValidity("El email no es valido");
+                password.setCustomValidity("La passwordno es valida");
             }
     
         }else{

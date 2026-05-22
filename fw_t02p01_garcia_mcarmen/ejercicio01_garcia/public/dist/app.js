@@ -35,7 +35,7 @@ async function cargarIndex(api, view, local) {
         const receta = await api.recetaAleatoria();
         //como puede ser null lo que deveulva lo tengo que compronbar antes
         if (receta != null) {
-            view.pintarRecetasHome(receta, contenedorRecetas);
+            view.pintarRecetasHome(receta, contenedorRecetas, local);
         }
     }
     // cuando haya un cambio en la seleccion de la receta
@@ -52,7 +52,7 @@ async function cargarIndex(api, view, local) {
                 const recetasCompleta = await api.obtenerPorId(recetasCategoriaSelect[i].idMeal);
                 console.log("Receta completa desde el select category: " + recetasCompleta);
                 if (recetasCompleta) {
-                    view.pintarRecetasHome(recetasCompleta, contenedorRecetas);
+                    view.pintarRecetasHome(recetasCompleta, contenedorRecetas, local);
                 }
             }
         }
@@ -60,10 +60,8 @@ async function cargarIndex(api, view, local) {
             // cargar algun error
             view.cargarAlerts(contenedorRecetas, "warning", "Error al cargar la categoria" + categorySelect);
         }
-        isLogin(local);
     });
     document.querySelector("#saveCategory")?.addEventListener;
-    isLogin(local);
 }
 function cargarRegistro(local, view) {
     const formRegistro = document.getElementById('registroForm');
@@ -85,7 +83,6 @@ function cargarRegistro(local, view) {
                     name: nameInput.value,
                     email: emailInput.value,
                     password: passInput.value,
-                    login: false
                 };
                 if (local.saveUser(new_user)) {
                     console.log("usuario creado: " + new_user);
@@ -117,38 +114,23 @@ function cargarLogin(local, view) {
         try {
             if (Utilities.validarLogin(formLogin, local)) {
                 view.cargarAlerts(contenedor, "success", "Credenciales validas!");
+                const emailInput = document.getElementById("loginEmail");
+                //local.activeLogin(emailInput.value);
+                let user = local.getOneUser(emailInput.value);
+                if (user != null) {
+                    local.saveSession(user);
+                }
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 2000);
             }
             else {
                 view.cargarAlerts(contenedor, "danger", "Credenciales no validas, vuelve a intentarlo");
             }
-            setTimeout(() => {
-                window.location.href = "index.html";
-            }, 2000);
         }
         catch (error) {
             console.warn(error);
         }
     });
-}
-function isLogin(local) {
-    const iconLogin = document.querySelector("#icon-login");
-    const divNombreUser = document.querySelector("#nombreUser");
-    const nombreUser = local.isLoginUser();
-    console.log("Entro en login o no?????");
-    if (nombreUser != null) {
-        console.log(nombreUser);
-        if (document.querySelector("#recetasHome")) {
-            console.log("Entro en el recetas???");
-            document.querySelectorAll("#recetasHome button").forEach(buton => {
-                buton.classList.add("d-block");
-                buton.classList.remove("d-none");
-                iconLogin.classList.add("d-block");
-                iconLogin.classList.remove("d-none");
-                document.querySelector("#saveCategory")?.classList.remove("d-none");
-                document.querySelector("#saveCategory")?.classList.add("d-block");
-                divNombreUser.innerHTML = `<span>${nombreUser}</span>`;
-            });
-        }
-    }
 }
 //# sourceMappingURL=app.js.map
