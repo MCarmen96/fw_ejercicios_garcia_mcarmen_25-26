@@ -3,6 +3,7 @@ import { AuthSession } from "./AuthSession";
 import { User } from "./User";
 
 
+
 export class StorageService {
     /*
             USER_KEY_ITEM, USER_MEAL_KEY_ITEM, …
@@ -56,7 +57,7 @@ export class StorageService {
 
     }
 
-    saveUser(user: User): boolean | User[] {
+    saveUser(user: User): boolean | User {
         let ok = true;
         let usersArray = this.getUsers();
         if (Array.isArray(usersArray)) {
@@ -191,6 +192,26 @@ export class StorageService {
         }
     }
 
+
+    saveCategory(category:string){
+
+        const user:AuthSession|null=this.getSession();
+        
+        if(user!=null){
+            const usuarios=this.getUsers();
+            if(Array.isArray(usuarios)){
+                const userEncontrado:User|undefined=usuarios.find(element => element.id === user.userId);
+
+                if(userEncontrado){
+                    userEncontrado.favoriteCategory=category;
+                    this.saveUser(userEncontrado);
+                }
+            }
+            
+        }
+    }
+
+    
 
 
     /*  // esta pregunta de si hay usuarios logueados es en el authSession

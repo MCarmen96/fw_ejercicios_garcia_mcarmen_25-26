@@ -135,6 +135,19 @@ export class StorageService {
             console.error(error);
         }
     }
+    saveCategory(category) {
+        const user = this.getSession();
+        if (user != null) {
+            const usuarios = this.getUsers();
+            if (Array.isArray(usuarios)) {
+                const userEncontrado = usuarios.find(element => element.id === user.userId);
+                if (userEncontrado) {
+                    userEncontrado.favoriteCategory = category;
+                    this.saveUser(userEncontrado);
+                }
+            }
+        }
+    }
 }
 /*
         USER_KEY_ITEM, USER_MEAL_KEY_ITEM, …

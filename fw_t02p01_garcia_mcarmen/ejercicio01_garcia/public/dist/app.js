@@ -41,27 +41,35 @@ async function cargarIndex(api, view, local) {
     // cuando haya un cambio en la seleccion de la receta
     selectCategory.addEventListener("change", async function () {
         const categorySelect = selectCategory.value;
+        console.log("select " + categorySelect);
         contenedorRecetas.innerHTML = "";
         if (document.querySelector("#saveCategory")?.classList.contains("d-block")) {
             document.querySelector("#saveCategory")?.removeAttribute("disabled");
         }
-        // url de la api que me devuelve un listado de catgorias con detalles simples de la misma
-        const recetasCategoriaSelect = await api.obtenerPorCategoria(categorySelect);
-        if (recetasCategoriaSelect) { // si hay algo
-            for (let i = 0; i < 8; i++) {
-                const recetasCompleta = await api.obtenerPorId(recetasCategoriaSelect[i].idMeal);
-                console.log("Receta completa desde el select category: " + recetasCompleta);
-                if (recetasCompleta) {
-                    view.pintarRecetasHome(recetasCompleta, contenedorRecetas, local);
-                }
+        cargarIndexPorCategoria(categorySelect, contenedorRecetas, api, view, local);
+    });
+    // guardar categoria
+    document.querySelector("#saveCategory")?.addEventListener('click', () => {
+        local.saveCategory(selectCategory.value);
+    });
+    document.querySelectorAll("#recetasHome button").forEach();
+}
+async function cargarIndexPorCategoria(categorySelect, contenedorRecetas, api, view, local) {
+    // url de la api que me devuelve un listado de catgorias con detalles simples de la misma
+    const recetasCategoriaSelect = await api.obtenerPorCategoria(categorySelect);
+    if (recetasCategoriaSelect) { // si hay algo
+        for (let i = 0; i < 8; i++) {
+            const recetasCompleta = await api.obtenerPorId(recetasCategoriaSelect[i].idMeal);
+            console.log("Receta completa desde el select category: " + recetasCompleta);
+            if (recetasCompleta) {
+                view.pintarRecetasHome(recetasCompleta, contenedorRecetas, local);
             }
         }
-        else {
-            // cargar algun error
-            view.cargarAlerts(contenedorRecetas, "warning", "Error al cargar la categoria" + categorySelect);
-        }
-    });
-    document.querySelector("#saveCategory")?.addEventListener;
+    }
+    else {
+        // cargar algun error
+        view.cargarAlerts(contenedorRecetas, "warning", "Error al cargar la categoria" + categorySelect);
+    }
 }
 function cargarRegistro(local, view) {
     const formRegistro = document.getElementById('registroForm');
@@ -132,5 +140,7 @@ function cargarLogin(local, view) {
             console.warn(error);
         }
     });
+}
+function saveMeal(idMeal) {
 }
 //# sourceMappingURL=app.js.map

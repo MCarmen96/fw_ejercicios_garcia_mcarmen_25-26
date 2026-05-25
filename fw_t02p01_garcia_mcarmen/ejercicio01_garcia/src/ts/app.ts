@@ -10,9 +10,6 @@ import { Utilities } from './Utilities.js';
 import { ViewService } from './ViewService.js';
 import { User } from './User.js';
 import { StorageService } from './StorageService.js';
-import { AuthSession } from './AuthSession.js';
-
-
 
 
 
@@ -61,20 +58,38 @@ async function cargarIndex(api: ApiService, view: ViewService, local: StorageSer
             view.pintarRecetasHome(receta, contenedorRecetas, local);
         }
     }
-
+    
+    
 
 
     // cuando haya un cambio en la seleccion de la receta
     selectCategory.addEventListener("change", async function () {
 
         const categorySelect = selectCategory.value;
+        console.log("select "+categorySelect);
         contenedorRecetas.innerHTML = "";
 
         if (document.querySelector("#saveCategory")?.classList.contains("d-block")) {
             document.querySelector("#saveCategory")?.removeAttribute("disabled");
         }
 
-        // url de la api que me devuelve un listado de catgorias con detalles simples de la misma
+        cargarIndexPorCategoria(categorySelect,contenedorRecetas,api,view,local);
+
+    })
+
+    // guardar categoria
+    document.querySelector("#saveCategory")?.addEventListener('click',()=>{
+        local.saveCategory(selectCategory.value);
+
+    })
+
+   /*  document.querySelectorAll("#recetasHome button").forEach() */
+    
+}
+
+
+async function cargarIndexPorCategoria(categorySelect:string,contenedorRecetas:HTMLDivElement,api:ApiService,view:ViewService,local:StorageService){
+     // url de la api que me devuelve un listado de catgorias con detalles simples de la misma
         const recetasCategoriaSelect = await api.obtenerPorCategoria(categorySelect);
 
         if (recetasCategoriaSelect) { // si hay algo
@@ -89,11 +104,6 @@ async function cargarIndex(api: ApiService, view: ViewService, local: StorageSer
             // cargar algun error
             view.cargarAlerts(contenedorRecetas, "warning", "Error al cargar la categoria" + categorySelect);
         }
-
-    })
-
-    document.querySelector("#saveCategory")?.addEventListener
-
 }
 
 function cargarRegistro(local: StorageService, view: ViewService) {
@@ -178,4 +188,8 @@ function cargarLogin(local: StorageService, view: ViewService) {
 }
 
 
+
+/* function saveMeal(idMeal:string){
+    
+} */
 
