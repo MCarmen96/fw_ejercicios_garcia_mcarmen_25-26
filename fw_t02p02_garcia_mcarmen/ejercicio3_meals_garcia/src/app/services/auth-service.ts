@@ -1,10 +1,38 @@
-import { Injectable } from '@angular/core';
 
+import { inject, Injectable } from '@angular/core';
+import { StorageService } from '../services/storage-service';
+import { User } from '../model/user';
+import { AuthSession } from '../model/auth-session';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
 
+  public local=inject(StorageService);
+
+  authLogin(email:string){
+    let user = this.local.getOneUser(email);
+    if (user != null) {
+        this.local.saveSession(user);
+    }
+
+  }
+
+  authRegister(user:User):boolean|User{
+    if(user!=null){
+        return this.local.saveUser(user);
+    }
+    return false;
+  }
+
+  getLastUser():number{
+    const id:number=this.local.getLastUser();
+    return id;
+  }
+
+  isSession():null|AuthSession{
+    return this.local.getSession();
+  }
 }
 
 /*

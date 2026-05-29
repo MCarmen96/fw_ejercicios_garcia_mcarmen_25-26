@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { Layout } from './c_layout/layout/layout';
 import { Home } from './c_pages/home/home';
 import { Details } from './c_pages/details/details';

@@ -1,85 +1,146 @@
-<div class="container d-flex justify-content-center align-items-center vh-100">
-  <div class="card shadow-sm" style="max-width: 420px; width: 100%;">
+<main>
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-sm" style="max-width: 420px; width: 100%;">
 
-    <div class="card-body">
+      <div class="card-body">
 
-      <!-- Tabs -->
-      <ul class="nav nav-tabs nav-fill mb-4" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button"
-            role="tab">
-            Login
-          </button>
-        </li>
+        <!-- Tabs -->
+        <ul class="nav nav-tabs nav-fill mb-4" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button"
+              role="tab">
+              Login
+            </button>
+          </li>
 
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button"
-            role="tab">
-            Registro
-          </button>
-        </li>
-      </ul>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button"
+              role="tab">
+              Registro
+            </button>
+          </li>
+        </ul>
 
-      <!-- Tab content -->
-      <div class="tab-content">
+        <!-- Tab content -->
+        <div class="tab-content">
 
-        <!-- LOGIN -->
-        <div class="tab-pane fade show active" id="login" role="tabpanel">
+          <!-- LOGIN -->
+          <div class="tab-pane fade show active" id="login" role="tabpanel">
 
-          <form>
-            <div class="mb-3">
-              <label for="email" class="form-label">Correo electrónico</label>
-              <input type="email" id="email" name="email" class="form-control"
-                placeholder="usuario@educastillalamancha.es">
+            <form [formGroup]="loginForm" (submit)="handleSubmitLogin()" novalidate>
+              <div class="mb-3">
+                <label for="email" class="form-label">Correo electrónico</label>
+                <input type="email" id="email" name="email" class="form-control"
+                  placeholder="usuario@educastillalamancha.es" formControlName="email"
+                  [ngClass]="getValidationClass(loginForm.get('email'),loginSubmitted)">
+                <!-- loginForm.get('email') con esto cogemos el objeto  -->
+                @if (loginForm.controls.email.invalid&&loginSubmitted){
+                <div class="invalid-feedback">Por favor, introduce un email valido(mín. 3 caracteres).</div>
+                }
+
+              </div>
+              <div class="mb-4">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="********"
+                  formControlName="password" [ngClass]="getValidationClass(loginForm.get('email'),loginSubmitted)">
+                @if (loginForm.controls.password.invalid&&loginSubmitted){
+                <div class="invalid-feedback">Por favor, introduce una contraseña valida.</div>
+                }
+
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">
+                  Entrar
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- REGISTER -->
+
+
+          <div class="tab-pane fade text-center" id="register" role="tabpanel">
+            @if (registroExitoso) {
+            <div class="alert alert-success text-center" role="alert">
+              <h5 class="alert-heading">¡Usuario creado correctamente!</h5>
+              <p class="mb-3">Tu cuenta ha sido registrada con éxito.</p>
             </div>
-            <div class="mb-4">
-              <label for="password" class="form-label">Contraseña</label>
-              <input type="password" id="password" name="password" class="form-control" placeholder="********">
+            }@else{
+            <div class="alert alert-danger text-center" role="alert">
+              <h5 class="alert-heading">¡Error!</h5>
+              <p class="mb-3">El usuario no se ha podido registrar correctamente</p>
             </div>
+            }
+            <form [formGroup]="registerForm" (submit)="handleSubmitRegister()" novalidate>
 
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary">
-                Entrar
-              </button>
-            </div>
-          </form>
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" formControlName="name"
+                  [ngClass]="getValidationClass(registerForm.get('name'),registerSubmitted)">
+
+                @if (registerForm.controls.name.invalid&&registerForm){
+                <div class="invalid-feedback">Por favor, introduce tu nombre (mín. 3 caracteres).</div>
+                } @else {
+                <div class="valid-feedback">¡Se ve bien!</div>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label">Correo electrónico</label>
+                <input type="email" class="form-control" id="email" formControlName="email"
+                  [ngClass]="getValidationClass(registerForm.get('email'),registerSubmitted)">
+                @if (registerForm.controls.email&&registerForm){
+                <div class="invalid-feedback">Por favor, introduce un correo valido.</div>
+                } @else {
+                <div class="valid-feedback">¡Se ve bien!</div>
+                }
+
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="password" formControlName="password"
+                  [ngClass]="getValidationClass(registerForm.get('password'),registerSubmitted)" placeholder="********">
+                @if(password?.errors){
+                <div class="invalid-feedback">
+                  La contraseña es obligatoria y debe tener al menos 3 caracteres
+                </div>
+
+                }
+
+                <div class="valid-feedback">¡Correcto!</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Repetir contraseña</label>
+                <input type="password" class="form-control" id="confirmPassword" formControlName="passwordConfirm"
+                  [ngClass]="getValidationClassConfirmPassword()" placeholder="********">
+                <!-- si ha enviado el formulario y tiene alguno de estos 2 errores es invalido -->
+                @if (registerSubmitted && (passwordConfirm?.errors || registerForm.errors?.['passwordsNoCoinciden'])) {
+                <div class="invalid-feedback" role="alert">
+
+                  @if (registerForm.errors?.['passwordsNoCoinciden']) {
+                  <div>Las contraseñas no coinciden.</div>
+                  } @else {
+                  <div>Por favor, repita la contraseña.</div>
+                  }
+
+                </div>
+                } @else if (registerSubmitted && registerForm.get('passwordConfirm')?.valid) {
+                <div class="valid-feedback">¡Las contraseñas coinciden!</div>
+                }
+
+
+
+              </div>
+
+              <button class="btn btn-primary w-100 rounded-pill mt-3" type="submit">Crear cuenta</button>
+            </form>
+          </div>
+
         </div>
-
-        <!-- REGISTER -->
-        <div class="tab-pane fade text-center" id="register" role="tabpanel">
-
-          <form id="registroForm" class="needs-validation" novalidate>
-
-            <div class="mb-3">
-              <label for="nombre" class="form-label">Nombre</label>
-              <input type="text" class="form-control" id="nombre" required minlength="3">
-              <div class="invalid-feedback">Por favor, introduce tu nombre (mín. 3 caracteres).</div>
-              <div class="valid-feedback">¡Se ve bien!</div>
-            </div>
-
-            <div class="mb-3">
-              <label for="email" class="form-label">Correo electrónico</label>
-              <input type="email" class="form-control" id="email" required>
-              <div class="invalid-feedback">Introduce un email válido.</div>
-            </div>
-
-            <div class="mb-3">
-              <label for="password" class="form-label">Contraseña</label>
-              <input type="password" class="form-control" id="password" required minlength="6">
-              <div class="invalid-feedback">La contraseña debe tener al menos 6 caracteres.</div>
-            </div>
-
-            <div class="mb-3">
-              <label for="confirmPassword" class="form-label">Repetir contraseña</label>
-              <input type="password" class="form-control" id="confirmPassword" required>
-              <div id="passError" class="invalid-feedback">Las contraseñas no coinciden.</div>
-            </div>
-
-            <button class="btn btn-primary w-100 rounded-pill mt-3" type="submit">Crear cuenta</button>
-          </form>
-        </div>
-
       </div>
     </div>
   </div>
-</div>
+</main>

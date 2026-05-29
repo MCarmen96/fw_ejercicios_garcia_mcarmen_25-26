@@ -22,7 +22,7 @@ export class MealsCategory implements OnInit {
   public loading=true;
   public error='';
 
-   get categorys():Category[]{
+  get categorys():Category[]{
 
     return this._categorys();
   }
@@ -52,7 +52,8 @@ export class MealsCategory implements OnInit {
 
 
       }
-       this._meals.set(arrayAux);
+
+      this._meals.set(arrayAux);
 
       }catch(error){
         this.error='Error loading meals';
@@ -72,7 +73,6 @@ export class MealsCategory implements OnInit {
         if(category){ arrayAux.push(category);}
 
         this._categorys.set(arrayAux);
-
       }
 
 
@@ -112,7 +112,8 @@ export class MealsCategory implements OnInit {
         this._meals.set(arrayAux);
 
   }
-    //Angular lo ejecuta automáticamente una vez, justo después de crear el componente.
+  
+  //Angular lo ejecuta automáticamente una vez, justo después de crear el componente.
   async ngOnInit(){
     await this.loadMeals();
     await this.loadCategorys();

@@ -1,0 +1,22 @@
+"use strict";
+exports.__esModule = true;
+exports.routes = void 0;
+var layout_1 = require("./c_layout/layout/layout");
+var home_1 = require("./c_pages/home/home");
+var details_1 = require("./c_pages/details/details");
+var plan_week_1 = require("./c_pages/plan-week/plan-week");
+var login_1 = require("./c_pages/login/login");
+var not_found_1 = require("./c_pages/not-found/not-found");
+exports.routes = [
+    {
+        path: '',
+        component: layout_1.Layout,
+        children: [
+            { path: '', component: home_1.Home },
+            { path: 'details/:id', component: details_1.Details },
+            { path: 'plan-week', component: plan_week_1.PlanWeek },
+        ]
+    },
+    { path: 'login', component: login_1.Login },
+    { path: '**', component: not_found_1.NotFound },
+];
