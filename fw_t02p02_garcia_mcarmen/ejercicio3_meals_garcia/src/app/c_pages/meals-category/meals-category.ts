@@ -2,10 +2,11 @@ import { Component,inject,OnInit,signal} from '@angular/core';
 import { ApiService } from '../../services/api-service';
 import { MyMeal } from '../../model/my-meal';
 import { Category } from '../../model/category';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-meals-category',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './meals-category.html',
   styleUrl: './meals-category.css',
 })
@@ -112,7 +113,7 @@ export class MealsCategory implements OnInit {
         this._meals.set(arrayAux);
 
   }
-  
+
   //Angular lo ejecuta automáticamente una vez, justo después de crear el componente.
   async ngOnInit(){
     await this.loadMeals();

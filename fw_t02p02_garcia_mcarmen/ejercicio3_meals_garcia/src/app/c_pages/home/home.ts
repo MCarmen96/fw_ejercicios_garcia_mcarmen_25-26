@@ -14,12 +14,17 @@ import { AuthService } from '../../services/auth-service';
 export class Home {
   public isAuthenticated = false;
   public authService=inject(AuthService);
-  
+
   ngOnInit():void{
     if (this.authService.isSession() !== null) {
       this.isAuthenticated=true;
       console.log('¡Hay una sesión activa!');
     }
   }
+
+  
+
+
+
 
 }

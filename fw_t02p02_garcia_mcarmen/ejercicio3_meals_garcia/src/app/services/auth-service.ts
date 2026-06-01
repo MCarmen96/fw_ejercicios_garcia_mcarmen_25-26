@@ -33,6 +33,8 @@ export class AuthService {
   isSession():null|AuthSession{
     return this.local.getSession();
   }
+
+
 }
 
 /*

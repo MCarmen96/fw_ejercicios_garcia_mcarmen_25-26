@@ -44,10 +44,11 @@ export class Login {
 
   public handleSubmitLogin() {
     this.loginSubmitted=true;
-  
+
     if(this.loginForm.valid){
       console.log("Entra en valid del formulario...")
       this.authService.authLogin(this.loginForm.value.email as string);
+      this.router.navigate(['/']);
     }
 
   }
