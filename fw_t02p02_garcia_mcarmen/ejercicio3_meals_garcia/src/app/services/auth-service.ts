@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { StorageService } from '../services/storage-service';
 import { User } from '../model/user';
 import { AuthSession } from '../model/auth-session';
+import { UserMeal } from '../model/user-meal';
 @Injectable({
   providedIn: 'root',
 })
@@ -34,6 +35,14 @@ export class AuthService {
     return this.local.getSession();
   }
 
+
+  saveCommentMeal(comentario:UserMeal):boolean{
+
+    if(!this.isSession()){return false}
+    let id=Number(this.isSession()?.userId);
+    this.local.saveCommentMeal(id,comentario);
+    return true;
+  }
 
 }
 

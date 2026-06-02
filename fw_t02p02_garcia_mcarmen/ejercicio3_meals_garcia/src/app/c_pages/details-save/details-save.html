@@ -1,2 +1,79 @@
-<p>details-save works!</p>
-<h1>GUARDAR COMENTARIO</h1>
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-12">
+
+      <div class="card shadow-sm border-0 p-4 p-md-5 bg-light rounded-4">
+        <h3 class="fw-bold text-dark mb-4 d-flex align-items-center gap-2">
+          <i class="bi bi-pencil-square text-success"></i>
+          Tu evaluación de la receta
+        </h3>
+        <!-- [formGroup]="valoracionForm" (ngSubmit)="guardarValoracion()" -->
+        <form [formGroup]="valoracionForm" (ngSubmit)="guardarValoracion()">
+
+          <div class="mb-4">
+            <label class="form-label fw-bold text-secondary d-block mb-2">Puntuación de la receta:</label>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+
+              @for (nota of ['1', '2', '3', '4', '5']; track nota) {
+              <input type="radio" class="btn-check" [id]="'btnradio' + nota" [value]="nota" formControlName="puntuacion"
+                name="puntuacion">
+              <label class="btn btn-outline-warning fw-medium px-3" [for]="'btnradio' + nota">
+                {{ nota }} ⭐
+              </label>
+              }
+
+            </div>
+            @if(valoracionForm.controls.puntuacion.invalid&&valoracionForm.controls.puntuacion.touched){
+              <div class="text-danger fs-7 mt-2 ps-1">
+                <i class="bi bi-exclamation-circle-fill me-1"></i> Debes seleccionar una valor.
+              </div>
+              }
+          </div>
+
+          <div class="mb-4 bg-white p-3 rounded-3 border-muted">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="radioDefault1" formControlName="yaCocinada" value="1"
+                [class.is-invalid]="valoracionForm.controls.yaCocinada.invalid && valoracionForm.controls.yaCocinada.touched" checked>
+              <label class="form-check-label" for="radioDefault1"
+                [class.text-danger]="valoracionForm.controls.yaCocinada.invalid && valoracionForm.controls.yaCocinada.touched">
+                Quiero hacerla
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="radioDefault2" formControlName="yaCocinada" value="2"
+                [class.is-invalid]="valoracionForm.controls.yaCocinada.invalid && valoracionForm.controls.yaCocinada.touched">
+              <label class="form-check-label" for="radioDefault2"
+                [class.text-danger]="valoracionForm.controls.yaCocinada.invalid && valoracionForm.controls.yaCocinada.touched">
+                La he hecho
+              </label>
+            </div>
+            @if(valoracionForm.controls.yaCocinada.invalid && valoracionForm.controls.yaCocinada.touched){
+            <div class="text-danger fs-7 mt-2 ps-1">
+              <i class="bi bi-exclamation-circle-fill me-1"></i> Debes seleccionar una opción.
+            </div>
+            }
+          </div>
+
+          <div class="mb-4">
+            <label for="textoComentario" class="form-label fw-bold text-secondary">Escribe tu opinión</label>
+            <textarea id="textoComentario" rows="3"
+              class="form-control form-control-lg bg-white border-muted shadow-none"
+              placeholder="¿Qué te pareció el sabor? ¿Es fácil de hacer?..." formControlName="textoComentario"
+              [class.is-invalid]="valoracionForm.controls.textoComentario.invalid && valoracionForm.controls.textoComentario.touched"></textarea>
+            @if(valoracionForm.controls.textoComentario.invalid){
+            <div class="invalid-feedback">Por favor, escribe un comentario válido min.5 caracteres.</div>
+            }
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-success btn-lg px-5 py-2 shadow-sm fw-medium">
+              Guardar opinión
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

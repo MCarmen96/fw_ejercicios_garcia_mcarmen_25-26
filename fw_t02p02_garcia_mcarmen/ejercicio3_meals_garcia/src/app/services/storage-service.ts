@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { User } from '../model/user';
 import { AuthSession } from '../model/auth-session';
+import { UserMeal } from '../model/user-meal';
 
 @Injectable({
   providedIn: 'root',
@@ -30,18 +31,17 @@ export class StorageService {
 
   public constructor() {
 
-    if (!localStorage.getItem(StorageService.USER_KEY_ITEM) || !localStorage.getItem(StorageService.USER_MEAL_KEY_ITEM) || !localStorage.getItem(StorageService.USER_MINI_MEAL_KEY_ITEM) || !localStorage.getItem(StorageService.USER_WEEKLY_PLANS)) {
+    if (!localStorage.getItem(StorageService.USER_KEY_ITEM)) {
       localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify([]));
-      localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM, JSON.stringify([]));
-      localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM, JSON.stringify([]));
-      localStorage.setItem(StorageService.USER_WEEKLY_PLANS, JSON.stringify([]));
+
+
       //localStorage.setItem(StorageService.USER_SESSION, JSON.parse(''));
     }
 
   }
 
   // cojo los usuarios del local storage y los devuelvo mejor hacerlo
-  // cojo los usuarios del local storage y los devuelvo mejor hacerlo
+
   getUsers(): User[] | boolean {
 
     const users = localStorage.getItem(StorageService.USER_KEY_ITEM);
@@ -56,16 +56,27 @@ export class StorageService {
 
   }
 
+  getMealsUser(id:number):UserMeal[]|boolean{
+    const mealsUser=localStorage.getItem(StorageService.USER_MEAL_KEY_ITEM+id);
+
+    if(mealsUser!=null){
+      return mealsUser ?JSON.parse(mealsUser):[];
+    }else{
+      return false;
+    }
+  }
+
   saveUser(user: User): boolean | User {
     let ok = true;
     let usersArray = this.getUsers();
     if (Array.isArray(usersArray)) {
       if(!this.getEmailUser(user.email)){
           usersArray.push(user);
+
       }else{
         ok=false;
       }
-      
+
     } else {
       ok = false;
     }
@@ -74,6 +85,9 @@ export class StorageService {
     if (ok) {
       try {
         localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(usersArray));//y ahora aqui lo guardo en storage sobreescribiendo
+        localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM+user.id, JSON.stringify([]));
+        localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM+user.id, JSON.stringify([]));
+        localStorage.setItem(StorageService.USER_WEEKLY_PLANS+user.id, JSON.stringify([]));
       } catch (error) {
         console.error(error);
         ok = false;
@@ -168,7 +182,7 @@ export class StorageService {
 
   getSession(): null | AuthSession {
     const session = localStorage.getItem(StorageService.USER_SESSION);
-    console.log("sesion:" + session);
+
     if (session != null) {
       return session ? JSON.parse(session) : null;
     }
@@ -211,6 +225,28 @@ export class StorageService {
       }
 
     }
+  }
+
+  searchUserXid(id:number){
+
+    let users = this.getUsers();
+
+    if(Array.isArray(users)&&users){
+
+    }
+
+  }
+
+  saveCommentMeal(id:number,comentario:UserMeal){
+
+    const mealUser=this.getMealsUser(id);
+    if(Array.isArray(mealUser)){
+      mealUser.push(comentario);
+      localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM+id,JSON.stringify(mealUser));
+    }
+
+
+
   }
 
 }

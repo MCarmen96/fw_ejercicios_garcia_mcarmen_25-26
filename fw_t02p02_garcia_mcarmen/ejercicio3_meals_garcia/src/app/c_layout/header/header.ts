@@ -16,7 +16,7 @@ export class Header {
     if (this.authService.isSession() !== null) {
       this.user=this.authService.isSession()?.name;
       this.isAuthenticated=true;
-      console.log('¡Hay una sesión activa!');
+      //console.log('¡Hay una sesión activa!');
     }
   }
 }

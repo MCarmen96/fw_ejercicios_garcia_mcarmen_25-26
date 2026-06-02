@@ -8,6 +8,7 @@ import { MyMeal } from '../../model/my-meal';
   templateUrl: './details-meal.html',
   styleUrl: './details-meal.css',
 })
+
 export class DetailsMeal {
 
   @Input() public id:string | undefined;

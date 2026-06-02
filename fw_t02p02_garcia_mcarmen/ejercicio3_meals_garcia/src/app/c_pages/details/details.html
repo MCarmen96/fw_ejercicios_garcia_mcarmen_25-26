@@ -1,7 +1,8 @@
-<h1>Details father!</h1>
+<!-- <h1>Details father!</h1> -->
+
 <app-details-meal [id]="idReceta()"></app-details-meal>
 
 @if(login()){
-  <app-details-save></app-details-save>
+  <app-details-save [idReceta]="idReceta()" [idUser]="idUser"></app-details-save>
 }
 
