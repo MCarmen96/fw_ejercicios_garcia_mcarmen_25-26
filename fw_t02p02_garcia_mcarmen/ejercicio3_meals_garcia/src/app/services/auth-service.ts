@@ -1,16 +1,21 @@
 
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable,signal } from '@angular/core';
 import { StorageService } from '../services/storage-service';
 import { User } from '../model/user';
 import { AuthSession } from '../model/auth-session';
 import { UserMeal } from '../model/user-meal';
+import { Router } from '@angular/router';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
 
   public local=inject(StorageService);
+  public router=inject(Router);
 
+  public isAuthenticated=this.local.isAuthenticated;
+  
   authLogin(email:string){
     let user = this.local.getOneUser(email);
     if (user != null) {
@@ -42,6 +47,11 @@ export class AuthService {
     let id=Number(this.isSession()?.userId);
     this.local.saveCommentMeal(id,comentario);
     return true;
+  }
+
+  logout(){
+    this.local.logout();
+    this.router.navigate(['/']);
   }
 
 }

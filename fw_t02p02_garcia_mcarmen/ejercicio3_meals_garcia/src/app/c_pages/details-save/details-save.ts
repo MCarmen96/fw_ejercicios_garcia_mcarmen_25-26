@@ -9,7 +9,7 @@ import { UserMeal } from '../../model/user-meal';
   styleUrl: './details-save.css',
 })
 export class DetailsSave {
-
+  // se declaran asi por que vienen del padre Details
   @Input() public idReceta:string="";
   @Input() public idUser:number=-1;
   private auth=inject(AuthService);
@@ -28,7 +28,7 @@ export class DetailsSave {
       return;
     }else{
 
-      
+
 
       let valueCocinada=this.valoracionForm.get('yaCocinada')?.value
       let cocinada:string=valueCocinada==="2" ? "LA_HE_HECHO":"QUIERO_HACERLA";

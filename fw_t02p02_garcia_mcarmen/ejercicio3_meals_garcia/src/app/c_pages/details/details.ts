@@ -16,16 +16,17 @@ export class Details {
 
     public idReceta = signal<string>('');
 
-    public login= signal<boolean>(false);
+    //public login= signal<boolean>(false);
     public idUser:number=-1;
-    public auth=inject(AuthService);
+    public authService=inject(AuthService);
+    public isAuthenticated =this.authService.isAuthenticated
     route:ActivatedRoute=inject(ActivatedRoute);
 
     constructor(){
 
-      const session=this.auth.isSession();
+      const session=this.authService.isSession();
       if(session!=null){
-        this.login.set(true);
+        //this.login.set(true);
         this.idUser=session.userId;
       }
 

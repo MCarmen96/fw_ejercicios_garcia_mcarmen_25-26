@@ -1,5 +1,5 @@
 
-import { Injectable } from '@angular/core';
+import { Injectable,signal } from '@angular/core';
 import { User } from '../model/user';
 import { AuthSession } from '../model/auth-session';
 import { UserMeal } from '../model/user-meal';
@@ -22,7 +22,7 @@ export class StorageService {
 
            Nunca toca el DOM
    */
-
+  public isAuthenticated=signal<boolean>(localStorage.getItem('USER_SESSION')!==null);
   private static readonly USER_KEY_ITEM: string = "users";
   private static readonly USER_MEAL_KEY_ITEM: string = "userMeals_";//Clave: userMeals_56 + el id del user
   private static readonly USER_MINI_MEAL_KEY_ITEM: string = "userMiniMeals_"// tambien con el id del usuario
@@ -203,6 +203,7 @@ export class StorageService {
 
     try {
       localStorage.setItem(StorageService.USER_SESSION, JSON.stringify(authSessionUser));
+      this.isAuthenticated.set(true);
     } catch (error) {
       console.error(error);
     }
@@ -247,6 +248,13 @@ export class StorageService {
 
 
 
+  }
+
+  logout(){
+    if(this.getSession()!=null){
+      localStorage.removeItem(StorageService.USER_SESSION);
+      this.isAuthenticated.set(false);
+    }
   }
 
 }
