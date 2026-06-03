@@ -69,6 +69,7 @@ export class StorageService {
   saveUser(user: User): boolean | User {
     let ok = true;
     let usersArray = this.getUsers();
+    console.log("desde la funcion save user local->"+user.favoriteCategory)
     if (Array.isArray(usersArray)) {
       if(!this.getEmailUser(user.email)){
           usersArray.push(user);
@@ -212,16 +213,21 @@ export class StorageService {
 
   saveCategory(category: string) {
 
-    const user: AuthSession | null = this.getSession();
+    const sesion: AuthSession | null = this.getSession();
 
-    if (user != null) {
+    if (sesion != null) {
       const usuarios = this.getUsers();
       if (Array.isArray(usuarios)) {
-        const userEncontrado: User | undefined = usuarios.find(element => element.id === user.userId);
+        const userEncontrado: User | undefined = usuarios.find(element => element.id === sesion.userId);
 
         if (userEncontrado) {
+          const indiceUser=usuarios.findIndex(user=>user.id===userEncontrado.id);
+          //array.splice(indice, cuantosElementosBorrar)
+          usuarios.splice(indiceUser,1);
           userEncontrado.favoriteCategory = category;
-          this.saveUser(userEncontrado);
+
+          usuarios.push(userEncontrado);
+          localStorage.setItem(StorageService.USER_KEY_ITEM,JSON.stringify(usuarios));
         }
       }
 

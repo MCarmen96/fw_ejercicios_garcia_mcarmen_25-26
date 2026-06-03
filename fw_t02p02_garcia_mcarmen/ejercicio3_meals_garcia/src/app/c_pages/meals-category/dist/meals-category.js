@@ -45,15 +45,23 @@ exports.__esModule = true;
 exports.MealsCategory = void 0;
 var core_1 = require("@angular/core");
 var api_service_1 = require("../../services/api-service");
+var router_1 = require("@angular/router");
+var auth_service_1 = require("../../services/auth-service");
+var storage_service_1 = require("../../services/storage-service");
+var common_1 = require("@angular/common");
 var MealsCategory = /** @class */ (function () {
     function MealsCategory() {
         this.titleComp = "MEALS";
         this.apiService = core_1.inject(api_service_1.ApiService);
-        //private changesDetector=inject(ChangeDetectorRef);
+        this.authService = core_1.inject(auth_service_1.AuthService);
+        this.local = core_1.inject(storage_service_1.StorageService);
         this._meals = core_1.signal([]);
+        this.selectedCategory = "0";
         this._categorys = core_1.signal([]);
+        this.isAuthenticated = this.authService.isAuthenticated;
         this.loading = true;
         this.error = '';
+        this.botnClick = false;
     }
     Object.defineProperty(MealsCategory.prototype, "categorys", {
         get: function () {
@@ -146,15 +154,17 @@ var MealsCategory = /** @class */ (function () {
     };
     MealsCategory.prototype.onCategoryChange = function (event) {
         return __awaiter(this, void 0, Promise, function () {
-            var selectElement, selectedCategory;
+            var selectElement, category;
             return __generator(this, function (_a) {
                 selectElement = event.target;
-                selectedCategory = selectElement.value;
-                if (selectedCategory === "") {
+                category = selectElement.value;
+                this.selectedCategory = category;
+                this.botnClick = false;
+                if (category === "") {
                     this.loadMeals();
                 }
                 else {
-                    this.searchByCategory(selectedCategory);
+                    this.searchByCategory(category);
                 }
                 return [2 /*return*/];
             });
@@ -193,6 +203,10 @@ var MealsCategory = /** @class */ (function () {
             });
         });
     };
+    MealsCategory.prototype.saveCategory = function () {
+        this.local.saveCategory(this.selectedCategory);
+        this.botnClick = true;
+    };
     //Angular lo ejecuta automáticamente una vez, justo después de crear el componente.
     MealsCategory.prototype.ngOnInit = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -212,7 +226,7 @@ var MealsCategory = /** @class */ (function () {
     MealsCategory = __decorate([
         core_1.Component({
             selector: 'app-meals-category',
-            imports: [],
+            imports: [router_1.RouterLink, common_1.NgClass],
             templateUrl: './meals-category.html',
             styleUrl: './meals-category.css'
         })

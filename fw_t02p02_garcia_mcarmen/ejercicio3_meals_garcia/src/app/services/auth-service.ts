@@ -14,7 +14,6 @@ export class AuthService {
   public local=inject(StorageService);
   public router=inject(Router);
 
-  public isAuthenticated=this.local.isAuthenticated;
 
   authLogin(email:string){
     let user = this.local.getOneUser(email);
@@ -43,6 +42,10 @@ export class AuthService {
   logout(){
     this.local.logout();
     this.router.navigate(['/']);
+  }
+  // Este 'get' ya actúa como la variable 'isAuthenticated' para toda tu aplicación.
+  get isAuthenticated() {
+    return this.local.isAuthenticated;
   }
 
 }

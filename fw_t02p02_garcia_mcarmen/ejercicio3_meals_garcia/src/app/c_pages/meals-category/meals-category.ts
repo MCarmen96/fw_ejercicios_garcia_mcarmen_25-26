@@ -3,10 +3,12 @@ import { ApiService } from '../../services/api-service';
 import { MyMeal } from '../../model/my-meal';
 import { Category } from '../../model/category';
 import { RouterLink } from "@angular/router";
-
+import { AuthService } from '../../services/auth-service';
+import { StorageService } from '../../services/storage-service';
+import { NgClass } from '@angular/common';
 @Component({
   selector: 'app-meals-category',
-  imports: [RouterLink],
+  imports: [RouterLink,NgClass],
   templateUrl: './meals-category.html',
   styleUrl: './meals-category.css',
 })
@@ -15,13 +17,16 @@ export class MealsCategory implements OnInit {
 
   public titleComp="MEALS";
   private apiService=inject(ApiService);
-  //private changesDetector=inject(ChangeDetectorRef);
+  private authService=inject(AuthService);
+  private local=inject(StorageService);
+
   private _meals= signal<MyMeal[]>([]);
-
+  public selectedCategory:string="0";
   private _categorys=signal<Category[]>([]);
-
+  public isAuthenticated=this.authService.isAuthenticated;
   public loading=true;
   public error='';
+  public botnClick:boolean=false;
 
   get categorys():Category[]{
 
@@ -87,12 +92,13 @@ export class MealsCategory implements OnInit {
   async onCategoryChange(event:Event):Promise<void>{
 
     const selectElement=event.target as HTMLSelectElement;
-    const selectedCategory=selectElement.value;// esto es el id de la categoria seleccionada
-
-    if(selectedCategory===""){
+    const category=selectElement.value;
+    this.selectedCategory=category;
+    this.botnClick=false;
+    if(category===""){
       this.loadMeals()
     }else{
-      this.searchByCategory(selectedCategory);
+      this.searchByCategory(category);
     }
 
 
@@ -114,6 +120,11 @@ export class MealsCategory implements OnInit {
 
   }
 
+
+  saveCategory(){
+    this.local.saveCategory(this.selectedCategory);
+    this.botnClick=true;
+  }
   //Angular lo ejecuta automáticamente una vez, justo después de crear el componente.
   async ngOnInit(){
     await this.loadMeals();

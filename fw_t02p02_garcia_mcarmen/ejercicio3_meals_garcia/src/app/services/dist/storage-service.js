@@ -10,16 +10,26 @@ exports.StorageService = void 0;
 var core_1 = require("@angular/core");
 var StorageService = /** @class */ (function () {
     function StorageService() {
-        if (!localStorage.getItem(StorageService_1.USER_KEY_ITEM) || !localStorage.getItem(StorageService_1.USER_MEAL_KEY_ITEM) || !localStorage.getItem(StorageService_1.USER_MINI_MEAL_KEY_ITEM) || !localStorage.getItem(StorageService_1.USER_WEEKLY_PLANS)) {
+        /*
+                 USER_KEY_ITEM, USER_MEAL_KEY_ITEM, …
+      
+                 Responsabilidades
+                 Alta y validación de usuarios
+                 Gestión de sesión
+                 Guardar y recuperar recetas del usuario
+                 Guardar y recuperar planes semanales
+                 Guardar preferencias del usuario
+                 …
+      
+                 Nunca toca el DOM
+         */
+        this.isAuthenticated = core_1.signal(localStorage.getItem('USER_SESSION') !== null);
+        if (!localStorage.getItem(StorageService_1.USER_KEY_ITEM)) {
             localStorage.setItem(StorageService_1.USER_KEY_ITEM, JSON.stringify([]));
-            localStorage.setItem(StorageService_1.USER_MEAL_KEY_ITEM, JSON.stringify([]));
-            localStorage.setItem(StorageService_1.USER_MINI_MEAL_KEY_ITEM, JSON.stringify([]));
-            localStorage.setItem(StorageService_1.USER_WEEKLY_PLANS, JSON.stringify([]));
             //localStorage.setItem(StorageService.USER_SESSION, JSON.parse(''));
         }
     }
     StorageService_1 = StorageService;
-    // cojo los usuarios del local storage y los devuelvo mejor hacerlo
     // cojo los usuarios del local storage y los devuelvo mejor hacerlo
     StorageService.prototype.getUsers = function () {
         var users = localStorage.getItem(StorageService_1.USER_KEY_ITEM);
@@ -33,9 +43,19 @@ var StorageService = /** @class */ (function () {
             return false;
         }
     };
+    StorageService.prototype.getMealsUser = function (id) {
+        var mealsUser = localStorage.getItem(StorageService_1.USER_MEAL_KEY_ITEM + id);
+        if (mealsUser != null) {
+            return mealsUser ? JSON.parse(mealsUser) : [];
+        }
+        else {
+            return false;
+        }
+    };
     StorageService.prototype.saveUser = function (user) {
         var ok = true;
         var usersArray = this.getUsers();
+        console.log("desde la funcion save user local->" + user.favoriteCategory);
         if (Array.isArray(usersArray)) {
             if (!this.getEmailUser(user.email)) {
                 usersArray.push(user);
@@ -52,6 +72,9 @@ var StorageService = /** @class */ (function () {
         if (ok) {
             try {
                 localStorage.setItem(StorageService_1.USER_KEY_ITEM, JSON.stringify(usersArray)); //y ahora aqui lo guardo en storage sobreescribiendo
+                localStorage.setItem(StorageService_1.USER_MEAL_KEY_ITEM + user.id, JSON.stringify([]));
+                localStorage.setItem(StorageService_1.USER_MINI_MEAL_KEY_ITEM + user.id, JSON.stringify([]));
+                localStorage.setItem(StorageService_1.USER_WEEKLY_PLANS + user.id, JSON.stringify([]));
             }
             catch (error) {
                 console.error(error);
@@ -132,7 +155,6 @@ var StorageService = /** @class */ (function () {
     };
     StorageService.prototype.getSession = function () {
         var session = localStorage.getItem(StorageService_1.USER_SESSION);
-        console.log("sesion:" + session);
         if (session != null) {
             return session ? JSON.parse(session) : null;
         }
@@ -147,38 +169,56 @@ var StorageService = /** @class */ (function () {
         console.log("Sesion guardada: " + authSessionUser);
         try {
             localStorage.setItem(StorageService_1.USER_SESSION, JSON.stringify(authSessionUser));
+            this.isAuthenticated.set(true);
         }
         catch (error) {
             console.error(error);
         }
     };
     StorageService.prototype.saveCategory = function (category) {
-        var user = this.getSession();
-        if (user != null) {
+        var sesion = this.getSession();
+        if (sesion != null) {
             var usuarios = this.getUsers();
             if (Array.isArray(usuarios)) {
-                var userEncontrado = usuarios.find(function (element) { return element.id === user.userId; });
-                if (userEncontrado) {
-                    userEncontrado.favoriteCategory = category;
-                    this.saveUser(userEncontrado);
+                var userEncontrado_1 = usuarios.find(function (element) { return element.id === sesion.userId; });
+                if (userEncontrado_1) {
+                    var indiceUser = usuarios.findIndex(function (user) { return user.id === userEncontrado_1.id; });
+                    //array.splice(indice, cuantosElementosBorrar)
+                    usuarios.splice(indiceUser, 1);
+                    userEncontrado_1.favoriteCategory = category;
+                    usuarios.push(userEncontrado_1);
+                    localStorage.setItem(StorageService_1.USER_KEY_ITEM, JSON.stringify(usuarios));
                 }
             }
         }
     };
+    StorageService.prototype.searchUserXid = function (id) {
+        var users = this.getUsers();
+        if (Array.isArray(users) && users) {
+        }
+    };
+    StorageService.prototype.saveCommentMeal = function (id, comentario) {
+        var mealUser = this.getMealsUser(id);
+        if (Array.isArray(mealUser)) {
+            mealUser.push(comentario);
+            try {
+                localStorage.setItem(StorageService_1.USER_MEAL_KEY_ITEM + id, JSON.stringify(mealUser));
+                return true;
+            }
+            catch (error) {
+                console.log("Error al guardar comentario receta....");
+                return false;
+            }
+        }
+        return false;
+    };
+    StorageService.prototype.logout = function () {
+        if (this.getSession() != null) {
+            localStorage.removeItem(StorageService_1.USER_SESSION);
+            this.isAuthenticated.set(false);
+        }
+    };
     var StorageService_1;
-    /*
-             USER_KEY_ITEM, USER_MEAL_KEY_ITEM, …
-  
-             Responsabilidades
-             Alta y validación de usuarios
-             Gestión de sesión
-             Guardar y recuperar recetas del usuario
-             Guardar y recuperar planes semanales
-             Guardar preferencias del usuario
-             …
-  
-             Nunca toca el DOM
-     */
     StorageService.USER_KEY_ITEM = "users";
     StorageService.USER_MEAL_KEY_ITEM = "userMeals_"; //Clave: userMeals_56 + el id del user
     StorageService.USER_MINI_MEAL_KEY_ITEM = "userMiniMeals_"; // tambien con el id del usuario
