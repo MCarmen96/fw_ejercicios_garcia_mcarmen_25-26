@@ -238,15 +238,22 @@ export class StorageService {
 
   }
 
-  saveCommentMeal(id:number,comentario:UserMeal){
+  saveCommentMeal(id:number,comentario:UserMeal):boolean{
 
     const mealUser=this.getMealsUser(id);
     if(Array.isArray(mealUser)){
       mealUser.push(comentario);
-      localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM+id,JSON.stringify(mealUser));
+      try{
+        localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM+id,JSON.stringify(mealUser));
+        return true;
+      }catch(error:any){
+        console.log("Error al guardar comentario receta....");
+        return false;
+      }
+
     }
 
-
+    return false;
 
   }
 

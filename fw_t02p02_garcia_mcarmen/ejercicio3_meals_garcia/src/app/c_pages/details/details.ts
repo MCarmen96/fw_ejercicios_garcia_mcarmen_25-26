@@ -19,7 +19,9 @@ export class Details {
     //public login= signal<boolean>(false);
     public idUser:number=-1;
     public authService=inject(AuthService);
-    public isAuthenticated =this.authService.isAuthenticated
+    public isAuthenticated =this.authService.isAuthenticated;
+
+    public exitoGuardado=signal<boolean>(false);
     route:ActivatedRoute=inject(ActivatedRoute);
 
     constructor(){
@@ -32,6 +34,10 @@ export class Details {
 
       const idUrl=this.route.snapshot.params['id'];
       this.idReceta.set(idUrl);
+    }
+
+    mostrarExito(exito:boolean){
+      this.exitoGuardado.set(true);
     }
 
 }

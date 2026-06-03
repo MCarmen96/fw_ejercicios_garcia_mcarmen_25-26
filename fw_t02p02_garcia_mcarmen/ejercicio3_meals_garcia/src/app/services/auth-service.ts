@@ -15,7 +15,7 @@ export class AuthService {
   public router=inject(Router);
 
   public isAuthenticated=this.local.isAuthenticated;
-  
+
   authLogin(email:string){
     let user = this.local.getOneUser(email);
     if (user != null) {
@@ -38,15 +38,6 @@ export class AuthService {
 
   isSession():null|AuthSession{
     return this.local.getSession();
-  }
-
-
-  saveCommentMeal(comentario:UserMeal):boolean{
-
-    if(!this.isSession()){return false}
-    let id=Number(this.isSession()?.userId);
-    this.local.saveCommentMeal(id,comentario);
-    return true;
   }
 
   logout(){

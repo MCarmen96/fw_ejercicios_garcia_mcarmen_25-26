@@ -1,7 +1,8 @@
-import { Component,Input,SimpleChanges,inject} from '@angular/core';
-import { AuthService } from '../../services/auth-service';
+import { Component,Input,SimpleChanges,inject,Output,EventEmitter} from '@angular/core';
+
 import { FormControl, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
 import { UserMeal } from '../../model/user-meal';
+import { StorageService } from '../../services/storage-service';
 @Component({
   selector: 'app-details-save',
   imports: [ReactiveFormsModule],
@@ -12,7 +13,8 @@ export class DetailsSave {
   // se declaran asi por que vienen del padre Details
   @Input() public idReceta:string="";
   @Input() public idUser:number=-1;
-  private auth=inject(AuthService);
+  @Output() exitoGuardado=new EventEmitter<boolean>(false);
+  private local=inject(StorageService);
 
   public valoracionForm=new FormGroup({
     textoComentario:new FormControl("",[Validators.required,Validators.minLength(5)]),
@@ -43,6 +45,12 @@ export class DetailsSave {
           notes:texto,
           rating:puntosReceta
         }
+
+        if(this.local.saveCommentMeal(this.idUser,comentario)){
+            this.exitoGuardado.emit(true);
+        }
+
+
 
 
     }

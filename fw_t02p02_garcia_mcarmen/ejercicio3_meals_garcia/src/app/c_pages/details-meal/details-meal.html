@@ -37,14 +37,16 @@
             </li>
             }
           </ul>
+          @if(isAuthenticated()){
+            <div class="d-grid d-md-flex justify-content-md-start mt-4">
+              <button
+                class="btn btn-success btn-lg px-4 py-2 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                <i class="bi bi-bookmark-heart-fill"></i>
+                Guardar receta
+              </button>
+            </div>
+          }
 
-          <div class="d-grid d-md-flex justify-content-md-start mt-4">
-            <button
-              class="btn btn-success btn-lg px-4 py-2 shadow-sm d-flex align-items-center justify-content-center gap-2">
-              <i class="bi bi-bookmark-heart-fill"></i>
-              Guardar receta
-            </button>
-          </div>
 
         </div>
       </div>
