@@ -21,9 +21,11 @@ export class MealsCategory implements OnInit {
   private local=inject(StorageService);
 
   private _meals= signal<MyMeal[]>([]);
+  public mealsSaved= signal<MyMeal[]>([]);
   public selectedCategory:string="0";
   private _categorys=signal<Category[]>([]);
   public isAuthenticated=this.authService.isAuthenticated;
+  public isMealsSaved=this.local.isMealsSaved;
   public loading=true;
   public error='';
   public botnClick:boolean=false;
@@ -43,6 +45,14 @@ export class MealsCategory implements OnInit {
   set meals(meal:MyMeal[]){
     this._meals.set(meal);
   }
+
+  /* get mealsSave():MyMeal[]{
+    return this._mealsSaved();
+  }
+
+  set mealsSave(mealSave:MyMeal[]){
+    this._mealsSaved.set(mealSave);
+  } */
 
 
   async loadMeals():Promise<void>{
@@ -120,15 +130,49 @@ export class MealsCategory implements OnInit {
 
   }
 
-
   saveCategory(){
     this.local.saveCategory(this.selectedCategory);
     this.botnClick=true;
   }
+
+  async mealsSavedLoad(){
+    
+    try{
+      const arrayAux:MyMeal[]=[];
+      const recetasGuardadasLocal=this.local.getMiniMeaslUser();
+      if (Array.isArray(recetasGuardadasLocal) && recetasGuardadasLocal.length > 0) {
+      
+      
+      // Si hay 2 recetas, dará 2 vueltas. Si hay 10 recetas, solo dará 4 vueltas.
+      const limiteVueltas = Math.min(4, recetasGuardadasLocal.length);
+      // coge el valor minimo de los 2 valores dados
+      for (let index = 0; index < limiteVueltas; index++) {
+
+        if (recetasGuardadasLocal[index]) {
+          let idAbuscar = recetasGuardadasLocal[index].id.toString();
+          const receta = await this.apiService.getMealForId(idAbuscar);
+          
+          if (receta) { 
+            arrayAux.push(receta); 
+          }
+        }
+      }
+    }
+
+      this.mealsSaved.set(arrayAux);
+
+      }catch(error){
+        this.error='Error loading meals';
+        this.loading=false;
+        console.error(error);
+      }
+  }
+  
   //Angular lo ejecuta automáticamente una vez, justo después de crear el componente.
   async ngOnInit(){
     await this.loadMeals();
     await this.loadCategorys();
+    await this.mealsSavedLoad();
 
   }
 

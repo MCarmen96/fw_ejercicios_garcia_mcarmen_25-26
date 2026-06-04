@@ -56,9 +56,11 @@ var MealsCategory = /** @class */ (function () {
         this.authService = core_1.inject(auth_service_1.AuthService);
         this.local = core_1.inject(storage_service_1.StorageService);
         this._meals = core_1.signal([]);
+        this.mealsSaved = core_1.signal([]);
         this.selectedCategory = "0";
         this._categorys = core_1.signal([]);
         this.isAuthenticated = this.authService.isAuthenticated;
+        this.isMealsSaved = this.local.isMealsSaved;
         this.loading = true;
         this.error = '';
         this.botnClick = false;
@@ -83,6 +85,13 @@ var MealsCategory = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    /* get mealsSave():MyMeal[]{
+      return this._mealsSaved();
+    }
+  
+    set mealsSave(mealSave:MyMeal[]){
+      this._mealsSaved.set(mealSave);
+    } */
     MealsCategory.prototype.loadMeals = function () {
         return __awaiter(this, void 0, Promise, function () {
             var arrayAux, index, receta, error_1;
@@ -207,6 +216,47 @@ var MealsCategory = /** @class */ (function () {
         this.local.saveCategory(this.selectedCategory);
         this.botnClick = true;
     };
+    MealsCategory.prototype.mealsSavedLoad = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var arrayAux, recetasGuardadasLocal, limiteVueltas, index, idAbuscar, receta, error_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 5, , 6]);
+                        arrayAux = [];
+                        recetasGuardadasLocal = this.local.getMiniMeaslUser();
+                        if (!(Array.isArray(recetasGuardadasLocal) && recetasGuardadasLocal.length > 0)) return [3 /*break*/, 4];
+                        limiteVueltas = Math.min(4, recetasGuardadasLocal.length);
+                        index = 0;
+                        _a.label = 1;
+                    case 1:
+                        if (!(index < limiteVueltas)) return [3 /*break*/, 4];
+                        if (!recetasGuardadasLocal[index]) return [3 /*break*/, 3];
+                        idAbuscar = recetasGuardadasLocal[index].id.toString();
+                        return [4 /*yield*/, this.apiService.getMealForId(idAbuscar)];
+                    case 2:
+                        receta = _a.sent();
+                        if (receta) {
+                            arrayAux.push(receta);
+                        }
+                        _a.label = 3;
+                    case 3:
+                        index++;
+                        return [3 /*break*/, 1];
+                    case 4:
+                        this.mealsSaved.set(arrayAux);
+                        return [3 /*break*/, 6];
+                    case 5:
+                        error_3 = _a.sent();
+                        this.error = 'Error loading meals';
+                        this.loading = false;
+                        console.error(error_3);
+                        return [3 /*break*/, 6];
+                    case 6: return [2 /*return*/];
+                }
+            });
+        });
+    };
     //Angular lo ejecuta automáticamente una vez, justo después de crear el componente.
     MealsCategory.prototype.ngOnInit = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -217,6 +267,9 @@ var MealsCategory = /** @class */ (function () {
                         _a.sent();
                         return [4 /*yield*/, this.loadCategorys()];
                     case 2:
+                        _a.sent();
+                        return [4 /*yield*/, this.mealsSavedLoad()];
+                    case 3:
                         _a.sent();
                         return [2 /*return*/];
                 }

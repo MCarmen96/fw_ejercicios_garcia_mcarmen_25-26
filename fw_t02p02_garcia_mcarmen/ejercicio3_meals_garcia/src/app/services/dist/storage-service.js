@@ -23,10 +23,14 @@ var StorageService = /** @class */ (function () {
       
                  Nunca toca el DOM
          */
+        this.isMealsSaved = core_1.signal(false);
         this.isAuthenticated = core_1.signal(localStorage.getItem('USER_SESSION') !== null);
         if (!localStorage.getItem(StorageService_1.USER_KEY_ITEM)) {
             localStorage.setItem(StorageService_1.USER_KEY_ITEM, JSON.stringify([]));
             //localStorage.setItem(StorageService.USER_SESSION, JSON.parse(''));
+        }
+        if (this.getMiniMeaslUser.length > 0) {
+            this.isMealsSaved.set(true);
         }
     }
     StorageService_1 = StorageService;
@@ -229,6 +233,7 @@ var StorageService = /** @class */ (function () {
         }
         try {
             localStorage.setItem(StorageService_1.USER_MINI_MEAL_KEY_ITEM + ((_a = this.getSession()) === null || _a === void 0 ? void 0 : _a.userId), JSON.stringify(miniMeals));
+            this.isMealsSaved.set(true);
             return true;
         }
         catch (error) {

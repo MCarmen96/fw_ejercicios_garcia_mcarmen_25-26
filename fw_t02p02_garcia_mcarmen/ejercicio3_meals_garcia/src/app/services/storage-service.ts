@@ -10,7 +10,7 @@ import { UserMiniMeal } from '../model/user-mini-meal';
   providedIn: 'root',
 })
 export class StorageService {
-
+  
   /*
            USER_KEY_ITEM, USER_MEAL_KEY_ITEM, …
 
@@ -24,6 +24,7 @@ export class StorageService {
 
            Nunca toca el DOM
    */
+  public isMealsSaved=signal<boolean>(false);
   public isAuthenticated = signal<boolean>(localStorage.getItem('USER_SESSION') !== null);
   private static readonly USER_KEY_ITEM: string = "users";
   private static readonly USER_MEAL_KEY_ITEM: string = "userMeals_";//Clave: userMeals_56 + el id del user
@@ -35,11 +36,12 @@ export class StorageService {
 
     if (!localStorage.getItem(StorageService.USER_KEY_ITEM)) {
       localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify([]));
-
-
       //localStorage.setItem(StorageService.USER_SESSION, JSON.parse(''));
     }
 
+    if(this.getMiniMeaslUser.length>0){
+      this.isMealsSaved.set(true);
+    }
   }
 
   // cojo los usuarios del local storage y los devuelvo mejor hacerlo
@@ -283,6 +285,7 @@ export class StorageService {
     }
     try {
       localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM + this.getSession()?.userId, JSON.stringify(miniMeals));
+      this.isMealsSaved.set(true);
       return true;
     } catch (error: any) {
       console.log("Error al guardar la receta en local storage....");
