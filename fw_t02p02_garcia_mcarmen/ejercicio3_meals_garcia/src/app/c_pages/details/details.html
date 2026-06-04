@@ -4,7 +4,7 @@
               <h5 class="alert-heading">¡Comentario guardado con exito!</h5>
   </div>
 }
-<app-details-meal [id]="idReceta()"></app-details-meal>
+<app-details-meal [idReceta]="idReceta()"></app-details-meal>
 
 @if(isAuthenticated()){
   <app-details-save [idReceta]="idReceta()" [idUser]="idUser" (exitoGuardado)="mostrarExito($event)"></app-details-save>

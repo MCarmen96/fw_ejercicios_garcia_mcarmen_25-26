@@ -37,11 +37,19 @@
             </li>
             }
           </ul>
-          @if(isAuthenticated()){
+          @if(isAuthenticated()&& mealSave()){
             <div class="d-grid d-md-flex justify-content-md-start mt-4">
               <button
-                class="btn btn-success btn-lg px-4 py-2 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                class="btn btn-success btn-lg px-4 py-2 shadow-sm d-flex align-items-center justify-content-center gap-2" (click)="guardarReceta()">
                 <i class="bi bi-bookmark-heart-fill"></i>
+                Quitar receta
+              </button>
+            </div>
+          }@else if (isAuthenticated()&&!mealSave()) {
+            <div class="d-grid d-md-flex justify-content-md-start mt-4">
+              <button
+                class="btn btn-outline-success btn-lg px-4 py-2 shadow-sm d-flex align-items-center justify-content-center gap-2" (click)="guardarReceta()">
+                <i class="bi bi-bookmark-heart"></i>
                 Guardar receta
               </button>
             </div>

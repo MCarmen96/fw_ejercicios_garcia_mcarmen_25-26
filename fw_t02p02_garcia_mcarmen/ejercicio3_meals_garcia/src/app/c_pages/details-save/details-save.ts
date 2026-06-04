@@ -26,7 +26,7 @@ export class DetailsSave {
   public guardarValoracion(){
     if (this.valoracionForm.invalid) {
         // o la clase que tiene puesta alberto devolviendo la clase si el input no es valido
-      this.valoracionForm.markAllAsTouched(); // 🚀 Disparador visual para el HTML
+      this.valoracionForm.markAllAsTouched(); 
       return;
     }else{
 
@@ -47,6 +47,7 @@ export class DetailsSave {
         }
 
         if(this.local.saveCommentMeal(this.idUser,comentario)){
+            // emitimos la respuesta al padre
             this.exitoGuardado.emit(true);
         }
 

@@ -52,6 +52,15 @@ var StorageService = /** @class */ (function () {
             return false;
         }
     };
+    StorageService.prototype.getMiniMeaslUser = function () {
+        var _a;
+        var idUser = (_a = this.getSession()) === null || _a === void 0 ? void 0 : _a.userId;
+        if (idUser) {
+            var minimeals = localStorage.getItem(StorageService_1.USER_MINI_MEAL_KEY_ITEM + idUser);
+            return minimeals ? JSON.parse(minimeals) : [];
+        }
+        return false;
+    };
     StorageService.prototype.saveUser = function (user) {
         var ok = true;
         var usersArray = this.getUsers();
@@ -211,6 +220,34 @@ var StorageService = /** @class */ (function () {
             }
         }
         return false;
+    };
+    StorageService.prototype.guardarReceta = function (meal) {
+        var _a;
+        var miniMeals = this.getMiniMeaslUser();
+        if (miniMeals && Array.isArray(miniMeals)) {
+            miniMeals.push(meal);
+        }
+        try {
+            localStorage.setItem(StorageService_1.USER_MINI_MEAL_KEY_ITEM + ((_a = this.getSession()) === null || _a === void 0 ? void 0 : _a.userId), JSON.stringify(miniMeals));
+            return true;
+        }
+        catch (error) {
+            console.log("Error al guardar la receta en local storage....");
+            return false;
+        }
+        return false;
+    };
+    StorageService.prototype.quitarRecetaGuardada = function (id) {
+        var _a;
+        var meals = this.getMiniMeaslUser();
+        if (Array.isArray(meals) && meals) {
+            var indiceReceta = meals.findIndex(function (meal) { return Number(meal.id) === id; });
+            // Si da diferente de -1 es que la receta existe en la lista
+            if (indiceReceta !== -1) {
+                meals.splice(indiceReceta, 1);
+                localStorage.setItem(StorageService_1.USER_MINI_MEAL_KEY_ITEM + ((_a = this.getSession()) === null || _a === void 0 ? void 0 : _a.userId), JSON.stringify(meals));
+            }
+        }
     };
     StorageService.prototype.logout = function () {
         if (this.getSession() != null) {

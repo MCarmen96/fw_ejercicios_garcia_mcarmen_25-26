@@ -1,8 +1,10 @@
 
-import { Injectable,signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { User } from '../model/user';
 import { AuthSession } from '../model/auth-session';
 import { UserMeal } from '../model/user-meal';
+import { MyMeal } from '../model/my-meal';
+import { UserMiniMeal } from '../model/user-mini-meal';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +24,7 @@ export class StorageService {
 
            Nunca toca el DOM
    */
-  public isAuthenticated=signal<boolean>(localStorage.getItem('USER_SESSION')!==null);
+  public isAuthenticated = signal<boolean>(localStorage.getItem('USER_SESSION') !== null);
   private static readonly USER_KEY_ITEM: string = "users";
   private static readonly USER_MEAL_KEY_ITEM: string = "userMeals_";//Clave: userMeals_56 + el id del user
   private static readonly USER_MINI_MEAL_KEY_ITEM: string = "userMiniMeals_"// tambien con el id del usuario
@@ -56,26 +58,36 @@ export class StorageService {
 
   }
 
-  getMealsUser(id:number):UserMeal[]|boolean{
-    const mealsUser=localStorage.getItem(StorageService.USER_MEAL_KEY_ITEM+id);
+  getMealsUser(id: number): UserMeal[] | boolean {
+    const mealsUser = localStorage.getItem(StorageService.USER_MEAL_KEY_ITEM + id);
 
-    if(mealsUser!=null){
-      return mealsUser ?JSON.parse(mealsUser):[];
-    }else{
+    if (mealsUser != null) {
+      return mealsUser ? JSON.parse(mealsUser) : [];
+    } else {
       return false;
     }
+  }
+
+  getMiniMeaslUser(): UserMiniMeal[] | boolean {
+    const idUser = this.getSession()?.userId;
+
+    if (idUser) {
+      const minimeals = localStorage.getItem(StorageService.USER_MINI_MEAL_KEY_ITEM + idUser);
+      return minimeals ? JSON.parse(minimeals) : [];
+    }
+    return false;
   }
 
   saveUser(user: User): boolean | User {
     let ok = true;
     let usersArray = this.getUsers();
-    console.log("desde la funcion save user local->"+user.favoriteCategory)
+    console.log("desde la funcion save user local->" + user.favoriteCategory)
     if (Array.isArray(usersArray)) {
-      if(!this.getEmailUser(user.email)){
-          usersArray.push(user);
+      if (!this.getEmailUser(user.email)) {
+        usersArray.push(user);
 
-      }else{
-        ok=false;
+      } else {
+        ok = false;
       }
 
     } else {
@@ -86,9 +98,9 @@ export class StorageService {
     if (ok) {
       try {
         localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(usersArray));//y ahora aqui lo guardo en storage sobreescribiendo
-        localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM+user.id, JSON.stringify([]));
-        localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM+user.id, JSON.stringify([]));
-        localStorage.setItem(StorageService.USER_WEEKLY_PLANS+user.id, JSON.stringify([]));
+        localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM + user.id, JSON.stringify([]));
+        localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM + user.id, JSON.stringify([]));
+        localStorage.setItem(StorageService.USER_WEEKLY_PLANS + user.id, JSON.stringify([]));
       } catch (error) {
         console.error(error);
         ok = false;
@@ -221,38 +233,38 @@ export class StorageService {
         const userEncontrado: User | undefined = usuarios.find(element => element.id === sesion.userId);
 
         if (userEncontrado) {
-          const indiceUser=usuarios.findIndex(user=>user.id===userEncontrado.id);
+          const indiceUser = usuarios.findIndex(user => user.id === userEncontrado.id);
           //array.splice(indice, cuantosElementosBorrar)
-          usuarios.splice(indiceUser,1);
+          usuarios.splice(indiceUser, 1);
           userEncontrado.favoriteCategory = category;
 
           usuarios.push(userEncontrado);
-          localStorage.setItem(StorageService.USER_KEY_ITEM,JSON.stringify(usuarios));
+          localStorage.setItem(StorageService.USER_KEY_ITEM, JSON.stringify(usuarios));
         }
       }
 
     }
   }
 
-  searchUserXid(id:number){
+  searchUserXid(id: number) {
 
     let users = this.getUsers();
 
-    if(Array.isArray(users)&&users){
+    if (Array.isArray(users) && users) {
 
     }
 
   }
 
-  saveCommentMeal(id:number,comentario:UserMeal):boolean{
+  saveCommentMeal(id: number, comentario: UserMeal): boolean {
 
-    const mealUser=this.getMealsUser(id);
-    if(Array.isArray(mealUser)){
+    const mealUser = this.getMealsUser(id);
+    if (Array.isArray(mealUser)) {
       mealUser.push(comentario);
-      try{
-        localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM+id,JSON.stringify(mealUser));
+      try {
+        localStorage.setItem(StorageService.USER_MEAL_KEY_ITEM + id, JSON.stringify(mealUser));
         return true;
-      }catch(error:any){
+      } catch (error: any) {
         console.log("Error al guardar comentario receta....");
         return false;
       }
@@ -263,8 +275,39 @@ export class StorageService {
 
   }
 
-  logout(){
-    if(this.getSession()!=null){
+  guardarReceta(meal: UserMiniMeal): boolean {
+    const miniMeals = this.getMiniMeaslUser();
+
+    if (miniMeals && Array.isArray(miniMeals)) {
+      miniMeals.push(meal);
+    }
+    try {
+      localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM + this.getSession()?.userId, JSON.stringify(miniMeals));
+      return true;
+    } catch (error: any) {
+      console.log("Error al guardar la receta en local storage....");
+      return false;
+    }
+
+    return false;
+  }
+
+  quitarRecetaGuardada(id: number) {
+    let meals = this.getMiniMeaslUser();
+    if (Array.isArray(meals) && meals) {
+      const indiceReceta = meals.findIndex(meal => Number(meal.id) === id);
+
+      // Si da diferente de -1 es que la receta existe en la lista
+      if (indiceReceta !== -1) {
+        meals.splice(indiceReceta, 1);
+        localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM+this.getSession()?.userId, JSON.stringify(meals));
+      }
+    }
+
+  }
+
+  logout() {
+    if (this.getSession() != null) {
       localStorage.removeItem(StorageService.USER_SESSION);
       this.isAuthenticated.set(false);
     }
