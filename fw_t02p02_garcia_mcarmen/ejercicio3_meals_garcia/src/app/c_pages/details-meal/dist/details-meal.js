@@ -30,7 +30,12 @@ var DetailsMeal = /** @class */ (function () {
         var _this = this;
         this.apiService.getMealForId(idReceta)
             .then(function (resultado) {
+            /* AQUI HAGO LA PETICION AL LOCAL Y PASANDOLE EL ID DE LA RECETA Y ME BUSCA SI ESTA GUARDADA O NO */
             _this.meal.set(resultado);
+            var id = Number(idReceta);
+            if (_this.local.searchMiniMeal(id)) {
+                _this.mealSave.set(true);
+            }
         })["catch"](function (err) {
             console.log(err);
         });

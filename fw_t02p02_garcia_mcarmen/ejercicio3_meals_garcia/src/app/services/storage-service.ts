@@ -5,12 +5,13 @@ import { AuthSession } from '../model/auth-session';
 import { UserMeal } from '../model/user-meal';
 import { MyMeal } from '../model/my-meal';
 import { UserMiniMeal } from '../model/user-mini-meal';
+import { elementAt } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StorageService {
-  
+
   /*
            USER_KEY_ITEM, USER_MEAL_KEY_ITEM, …
 
@@ -307,6 +308,17 @@ export class StorageService {
       }
     }
 
+  }
+
+  searchMiniMeal(id:number):boolean{
+    const meals=this.getMiniMeaslUser();
+    if(meals&&Array.isArray(meals)){
+      const mealEncontrada:UserMiniMeal|undefined=meals.find(element=>Number(element.id)==id);
+      if(mealEncontrada){
+        return true;
+      }
+    }
+    return false;
   }
 
   logout() {

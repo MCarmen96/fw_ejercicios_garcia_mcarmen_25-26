@@ -6,9 +6,10 @@ import { RouterLink } from "@angular/router";
 import { AuthService } from '../../services/auth-service';
 import { StorageService } from '../../services/storage-service';
 import { NgClass } from '@angular/common';
+import { MealsSave } from '../meals-save/meals-save';
 @Component({
   selector: 'app-meals-category',
-  imports: [RouterLink,NgClass],
+  imports: [RouterLink,NgClass,MealsSave],
   templateUrl: './meals-category.html',
   styleUrl: './meals-category.css',
 })
@@ -135,44 +136,12 @@ export class MealsCategory implements OnInit {
     this.botnClick=true;
   }
 
-  async mealsSavedLoad(){
-    
-    try{
-      const arrayAux:MyMeal[]=[];
-      const recetasGuardadasLocal=this.local.getMiniMeaslUser();
-      if (Array.isArray(recetasGuardadasLocal) && recetasGuardadasLocal.length > 0) {
-      
-      
-      // Si hay 2 recetas, dará 2 vueltas. Si hay 10 recetas, solo dará 4 vueltas.
-      const limiteVueltas = Math.min(4, recetasGuardadasLocal.length);
-      // coge el valor minimo de los 2 valores dados
-      for (let index = 0; index < limiteVueltas; index++) {
 
-        if (recetasGuardadasLocal[index]) {
-          let idAbuscar = recetasGuardadasLocal[index].id.toString();
-          const receta = await this.apiService.getMealForId(idAbuscar);
-          
-          if (receta) { 
-            arrayAux.push(receta); 
-          }
-        }
-      }
-    }
 
-      this.mealsSaved.set(arrayAux);
-
-      }catch(error){
-        this.error='Error loading meals';
-        this.loading=false;
-        console.error(error);
-      }
-  }
-  
   //Angular lo ejecuta automáticamente una vez, justo después de crear el componente.
   async ngOnInit(){
     await this.loadMeals();
     await this.loadCategorys();
-    await this.mealsSavedLoad();
 
   }
 

@@ -27,8 +27,7 @@
 
 
 @if (loading){
-<h1>{{isMealsSaved()}}</h1>
-<h1>{{isAuthenticated()}}</h1>
+
 <div class="container">
 
   <div class="row g-4">
@@ -38,7 +37,7 @@
     <div class="col-12 col-md-6 col-lg-3 mb-4">
       <div class="card shadow h-100">
         <!-- <a [routerLink]="['/details', meal.idMeal]"> esta seria otra opcion,por is hay que añadir algo mas a la ruta mejor array -->
-        <a routerLink="details/{{meal.idMeal}}"> <img [src]="meal.strMealThumb" class="card-img-top"
+        <a routerLink="/details/{{meal.idMeal}}"> <img [src]="meal.strMealThumb" class="card-img-top"
             [alt]="meal.strMeal"></a>
 
 
@@ -78,40 +77,4 @@
 
 }
 
-@if(isAuthenticated() && mealsSaved()){
-<div class="container mt-5">
-  <div class="fs-2 mb-3">
-    <h1>Recetas Guardadas <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-bookmark-heart-fill text-danger"
-      viewBox="0 0 16 16">
-      <path
-        d="M2 15.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2zM8 4.41c1.387-1.425 4.854 1.07 0 4.277C3.146 5.48 6.613 2.986 8 4.412z">
-      </path>
-    </svg></h1>
-    
-  </div>
 
-  <div class="row g-4">
-
-    @for(meal of mealsSaved(); track meal.idMeal){
-    <div class="col-12 col-md-6 col-lg-3 mb-4">
-      <div class="card shadow h-100">
-        <a routerLink="details/{{meal.idMeal}}">
-          <img [src]="meal.strMealThumb" class="card-img-top" [alt]="meal.strMeal">
-        </a>
-        <div class="card-body">
-          <h5 class="card-title">{{meal.strMeal}}</h5>
-          <p class="card-text"><strong>Categoría:</strong> {{meal.strCategory}}</p>
-          <p class="card-text"><strong>Origen:</strong> {{meal.strArea}}</p>
-          <h6>Ingredientes:</h6>
-          <ul style="max-height: 100px; overflow-y: auto;">
-            @for(ing of meal.ingredients; track $index){
-            <li>{{ing.name}} - <small>{{ing.measure}}</small></li>
-            }
-          </ul>
-        </div>
-      </div>
-    </div>
-    }
-
-  </div>
-</div> }

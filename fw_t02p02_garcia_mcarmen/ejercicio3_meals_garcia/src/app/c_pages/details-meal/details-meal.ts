@@ -23,8 +23,8 @@ export class DetailsMeal {
   public isAuthenticated =this.authService.isAuthenticated;
   private local=inject(StorageService);
   /* Esta funcion es la que recoje el id que le pasa el padre esta escuchando en todo momento cuando cambia el id */
-  ngOnChanges(changes:SimpleChanges){
 
+  ngOnChanges(changes:SimpleChanges){
     if(changes['idReceta']&&this.idReceta){
       this.cargarReceta(this.idReceta);
     }
@@ -34,7 +34,13 @@ export class DetailsMeal {
   public cargarReceta(idReceta:string){
         this.apiService.getMealForId(idReceta)
         .then((resultado:MyMeal|null)=>{
+              /* AQUI HAGO LA PETICION AL LOCAL Y PASANDOLE EL ID DE LA RECETA Y ME BUSCA SI ESTA GUARDADA O NO */
+
               this.meal.set(resultado);
+              let id=Number(idReceta);
+              if(this.local.searchMiniMeal(id)){
+                this.mealSave.set(true);
+              }
           })
         .catch((err:any)=>{
           console.log(err);
@@ -42,6 +48,7 @@ export class DetailsMeal {
   }
 
   public guardarReceta(){
+
     const recetaActual = this.meal();
     if(!recetaActual)return;
     // si no esta guardada
@@ -59,8 +66,6 @@ export class DetailsMeal {
       this.local.quitarRecetaGuardada(id);
       this.mealSave.set(false);
     }
-
-   
 
   }
 

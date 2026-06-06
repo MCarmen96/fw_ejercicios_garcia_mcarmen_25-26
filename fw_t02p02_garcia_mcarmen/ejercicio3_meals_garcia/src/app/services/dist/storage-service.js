@@ -254,6 +254,16 @@ var StorageService = /** @class */ (function () {
             }
         }
     };
+    StorageService.prototype.searchMiniMeal = function (id) {
+        var meals = this.getMiniMeaslUser();
+        if (meals && Array.isArray(meals)) {
+            var mealEncontrada = meals.find(function (element) { return Number(element.id) == id; });
+            if (mealEncontrada) {
+                return true;
+            }
+        }
+        return false;
+    };
     StorageService.prototype.logout = function () {
         if (this.getSession() != null) {
             localStorage.removeItem(StorageService_1.USER_SESSION);
