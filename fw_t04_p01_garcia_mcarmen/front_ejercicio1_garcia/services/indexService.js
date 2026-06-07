@@ -12,12 +12,12 @@ const getCharacters = async (token, page = 1) => {
         headers: { Authorization: `Bearer ${token}` }
     };
 
-    const response = await axios.get(`http://localhost:3000/api/characters?page=${page}&limit=4`, config);
+    const response = await axios.get(`${process.env.API_URL}/api/characters?page=${page}&limit=4`, config);
     return response.data;
 };
 const getEpisodios = async (token) => {
 
-    const url = "http://localhost:3000/api/episodes";
+    const url = `${process.env.API_URL}/api/episodes`;
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
@@ -31,7 +31,7 @@ const getCharactersWithPage = async (token, page) => {
         headers: { Authorization: `Bearer ${token}` }
     };
 
-    const response = await axios.get(`http://localhost:3000/api/characters?page=${page}&limit=4`, config);
+    const response = await axios.get(`${process.env.API_URL}/api/characters?page=${page}&limit=4`, config);
     return response.data;
     }catch(error){
         console.error("error paginar desde index service: "+error);
@@ -44,13 +44,13 @@ const getCharactersNameId = async (token) => {
         headers: { Authorization: `Bearer ${token}` }
     };
 
-    const response = await axios.get(`http://localhost:3000/api/characters`, config);
+    const response = await axios.get(`h${process.env.API_URL}/api/characters`, config);
     console.log("respuesta desde el index controller: " + response.data);
     return response.data;
 
 };
 const getEpisodiosWithId = async (token, id) => {
-    const url = `http://localhost:3000/api/episodes/${id}`;
+    const url = `${process.env.API_URL}/api/episodes/${id}`;
 
     const config = {
         headers: {
@@ -64,7 +64,7 @@ const getEpisodiosWithId = async (token, id) => {
 };
 const saveEpisode = async (token, newEpisode) => {
 
-    const url = "http://localhost:3000/api/episodes";
+    const url = `${process.env.API_URL}/api/episodes`;
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
@@ -95,7 +95,7 @@ const saveEpisode = async (token, newEpisode) => {
 };
 
 const deleteEpisode = async (token, id) => {
-    const url = `http://localhost:3000/api/episodes/${id}`;
+    const url = `${process.env.API_URL}/api/episodes/${id}`;
 
     const config = {
         headers: { Authorization: `Bearer ${token}` }
