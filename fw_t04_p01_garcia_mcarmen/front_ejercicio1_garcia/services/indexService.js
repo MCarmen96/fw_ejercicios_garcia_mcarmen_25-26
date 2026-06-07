@@ -44,7 +44,7 @@ const getCharactersNameId = async (token) => {
         headers: { Authorization: `Bearer ${token}` }
     };
 
-    const response = await axios.get(`h${process.env.API_URL}/api/characters`, config);
+    const response = await axios.get(`${process.env.API_URL}/api/characters`, config);
     console.log("respuesta desde el index controller: " + response.data);
     return response.data;
 
