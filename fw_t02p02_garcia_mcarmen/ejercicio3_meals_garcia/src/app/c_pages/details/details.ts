@@ -23,7 +23,7 @@ export class Details {
 
     public exitoGuardado=signal<boolean>(false);
     route:ActivatedRoute=inject(ActivatedRoute);
-
+    public isSave:boolean=false;
     constructor(){
 
       const session=this.authService.isSession();
@@ -37,7 +37,18 @@ export class Details {
     }
 
     mostrarExito(exito:boolean){
-      this.exitoGuardado.set(true);
+      if(exito){
+        this.exitoGuardado.set(true);
+      }
+
+    }
+
+    mostrarComentario(exito:boolean){
+        if(exito){
+        this.isSave=true;
+      }else{
+        this.isSave=false;
+      }
     }
 
 }

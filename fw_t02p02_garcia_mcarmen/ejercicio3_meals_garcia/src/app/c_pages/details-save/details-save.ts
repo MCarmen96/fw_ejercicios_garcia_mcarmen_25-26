@@ -1,4 +1,4 @@
-import { Component,Input,SimpleChanges,inject,Output,EventEmitter} from '@angular/core';
+import { Component,Input,SimpleChanges,inject,Output,EventEmitter, signal} from '@angular/core';
 
 import { FormControl, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
 import { UserMeal } from '../../model/user-meal';
@@ -13,7 +13,9 @@ export class DetailsSave {
   // se declaran asi por que vienen del padre Details
   @Input() public idReceta:string="";
   @Input() public idUser:number=-1;
-  @Output() exitoGuardado=new EventEmitter<boolean>(false);
+
+  @Output() exitoGuardado=new EventEmitter<boolean>(false);// parametro que va a recibir el padre
+  
   private local=inject(StorageService);
 
   public valoracionForm=new FormGroup({
@@ -26,7 +28,7 @@ export class DetailsSave {
   public guardarValoracion(){
     if (this.valoracionForm.invalid) {
         // o la clase que tiene puesta alberto devolviendo la clase si el input no es valido
-      this.valoracionForm.markAllAsTouched(); 
+      this.valoracionForm.markAllAsTouched();
       return;
     }else{
 
@@ -51,9 +53,9 @@ export class DetailsSave {
             this.exitoGuardado.emit(true);
         }
 
-
-
-
     }
   }
+
+
+
 }

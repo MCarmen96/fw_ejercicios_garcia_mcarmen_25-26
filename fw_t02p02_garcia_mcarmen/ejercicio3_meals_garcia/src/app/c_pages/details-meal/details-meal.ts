@@ -1,4 +1,4 @@
-import { Component,Input,SimpleChanges,inject, signal } from '@angular/core';
+import { Component,Input,SimpleChanges,inject, signal ,Output,EventEmitter} from '@angular/core';
 import { ApiService } from '../../services/api-service';
 import { MyMeal } from '../../model/my-meal';
 import { AuthService } from '../../services/auth-service';
@@ -14,7 +14,7 @@ import { UserMiniMeal } from '../../model/user-mini-meal';
 
 export class DetailsMeal {
 
-  @Input() public idReceta:string | undefined;
+  @Input() public idReceta:string | undefined;// parametro que recibo del padre
 
   private apiService=inject(ApiService);
   private authService=inject(AuthService);
@@ -22,6 +22,9 @@ export class DetailsMeal {
   public mealSave=signal<boolean>(false);
   public isAuthenticated =this.authService.isAuthenticated;
   private local=inject(StorageService);
+
+  @Output() isSave=new EventEmitter<boolean>;
+  @Output() notSave=new EventEmitter<boolean>;
   /* Esta funcion es la que recoje el id que le pasa el padre esta escuchando en todo momento cuando cambia el id */
 
   ngOnChanges(changes:SimpleChanges){
@@ -60,11 +63,13 @@ export class DetailsMeal {
       }
       if(this.local.guardarReceta(miniMeal)){
           this.mealSave.set(true);
+          this.isSave.emit(true);
       }
     }else{
       let id:number=Number(recetaActual.idMeal);
       this.local.quitarRecetaGuardada(id);
       this.mealSave.set(false);
+      this.isSave.emit(false);
     }
 
   }

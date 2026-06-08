@@ -19,6 +19,8 @@ var DetailsMeal = /** @class */ (function () {
         this.mealSave = core_1.signal(false);
         this.isAuthenticated = this.authService.isAuthenticated;
         this.local = core_1.inject(storage_service_1.StorageService);
+        this.isSave = new core_1.EventEmitter;
+        this.notSave = new core_1.EventEmitter;
     }
     /* Esta funcion es la que recoje el id que le pasa el padre esta escuchando en todo momento cuando cambia el id */
     DetailsMeal.prototype.ngOnChanges = function (changes) {
@@ -53,17 +55,25 @@ var DetailsMeal = /** @class */ (function () {
             };
             if (this.local.guardarReceta(miniMeal)) {
                 this.mealSave.set(true);
+                this.isSave.emit(true);
             }
         }
         else {
             var id = Number(recetaActual.idMeal);
             this.local.quitarRecetaGuardada(id);
             this.mealSave.set(false);
+            this.isSave.emit(false);
         }
     };
     __decorate([
         core_1.Input()
     ], DetailsMeal.prototype, "idReceta");
+    __decorate([
+        core_1.Output()
+    ], DetailsMeal.prototype, "isSave");
+    __decorate([
+        core_1.Output()
+    ], DetailsMeal.prototype, "notSave");
     DetailsMeal = __decorate([
         core_1.Component({
             selector: 'app-details-meal',

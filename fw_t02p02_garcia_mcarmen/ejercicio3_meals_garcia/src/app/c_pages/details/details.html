@@ -4,9 +4,10 @@
               <h5 class="alert-heading">¡Comentario guardado con exito!</h5>
   </div>
 }
-<app-details-meal [idReceta]="idReceta()"></app-details-meal>
+<app-details-meal [idReceta]="idReceta()" (isSave)="mostrarComentario($event)"></app-details-meal>
 
-@if(isAuthenticated()){
-  <app-details-save [idReceta]="idReceta()" [idUser]="idUser" (exitoGuardado)="mostrarExito($event)"></app-details-save>
+@if(isSave){
+                    <!-- // izquierda padre || derecha hijo -->
+  <app-details-save [idReceta]="idReceta()" [idUser]="idUser" (exitoGuardado)="mostrarExito($event)" ></app-details-save>
 }
 

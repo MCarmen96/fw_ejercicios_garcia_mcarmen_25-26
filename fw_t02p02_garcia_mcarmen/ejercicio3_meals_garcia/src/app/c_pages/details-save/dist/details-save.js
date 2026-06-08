@@ -15,7 +15,7 @@ var DetailsSave = /** @class */ (function () {
         // se declaran asi por que vienen del padre Details
         this.idReceta = "";
         this.idUser = -1;
-        this.exitoGuardado = new core_1.EventEmitter(false);
+        this.exitoGuardado = new core_1.EventEmitter(false); // parametro que va a recibir el padre
         this.local = core_1.inject(storage_service_1.StorageService);
         this.valoracionForm = new forms_1.FormGroup({
             textoComentario: new forms_1.FormControl("", [forms_1.Validators.required, forms_1.Validators.minLength(5)]),
