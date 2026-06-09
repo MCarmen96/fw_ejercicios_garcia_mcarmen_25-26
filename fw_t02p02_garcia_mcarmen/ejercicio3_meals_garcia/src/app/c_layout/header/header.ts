@@ -1,4 +1,4 @@
-import { Component,inject } from '@angular/core';
+import { Component,inject,computed} from '@angular/core';
 import { LoginWidget } from '../login-widget/login-widget';
 import { AuthService } from '../../services/auth-service';
 import { LogoutWidget } from "../logout-widget/logout-widget";
@@ -12,9 +12,16 @@ export class Header {
 
     public authService=inject(AuthService);
     public isAuthenticated =this.authService.isAuthenticated;
-    public user:string|undefined="";
 
-  ngOnInit():void{
+
+  public user = computed(() => {
+    if (this.isAuthenticated()) {
+      return this.authService.isSession()?.name ?? '';
+    }
+    return '';
+  });
+  
+  /* ngOnInit():void{
     if (this.authService.isSession() !== null) {
       this.user=this.authService.isSession()?.name;
       //this.isAuthenticated=true;
@@ -26,5 +33,5 @@ export class Header {
     //this.isAuthenticated=false;
     this.user="";
 
-  }
+  } */
 }

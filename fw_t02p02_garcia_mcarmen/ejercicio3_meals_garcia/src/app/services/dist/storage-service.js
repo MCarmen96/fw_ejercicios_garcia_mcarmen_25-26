@@ -24,7 +24,7 @@ var StorageService = /** @class */ (function () {
                  Nunca toca el DOM
          */
         this.isMealsSaved = core_1.signal(false);
-        this.isAuthenticated = core_1.signal(localStorage.getItem('USER_SESSION') !== null);
+        this.isAuthenticated = core_1.signal(localStorage.getItem('authSession') !== null);
         if (!localStorage.getItem(StorageService_1.USER_KEY_ITEM)) {
             localStorage.setItem(StorageService_1.USER_KEY_ITEM, JSON.stringify([]));
             //localStorage.setItem(StorageService.USER_SESSION, JSON.parse(''));

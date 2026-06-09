@@ -26,7 +26,7 @@ export class StorageService {
            Nunca toca el DOM
    */
   public isMealsSaved=signal<boolean>(false);
-  public isAuthenticated = signal<boolean>(localStorage.getItem('USER_SESSION') !== null);
+  public isAuthenticated = signal<boolean>(localStorage.getItem('authSession') !== null);
   private static readonly USER_KEY_ITEM: string = "users";
   private static readonly USER_MEAL_KEY_ITEM: string = "userMeals_";//Clave: userMeals_56 + el id del user
   private static readonly USER_MINI_MEAL_KEY_ITEM: string = "userMiniMeals_"// tambien con el id del usuario

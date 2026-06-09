@@ -1,6 +1,7 @@
-
+<!-- preguntar si hay session activa -->
 <app-meals-category></app-meals-category>
 
-@if (isAuthenticated) {
+@if (isAuthenticated()) {
   <app-meals-save></app-meals-save>
+
 }

@@ -1,1 +1,121 @@
-<p>plan-week-create works!</p>
+<div class="container mt-5">
+  <form>
+    <div class="table-responsive shadow-sm rounded mb-5">
+      <table class="table table-bordered table-hover align-middle text-center m-0">
+        <thead class="table-dark">
+          <tr>
+            <th style="width: 20%;">Día</th>
+            <th style="width: 35%;">Comida</th>
+            <th style="width: 35%;">Cena</th>
+            <th style="width: 10%;">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (fila of [1,2,3,4,5,6,7]; track $index) {
+          <tr>
+            <td>
+              <select class="form-select form-select-sm">
+                <option value="" selected disabled>Elegir día...</option>
+                <option value="lunes">Lunes</option>
+                <option value="martes">Martes</option>
+                <option value="miercoles">Miércoles</option>
+                <option value="jueves">Jueves</option>
+                <option value="viernes">Viernes</option>
+                <option value="sabado">Sábado</option>
+                <option value="domingo">Domingo</option>
+              </select>
+            </td>
+
+            <td>
+              <div class="d-flex align-items-center justify-content-between bg-light p-2 rounded border">
+                <span class="text-muted small">Vacío</span>
+                <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" title="Quitar comida">
+                  &times;
+                </button>
+              </div>
+            </td>
+
+            <td>
+              <div class="d-flex align-items-center justify-content-between bg-light p-2 rounded border">
+                <span class="text-muted small">Vacío</span>
+                <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" title="Quitar cena">
+                  &times;
+                </button>
+              </div>
+            </td>
+
+            <td>
+              <button type="button" class="btn btn-sm btn-danger w-100" title="Resetear fila">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                  class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                  <path
+                    d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                </svg>
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="text-center">
+      <button type="button" class="btn btn-sm btn-primary w-50 text-center" title="Resetear fila">
+        Save Plan Week
+      </button>
+
+    </div>
+
+    <hr class="my-5" style="border-top: 2px dashed #ccc;">
+
+
+
+  </form>
+
+  <div class="row justify-content-center mb-4">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="input-group shadow-sm">
+        <span class="input-group-text bg-white border-end-0 text-muted">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+            viewBox="0 0 16 16">
+            <path
+              d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+          </svg>
+        </span>
+        <input type="text" class="form-control border-start-0 ps-1" placeholder="Busca un plato por ingrediente..."
+          #miInput>
+        <button class="btn btn-dark px-4" (click)="buscarReceta(miInput.value)">Buscar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="container p-4 min-vh-25 bg-light border border-secondary border-dashed rounded d-flex align-items-center justify-content-center"
+  style="border-style: dashed !important;">
+  <div class="text-center text-muted">
+    @for(meal of mealsFilter(); track meal.idMeal){
+    <div class="col-12 col-md-6 col-lg-3 mb-4">
+      <div class="card shadow h-100">
+
+        <a> <img [src]="meal.strMealThumb" class="card-img-top" [alt]="meal.strMeal"></a>
+
+        <div class="card-body">
+          <h5 class="card-title">{{meal.strMeal}}</h5>
+          <p class="card-text">
+            <strong>Origen:</strong> {{meal.strCountry}}
+          </p>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="radioDefault" id="radioDefault1">
+          <label class="form-check-label" for="radioDefault1">
+            Añadir
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    }
+
+  </div>
+</div>

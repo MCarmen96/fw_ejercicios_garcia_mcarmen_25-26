@@ -14,8 +14,14 @@ var meals_save_1 = require("../meals-save/meals-save");
 var auth_service_1 = require("../../services/auth-service");
 var Home = /** @class */ (function () {
     function Home() {
-        this.isAuthenticated = false; // más adelante vendrá de un AuthService
-        this.auth = core_2.inject(auth_service_1.AuthService);
+        this.authService = core_2.inject(auth_service_1.AuthService);
+        this.isAuthenticated = this.authService.isAuthenticated;
+        /*  ngOnInit():void{
+           if (this.authService.isSession() !== null) {
+             this.isAuthenticated=true;
+             console.log('¡Hay una sesión activa!');
+           }
+       }*/
     }
     Home = __decorate([
         core_1.Component({

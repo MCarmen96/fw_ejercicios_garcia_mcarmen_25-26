@@ -17,7 +17,7 @@ export class ApiService  {
   API_KEY: string = "1";
   API_URL: string = "https://www.themealdb.com/api/json/v1/" + this.API_KEY;
 
-  public async getMeals(): Promise<MyMeal | null> {
+    public async getMeals(): Promise<MyMeal | null> {
 
         //let receta:MyMeal;
         let datos;
@@ -135,6 +135,21 @@ export class ApiService  {
         } catch (error) {
             return null;
         }
+    }
+
+    public async getMealFilterIngredient(ingrediente:string):Promise<any[]>{
+      let respuesta:Response|null;
+      let datos;
+      try{
+        respuesta=await fetch(`${this.API_URL}/filter.php?i=${ingrediente}`);
+        console.log("Ruta="+`${this.API_URL}filter.php?i=${ingrediente}`);
+      
+        datos= await respuesta.json();
+        console.log("Recetas filtradas=> "+datos.meals);
+      }catch(error){
+            console.log("Error al cargar recetas por ingredientes...."+error);
+      }
+      return datos.meals;
     }
 
 
