@@ -14,7 +14,7 @@ import { UserMiniMeal } from '../../model/user-mini-meal';
 
 export class DetailsMeal {
 
-  @Input() public idReceta:string | undefined;// parametro que recibo del padre
+  @Input() public idReceta:string | undefined;// parametro que recibo del padre sebe llamar igual
 
   private apiService=inject(ApiService);
   private authService=inject(AuthService);
@@ -24,9 +24,9 @@ export class DetailsMeal {
   private local=inject(StorageService);
 
   @Output() isSave=new EventEmitter<boolean>;
-  @Output() notSave=new EventEmitter<boolean>;
-  /* Esta funcion es la que recoje el id que le pasa el padre esta escuchando en todo momento cuando cambia el id */
+  
 
+  /* Esta funcion es la que recoje el id que le pasa el padre esta escuchando en todo momento cuando cambia el id */
   ngOnChanges(changes:SimpleChanges){
     if(changes['idReceta']&&this.idReceta){
       this.cargarReceta(this.idReceta);
@@ -43,6 +43,7 @@ export class DetailsMeal {
               let id=Number(idReceta);
               if(this.local.searchMiniMeal(id)){
                 this.mealSave.set(true);
+                this.isSave.emit(true);
               }
           })
         .catch((err:any)=>{

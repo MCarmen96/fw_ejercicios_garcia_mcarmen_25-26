@@ -6,7 +6,7 @@ import { UserMeal } from '../model/user-meal';
 import { MyMeal } from '../model/my-meal';
 import { UserMiniMeal } from '../model/user-mini-meal';
 import { elementAt } from 'rxjs';
-
+import { WeeklyPlan } from '../model/weekly-plan';
 @Injectable({
   providedIn: 'root',
 })
@@ -129,6 +129,11 @@ export class StorageService {
 
     return ok;
   }
+
+  getWeeklyPlans(userId: number): WeeklyPlan[] {
+  const plans = localStorage.getItem(StorageService.USER_WEEKLY_PLANS + userId);
+  return plans ? JSON.parse(plans) : [];
+}
 
   getPasswordUser(password: string): boolean {// por que me pide el undefined???
 

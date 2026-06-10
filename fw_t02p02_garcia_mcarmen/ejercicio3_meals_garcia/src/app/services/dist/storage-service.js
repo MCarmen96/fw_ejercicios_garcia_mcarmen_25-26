@@ -109,6 +109,10 @@ var StorageService = /** @class */ (function () {
         }
         return ok;
     };
+    StorageService.prototype.getWeeklyPlans = function (userId) {
+        var plans = localStorage.getItem(StorageService_1.USER_WEEKLY_PLANS + userId);
+        return plans ? JSON.parse(plans) : [];
+    };
     StorageService.prototype.getPasswordUser = function (password) {
         var users = this.getUsers();
         var ok = false;

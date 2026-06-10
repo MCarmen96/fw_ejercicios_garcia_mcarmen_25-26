@@ -4,10 +4,14 @@
               <h5 class="alert-heading">¡Comentario guardado con exito!</h5>
   </div>
 }
+<!--
+  [nombre del @Input() del HIJO]  = "variable del PADRE"
+  (nombre del @Output() del HIJO) = "método del PADRE($event)"
+-->
 <app-details-meal [idReceta]="idReceta()" (isSave)="mostrarComentario($event)"></app-details-meal>
 
-@if(isSave){
-                    <!-- // izquierda padre || derecha hijo -->
+@if(isSave()){
+                  
   <app-details-save [idReceta]="idReceta()" [idUser]="idUser" (exitoGuardado)="mostrarExito($event)" ></app-details-save>
 }
 

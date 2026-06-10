@@ -23,7 +23,7 @@ export class Details {
 
     public exitoGuardado=signal<boolean>(false);
     route:ActivatedRoute=inject(ActivatedRoute);
-    public isSave:boolean=false;
+    public isSave=signal<boolean>(false);
     constructor(){
 
       const session=this.authService.isSession();
@@ -42,13 +42,9 @@ export class Details {
       }
 
     }
-
+    /* esta funcion recibe un emmiter del hijo y en funcion de eso cambio mi signal */
     mostrarComentario(exito:boolean){
-        if(exito){
-        this.isSave=true;
-      }else{
-        this.isSave=false;
-      }
+      this.isSave.set(exito);
     }
 
 }

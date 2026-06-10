@@ -21,7 +21,7 @@ var Details = /** @class */ (function () {
         this.isAuthenticated = this.authService.isAuthenticated;
         this.exitoGuardado = core_1.signal(false);
         this.route = core_1.inject(router_1.ActivatedRoute);
-        this.isSave = false;
+        this.isSave = core_1.signal(false);
         var session = this.authService.isSession();
         if (session != null) {
             //this.login.set(true);
@@ -35,13 +35,9 @@ var Details = /** @class */ (function () {
             this.exitoGuardado.set(true);
         }
     };
+    /* esta funcion recibe un emmiter del hijo y en funcion de eso cambio mi signal */
     Details.prototype.mostrarComentario = function (exito) {
-        if (exito) {
-            this.isSave = true;
-        }
-        else {
-            this.isSave = false;
-        }
+        this.isSave.set(exito);
     };
     Details = __decorate([
         core_1.Component({

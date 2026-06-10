@@ -45,24 +45,55 @@ exports.__esModule = true;
 exports.PlanWeekCreate = void 0;
 var core_1 = require("@angular/core");
 var api_service_1 = require("../../services/api-service");
+var storage_service_1 = require("../../services/storage-service");
+var util_1 = require("../../model/util");
 var PlanWeekCreate = /** @class */ (function () {
     function PlanWeekCreate() {
         this.api = core_1.inject(api_service_1.ApiService);
-        this.mealsFilter = core_1.signal([]);
+        this.storage = core_1.inject(storage_service_1.StorageService);
+        this.planId = core_1.signal('');
+        this.planIdError = core_1.signal('');
+        this.resultadosBusqueda = core_1.signal([]);
+        this.diaSeleccionado = core_1.signal('');
+        this.tipoSeleccionado = core_1.signal('');
     }
     PlanWeekCreate.prototype.buscarReceta = function (ingrediente) {
         return __awaiter(this, void 0, void 0, function () {
             var datos;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.api.getMealFilterIngredient(ingrediente)];
+                    case 0:
+                        // si no hay dia seleciona y tipo selecionado no busco
+                        if (!this.diaSeleccionado() || !this.tipoSeleccionado())
+                            return [2 /*return*/];
+                        return [4 /*yield*/, this.api.getMealFilterIngredient(ingrediente.trim())];
                     case 1:
                         datos = _a.sent();
-                        this.mealsFilter.set(datos);
+                        this.resultadosBusqueda.set(datos);
                         return [2 /*return*/];
                 }
             });
         });
+    };
+    PlanWeekCreate.prototype.onFechaChange = function (event) {
+        var _a;
+        var input = event.target;
+        if (!input.value) {
+            this.planId.set('');
+            this.planIdError.set('');
+            return;
+        }
+        // Añadimos T12:00:00 para evitar problemas de zona horaria
+        // Sin esto, new Date('2026-06-10') puede crear el día anterior en UTC-X
+        var fecha = new Date(input.value + 'T12:00:00');
+        var id = util_1.Util.getISOWeek(fecha);
+        this.planId.set(id);
+        // Validar que no exista ya un plan con ese ID
+        var userId = (_a = this.storage.getSession()) === null || _a === void 0 ? void 0 : _a.userId;
+        if (userId) {
+            var planExistente = this.storage.getWeeklyPlans(userId).some(function (p) { return p.id === id; });
+            this.planIdError.set(planExistente ? "Ya tienes un plan para " + id + ". Elige otra fecha." : '');
+        }
     };
     PlanWeekCreate = __decorate([
         core_1.Component({
