@@ -220,6 +220,38 @@ var ApiService = /** @class */ (function () {
             });
         });
     };
+    ApiService.prototype.getAreas = function () {
+        return __awaiter(this, void 0, Promise, function () {
+            var areas, respuesta, datos, error_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        areas = [];
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, fetch(this.API_URL + "/list.php?a=list")];
+                    case 2:
+                        respuesta = _a.sent();
+                        return [4 /*yield*/, respuesta.json()];
+                    case 3:
+                        datos = _a.sent();
+                        if (datos.meals && datos.meals.length > 0) {
+                            datos.meals.sort(function (a, b) { return a.strArea.localeCompare(b.strArea); });
+                            datos.meals.forEach(function (area) {
+                                areas.push(area.strArea);
+                            });
+                        }
+                        return [3 /*break*/, 5];
+                    case 4:
+                        error_5 = _a.sent();
+                        console.log('Error al obtener los países:', error_5);
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/, areas];
+                }
+            });
+        });
+    };
     ApiService = __decorate([
         core_1.Injectable({
             providedIn: 'root'

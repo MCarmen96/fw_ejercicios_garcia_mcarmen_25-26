@@ -7,6 +7,7 @@ import { MyMeal } from '../model/my-meal';
 import { UserMiniMeal } from '../model/user-mini-meal';
 import { elementAt } from 'rxjs';
 import { WeeklyPlan } from '../model/weekly-plan';
+import { MyOwnRecipe } from '../model/my-own-recipe';
 @Injectable({
   providedIn: 'root',
 })
@@ -25,13 +26,14 @@ export class StorageService {
 
            Nunca toca el DOM
    */
-  public isMealsSaved=signal<boolean>(false);
+  public isMealsSaved = signal<boolean>(false);
   public isAuthenticated = signal<boolean>(localStorage.getItem('authSession') !== null);
   private static readonly USER_KEY_ITEM: string = "users";
   private static readonly USER_MEAL_KEY_ITEM: string = "userMeals_";//Clave: userMeals_56 + el id del user
   private static readonly USER_MINI_MEAL_KEY_ITEM: string = "userMiniMeals_"// tambien con el id del usuario
   private static readonly USER_WEEKLY_PLANS: string = "weeklyPlans_";// tmabien con el id
   private static readonly USER_SESSION: string = "authSession";
+  private static readonly USER_OWN_RECIPES: string = 'ownRecipes_';
 
   public constructor() {
 
@@ -40,7 +42,7 @@ export class StorageService {
       //localStorage.setItem(StorageService.USER_SESSION, JSON.parse(''));
     }
 
-    if(this.getMiniMeaslUser.length>0){
+    if (this.getMiniMeaslUser.length > 0) {
       this.isMealsSaved.set(true);
     }
   }
@@ -131,9 +133,9 @@ export class StorageService {
   }
 
   getWeeklyPlans(userId: number): WeeklyPlan[] {
-  const plans = localStorage.getItem(StorageService.USER_WEEKLY_PLANS + userId);
-  return plans ? JSON.parse(plans) : [];
-}
+    const plans = localStorage.getItem(StorageService.USER_WEEKLY_PLANS + userId);
+    return plans ? JSON.parse(plans) : [];
+  }
 
   getPasswordUser(password: string): boolean {// por que me pide el undefined???
 
@@ -309,17 +311,17 @@ export class StorageService {
       // Si da diferente de -1 es que la receta existe en la lista
       if (indiceReceta !== -1) {
         meals.splice(indiceReceta, 1);
-        localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM+this.getSession()?.userId, JSON.stringify(meals));
+        localStorage.setItem(StorageService.USER_MINI_MEAL_KEY_ITEM + this.getSession()?.userId, JSON.stringify(meals));
       }
     }
 
   }
 
-  searchMiniMeal(id:number):boolean{
-    const meals=this.getMiniMeaslUser();
-    if(meals&&Array.isArray(meals)){
-      const mealEncontrada:UserMiniMeal|undefined=meals.find(element=>Number(element.id)==id);
-      if(mealEncontrada){
+  searchMiniMeal(id: number): boolean {
+    const meals = this.getMiniMeaslUser();
+    if (meals && Array.isArray(meals)) {
+      const mealEncontrada: UserMiniMeal | undefined = meals.find(element => Number(element.id) == id);
+      if (mealEncontrada) {
         return true;
       }
     }
@@ -360,4 +362,44 @@ export class StorageService {
       return false;
     }
   }
+
+  getOwnRecipes(userId: number): MyOwnRecipe[] {
+    const data = localStorage.getItem(StorageService.USER_OWN_RECIPES + userId);
+    return data ? JSON.parse(data) : [];
+  }
+
+  saveOwnRecipe(recipe: MyOwnRecipe): boolean {
+    const userId = this.getSession()?.userId;
+    if (!userId) return false;
+
+    const recipes = this.getOwnRecipes(userId);
+
+    // No se permite el mismo nombre exacto
+    const nombreRepetido = recipes.some(
+      r => r.name.toLowerCase() === recipe.name.toLowerCase()
+    );
+    if (nombreRepetido) return false;
+
+    recipes.push(recipe);
+    try {
+      localStorage.setItem(StorageService.USER_OWN_RECIPES + userId, JSON.stringify(recipes));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  deleteOwnRecipe(id: number): boolean {
+  const userId = this.getSession()?.userId;
+  if (!userId) return false;
+
+  const recipes = this.getOwnRecipes(userId).filter(r => r.id !== id);
+  try {
+    localStorage.setItem(StorageService.USER_OWN_RECIPES + userId, JSON.stringify(recipes));
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 }

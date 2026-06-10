@@ -304,12 +304,50 @@ var StorageService = /** @class */ (function () {
             return false;
         }
     };
+    StorageService.prototype.getOwnRecipes = function (userId) {
+        var data = localStorage.getItem(StorageService_1.USER_OWN_RECIPES + userId);
+        return data ? JSON.parse(data) : [];
+    };
+    StorageService.prototype.saveOwnRecipe = function (recipe) {
+        var _a;
+        var userId = (_a = this.getSession()) === null || _a === void 0 ? void 0 : _a.userId;
+        if (!userId)
+            return false;
+        var recipes = this.getOwnRecipes(userId);
+        // No se permite el mismo nombre exacto
+        var nombreRepetido = recipes.some(function (r) { return r.name.toLowerCase() === recipe.name.toLowerCase(); });
+        if (nombreRepetido)
+            return false;
+        recipes.push(recipe);
+        try {
+            localStorage.setItem(StorageService_1.USER_OWN_RECIPES + userId, JSON.stringify(recipes));
+            return true;
+        }
+        catch (error) {
+            return false;
+        }
+    };
+    StorageService.prototype.deleteOwnRecipe = function (id) {
+        var _a;
+        var userId = (_a = this.getSession()) === null || _a === void 0 ? void 0 : _a.userId;
+        if (!userId)
+            return false;
+        var recipes = this.getOwnRecipes(userId).filter(function (r) { return r.id !== id; });
+        try {
+            localStorage.setItem(StorageService_1.USER_OWN_RECIPES + userId, JSON.stringify(recipes));
+            return true;
+        }
+        catch (error) {
+            return false;
+        }
+    };
     var StorageService_1;
     StorageService.USER_KEY_ITEM = "users";
     StorageService.USER_MEAL_KEY_ITEM = "userMeals_"; //Clave: userMeals_56 + el id del user
     StorageService.USER_MINI_MEAL_KEY_ITEM = "userMiniMeals_"; // tambien con el id del usuario
     StorageService.USER_WEEKLY_PLANS = "weeklyPlans_"; // tmabien con el id
     StorageService.USER_SESSION = "authSession";
+    StorageService.USER_OWN_RECIPES = 'ownRecipes_';
     StorageService = StorageService_1 = __decorate([
         core_1.Injectable({
             providedIn: 'root'

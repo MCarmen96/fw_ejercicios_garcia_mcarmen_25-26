@@ -46,6 +46,11 @@ var Util = /** @class */ (function () {
         // padStart(2, '0') convierte "1" en "01", "9" en "09", etc.
         return d.getFullYear() + "-W" + numSemana.toString().padStart(2, '0');
     };
+    Util.generateId = function (recipes) {
+        if (recipes.length === 0)
+            return 1;
+        return recipes[recipes.length - 1].id + 1;
+    };
     return Util;
 }());
 exports.Util = Util;

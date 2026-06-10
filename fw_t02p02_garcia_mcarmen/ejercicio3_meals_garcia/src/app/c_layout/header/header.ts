@@ -2,9 +2,10 @@ import { Component,inject,computed} from '@angular/core';
 import { LoginWidget } from '../login-widget/login-widget';
 import { AuthService } from '../../services/auth-service';
 import { LogoutWidget } from "../logout-widget/logout-widget";
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-header',
-  imports: [LoginWidget, LogoutWidget],
+  imports: [LoginWidget, LogoutWidget,RouterLink],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
@@ -20,7 +21,7 @@ export class Header {
     }
     return '';
   });
-  
+
   /* ngOnInit():void{
     if (this.authService.isSession() !== null) {
       this.user=this.authService.isSession()?.name;

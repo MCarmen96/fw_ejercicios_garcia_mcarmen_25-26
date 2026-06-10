@@ -7,6 +7,7 @@ import { PlanWeek } from './c_pages/plan-week/plan-week';
 import { Login } from './c_pages/login/login';
 import { NotFound } from './c_pages/not-found/not-found';
 import { authGuard } from './guards/auth-guard';
+import { MyRecipes } from './c_pages/my-recipes/my-recipes';
 
 export const routes: Routes = [
   {
@@ -16,6 +17,8 @@ export const routes: Routes = [
       { path: '', component: Home },
       { path: 'details/:id', component: Details,canActivate:[authGuard]},
       { path: 'plan-week', component: PlanWeek,canActivate:[authGuard]},
+      { path: 'my-recipes', component: MyRecipes, canActivate: [authGuard] }
+
 
     ],
 

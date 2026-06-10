@@ -1,7 +1,7 @@
 import { StorageService } from "../services/storage-service";
 //import { Forms } from './forms/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { MyOwnRecipe } from "./my-own-recipe";
 export class Util {
 
  /*  public static validarRegistro(form:HTMLFormElement) {
@@ -51,5 +51,11 @@ export class Util {
 
     // padStart(2, '0') convierte "1" en "01", "9" en "09", etc.
     return `${d.getFullYear()}-W${numSemana.toString().padStart(2, '0')}`;
+  }
+
+
+  static generateId(recipes: MyOwnRecipe[]): number {
+    if (recipes.length === 0) return 1;
+    return recipes[recipes.length - 1].id + 1;
   }
 }

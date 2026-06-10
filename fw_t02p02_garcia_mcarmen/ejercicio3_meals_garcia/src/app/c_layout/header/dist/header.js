@@ -11,6 +11,7 @@ var core_1 = require("@angular/core");
 var login_widget_1 = require("../login-widget/login-widget");
 var auth_service_1 = require("../../services/auth-service");
 var logout_widget_1 = require("../logout-widget/logout-widget");
+var router_1 = require("@angular/router");
 var Header = /** @class */ (function () {
     function Header() {
         var _this = this;
@@ -40,7 +41,7 @@ var Header = /** @class */ (function () {
     Header = __decorate([
         core_1.Component({
             selector: 'app-header',
-            imports: [login_widget_1.LoginWidget, logout_widget_1.LogoutWidget],
+            imports: [login_widget_1.LoginWidget, logout_widget_1.LogoutWidget, router_1.RouterLink],
             templateUrl: './header.html',
             styleUrl: './header.css'
         })
