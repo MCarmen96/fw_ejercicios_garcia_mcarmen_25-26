@@ -1,6 +1,6 @@
 
-  <h1>Plan semanal</h1>
-<app-plan-week-create></app-plan-week-create>
+<h1>Plan semanal</h1>
+<app-plan-week-create (planSave)="cargarWeekPlans($event)"></app-plan-week-create>
 
-<app-plan-week-list></app-plan-week-list>
+<app-plan-week-list [updateList]="updateList()"></app-plan-week-list>
 

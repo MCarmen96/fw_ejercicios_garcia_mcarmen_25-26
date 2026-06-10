@@ -12,7 +12,13 @@ var plan_week_create_1 = require("../plan-week-create/plan-week-create");
 var plan_week_list_1 = require("../plan-week-list/plan-week-list");
 var PlanWeek = /** @class */ (function () {
     function PlanWeek() {
+        this.updateList = core_1.signal(0);
     }
+    PlanWeek.prototype.cargarWeekPlans = function (event) {
+        if (event) {
+            this.updateList.update(function (n) { return n + 1; });
+        }
+    };
     PlanWeek = __decorate([
         core_1.Component({
             selector: 'app-plan-week',

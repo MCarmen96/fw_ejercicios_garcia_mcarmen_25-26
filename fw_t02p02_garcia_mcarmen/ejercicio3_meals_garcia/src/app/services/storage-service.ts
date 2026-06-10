@@ -333,4 +333,31 @@ export class StorageService {
     }
   }
 
+  saveWeeklyPlan(plan: WeeklyPlan): boolean {
+    const userId = this.getSession()?.userId;
+    if (!userId) return false;
+
+    const planes = this.getWeeklyPlans(userId);
+    planes.push(plan);
+
+    try {
+      localStorage.setItem(StorageService.USER_WEEKLY_PLANS + userId, JSON.stringify(planes));
+      return true;
+    } catch (error) {
+      console.error('Error al guardar el plan:', error);
+      return false;
+    }
+  }
+  deletePlan(planId: string): boolean {
+    const userId = this.getSession()?.userId;
+    if (!userId) return false;
+
+    const planes = this.getWeeklyPlans(userId).filter(p => p.id !== planId);
+    try {
+      localStorage.setItem(StorageService.USER_WEEKLY_PLANS + userId, JSON.stringify(planes));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }

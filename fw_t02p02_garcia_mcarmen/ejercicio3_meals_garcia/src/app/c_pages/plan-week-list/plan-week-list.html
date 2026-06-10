@@ -1,1 +1,36 @@
-<p>plan-week-list works!</p>
+<div class="container mt-5">
+  <h4 class="mb-4">Mis planes semanales</h4>
+
+  @if (planes().length === 0) {
+    <p class="text-muted">No tienes ningún plan guardado todavía.</p>
+  } @else {
+    <div class="table-responsive shadow-sm rounded">
+      <table class="table table-bordered table-hover align-middle text-center m-0">
+        <thead class="table-dark">
+          <tr>
+            <th>Semana</th>
+            <th>Días planificados</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (plan of planes(); track plan.id) {
+            <tr [class.table-warning]="plan.id === semanaActual">
+              <td class="fw-semibold">
+                {{ plan.id }}
+                @if (plan.id === semanaActual) {
+                  <span class="badge bg-warning text-dark ms-2">Semana actual</span>
+                }
+              </td>
+              <td>{{ plan.days.length }}</td>
+              <td>
+                <button class="btn btn-sm btn-danger"
+                  (click)="eliminarPlan(plan.id)">✕</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

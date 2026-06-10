@@ -274,6 +274,36 @@ var StorageService = /** @class */ (function () {
             this.isAuthenticated.set(false);
         }
     };
+    StorageService.prototype.saveWeeklyPlan = function (plan) {
+        var _a;
+        var userId = (_a = this.getSession()) === null || _a === void 0 ? void 0 : _a.userId;
+        if (!userId)
+            return false;
+        var planes = this.getWeeklyPlans(userId);
+        planes.push(plan);
+        try {
+            localStorage.setItem(StorageService_1.USER_WEEKLY_PLANS + userId, JSON.stringify(planes));
+            return true;
+        }
+        catch (error) {
+            console.error('Error al guardar el plan:', error);
+            return false;
+        }
+    };
+    StorageService.prototype.deletePlan = function (planId) {
+        var _a;
+        var userId = (_a = this.getSession()) === null || _a === void 0 ? void 0 : _a.userId;
+        if (!userId)
+            return false;
+        var planes = this.getWeeklyPlans(userId).filter(function (p) { return p.id !== planId; });
+        try {
+            localStorage.setItem(StorageService_1.USER_WEEKLY_PLANS + userId, JSON.stringify(planes));
+            return true;
+        }
+        catch (error) {
+            return false;
+        }
+    };
     var StorageService_1;
     StorageService.USER_KEY_ITEM = "users";
     StorageService.USER_MEAL_KEY_ITEM = "userMeals_"; //Clave: userMeals_56 + el id del user

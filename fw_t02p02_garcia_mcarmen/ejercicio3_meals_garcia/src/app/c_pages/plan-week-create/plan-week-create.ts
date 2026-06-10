@@ -1,9 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal,Input, Output, EventEmitter } from '@angular/core';
 import { ApiService } from '../../services/api-service';
 import { StorageService } from '../../services/storage-service';
 import { Util } from '../../model/util';
 import { WeeklyPlanDay } from '../../model/weekly-plan-day';
-
+import { WeeklyPlan } from '../../model/weekly-plan';
 @Component({
   selector: 'app-plan-week-create',
   imports: [],
@@ -13,7 +13,7 @@ import { WeeklyPlanDay } from '../../model/weekly-plan-day';
 export class PlanWeekCreate {
 
   private api = inject(ApiService);
-  private storage = inject(StorageService);
+  private local = inject(StorageService);
 
   public planId = signal<string>('');
   public planIdError = signal<string>('');
@@ -22,6 +22,8 @@ export class PlanWeekCreate {
   public tipoSeleccionado = signal<'lunch' | 'dinner' | ''>('');
 
   public planTemporal = signal<WeeklyPlanDay[]>([]);
+
+  @Output() planSave=new EventEmitter<boolean>(false);
 
   async buscarReceta(ingrediente: string) {
     // si no hay dia seleciona y tipo selecionado no busco
@@ -48,10 +50,10 @@ export class PlanWeekCreate {
     this.planId.set(id);
 
     // Validar que no exista ya un plan con ese ID
-    const userId = this.storage.getSession()?.userId;
+    const userId = this.local.getSession()?.userId;
     if (userId) {
       //aplicamos a la lista de los planes semanales de ese usaurio el some
-      const planExistente = this.storage.getWeeklyPlans(userId).some(p => p.id === id);
+      const planExistente = this.local.getWeeklyPlans(userId).some(p => p.id === id);
       this.planIdError.set(
         planExistente ? `Ya tienes un plan para ${id}. Elige otra fecha.` : ''
       );
@@ -95,13 +97,41 @@ export class PlanWeekCreate {
     Creas un array nuevo en otra dirección de memoria con los mismos elementos.
     El signal compara → objeto distinto → hay cambio, re-renderiza.
    */
-
+    //se limpian los resultado de busqueda y el tipo de cena|comida selecionado
     this.tipoSeleccionado.set('');
-    this.resultadosBusqueda.set([]);
+    this.resultadosBusqueda.set([]);//
   }
 
   public quitarDia(dia: string): void {
-  this.planTemporal.update(plan => plan.filter(d => d.day !== dia));
+    this.planTemporal.update(plan => plan.filter(d => d.day !== dia));
+  }
+  
+  public guardarPlan(): void {
+
+  const plan: WeeklyPlan = {
+    id: this.planId(),
+    userId: this.local.getSession()!.userId,
+    days: this.planTemporal()
+  };
+
+  const ok = this.local.saveWeeklyPlan(plan);
+
+  if (ok) {
+    this.resetFormulario();
+    this.planSave.emit(true);
+  } else {
+    console.error('Error al guardar el plan');
+  }
 }
+
+private resetFormulario(): void {
+  this.planId.set('');
+  this.planIdError.set('');
+  this.diaSeleccionado.set('');
+  this.tipoSeleccionado.set('');
+  this.resultadosBusqueda.set([]);
+  this.planTemporal.set([]);
+}
+
 
 }

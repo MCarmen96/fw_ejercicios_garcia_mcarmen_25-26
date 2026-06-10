@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { PlanWeekCreate } from "../plan-week-create/plan-week-create";
 import { PlanWeekList } from '../plan-week-list/plan-week-list';
 
@@ -9,5 +9,11 @@ import { PlanWeekList } from '../plan-week-list/plan-week-list';
   styleUrl: './plan-week.css',
 })
 export class PlanWeek {
-
+  public updateList=signal<number>(0);
+  cargarWeekPlans(event:boolean){
+    if(event){
+      this.updateList.update(n => n + 1);
+   
+    }
+  }
 }

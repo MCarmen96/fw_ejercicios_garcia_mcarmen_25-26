@@ -57,13 +57,14 @@ var util_1 = require("../../model/util");
 var PlanWeekCreate = /** @class */ (function () {
     function PlanWeekCreate() {
         this.api = core_1.inject(api_service_1.ApiService);
-        this.storage = core_1.inject(storage_service_1.StorageService);
+        this.local = core_1.inject(storage_service_1.StorageService);
         this.planId = core_1.signal('');
         this.planIdError = core_1.signal('');
         this.resultadosBusqueda = core_1.signal([]);
         this.diaSeleccionado = core_1.signal('');
         this.tipoSeleccionado = core_1.signal('');
         this.planTemporal = core_1.signal([]);
+        this.planSave = new core_1.EventEmitter(false);
     }
     PlanWeekCreate.prototype.buscarReceta = function (ingrediente) {
         return __awaiter(this, void 0, void 0, function () {
@@ -97,10 +98,10 @@ var PlanWeekCreate = /** @class */ (function () {
         var id = util_1.Util.getISOWeek(fecha);
         this.planId.set(id);
         // Validar que no exista ya un plan con ese ID
-        var userId = (_a = this.storage.getSession()) === null || _a === void 0 ? void 0 : _a.userId;
+        var userId = (_a = this.local.getSession()) === null || _a === void 0 ? void 0 : _a.userId;
         if (userId) {
             //aplicamos a la lista de los planes semanales de ese usaurio el some
-            var planExistente = this.storage.getWeeklyPlans(userId).some(function (p) { return p.id === id; });
+            var planExistente = this.local.getWeeklyPlans(userId).some(function (p) { return p.id === id; });
             this.planIdError.set(planExistente ? "Ya tienes un plan para " + id + ". Elige otra fecha." : '');
         }
     };
@@ -141,12 +142,39 @@ var PlanWeekCreate = /** @class */ (function () {
         Creas un array nuevo en otra dirección de memoria con los mismos elementos.
         El signal compara → objeto distinto → hay cambio, re-renderiza.
        */
+        //se limpian los resultado de busqueda y el tipo de cena|comida selecionado
         this.tipoSeleccionado.set('');
-        this.resultadosBusqueda.set([]);
+        this.resultadosBusqueda.set([]); //
     };
     PlanWeekCreate.prototype.quitarDia = function (dia) {
         this.planTemporal.update(function (plan) { return plan.filter(function (d) { return d.day !== dia; }); });
     };
+    PlanWeekCreate.prototype.guardarPlan = function () {
+        var plan = {
+            id: this.planId(),
+            userId: this.local.getSession().userId,
+            days: this.planTemporal()
+        };
+        var ok = this.local.saveWeeklyPlan(plan);
+        if (ok) {
+            this.resetFormulario();
+            this.planSave.emit(true);
+        }
+        else {
+            console.error('Error al guardar el plan');
+        }
+    };
+    PlanWeekCreate.prototype.resetFormulario = function () {
+        this.planId.set('');
+        this.planIdError.set('');
+        this.diaSeleccionado.set('');
+        this.tipoSeleccionado.set('');
+        this.resultadosBusqueda.set([]);
+        this.planTemporal.set([]);
+    };
+    __decorate([
+        core_1.Output()
+    ], PlanWeekCreate.prototype, "planSave");
     PlanWeekCreate = __decorate([
         core_1.Component({
             selector: 'app-plan-week-create',
