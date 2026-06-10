@@ -41,6 +41,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 exports.__esModule = true;
 exports.PlanWeekCreate = void 0;
 var core_1 = require("@angular/core");
@@ -56,6 +63,7 @@ var PlanWeekCreate = /** @class */ (function () {
         this.resultadosBusqueda = core_1.signal([]);
         this.diaSeleccionado = core_1.signal('');
         this.tipoSeleccionado = core_1.signal('');
+        this.planTemporal = core_1.signal([]);
     }
     PlanWeekCreate.prototype.buscarReceta = function (ingrediente) {
         return __awaiter(this, void 0, void 0, function () {
@@ -91,9 +99,53 @@ var PlanWeekCreate = /** @class */ (function () {
         // Validar que no exista ya un plan con ese ID
         var userId = (_a = this.storage.getSession()) === null || _a === void 0 ? void 0 : _a.userId;
         if (userId) {
+            //aplicamos a la lista de los planes semanales de ese usaurio el some
             var planExistente = this.storage.getWeeklyPlans(userId).some(function (p) { return p.id === id; });
             this.planIdError.set(planExistente ? "Ya tienes un plan para " + id + ". Elige otra fecha." : '');
         }
+    };
+    PlanWeekCreate.prototype.addAlPlan = function (meal) {
+        var dia = this.diaSeleccionado();
+        var tipo = this.tipoSeleccionado();
+        if (!dia || !tipo)
+            return;
+        var id = Number(meal.idMeal);
+        // Sacas el array actual del signal, trabajas con él normal
+        var arrayAuxiliar = this.planTemporal();
+        var diaExistente = arrayAuxiliar.find(function (d) { return d.day === dia; });
+        if (diaExistente) {
+            if (tipo === 'lunch') {
+                diaExistente.lunchMealId = id;
+                diaExistente.lunchMealName = meal.strMeal;
+            }
+            else {
+                diaExistente.dinnerMealId = id;
+                diaExistente.dinnerMealName = meal.strMeal;
+            }
+        }
+        else {
+            var nuevo = { day: dia };
+            if (tipo === 'lunch') {
+                nuevo.lunchMealId = id;
+                nuevo.lunchMealName = meal.strMeal;
+            }
+            else {
+                nuevo.dinnerMealId = id;
+                nuevo.dinnerMealName = meal.strMeal;
+            }
+            arrayAuxiliar.push(nuevo); // push normal, sin magia
+        }
+        // Al final, metes el array entero de golpe en el signal
+        this.planTemporal.set(__spreadArrays(arrayAuxiliar));
+        /*
+        Creas un array nuevo en otra dirección de memoria con los mismos elementos.
+        El signal compara → objeto distinto → hay cambio, re-renderiza.
+       */
+        this.tipoSeleccionado.set('');
+        this.resultadosBusqueda.set([]);
+    };
+    PlanWeekCreate.prototype.quitarDia = function (dia) {
+        this.planTemporal.update(function (plan) { return plan.filter(function (d) { return d.day !== dia; }); });
     };
     PlanWeekCreate = __decorate([
         core_1.Component({

@@ -91,7 +91,7 @@
             <img [src]="meal.strMealThumb + '/preview'" class="card-img-top" [alt]="meal.strMeal">
             <div class="card-body p-2 d-flex flex-column justify-content-between">
               <p class="card-text small fw-semibold mb-2">{{ meal.strMeal }}</p>
-              <button class="btn btn-sm btn-outline-dark w-100">
+              <button class="btn btn-sm btn-outline-dark w-100" (click)="addAlPlan(meal)">
                 + Añadir
               </button>
             </div>
@@ -102,6 +102,33 @@
   }
 
 }
-
+@if (planTemporal().length > 0) {
+  <div class="table-responsive shadow-sm rounded mb-4">
+    <table class="table table-bordered table-hover align-middle text-center m-0">
+      <thead class="table-dark">
+        <tr>
+          <th>Día</th>
+          <th>Comida</th>
+          <th>Cena</th>
+          <th>Quitar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- pintamos tr por cada elemento del array -->
+        @for (dia of planTemporal(); track dia.day) {
+          <tr>
+            <td class="fw-semibold text-capitalize">{{ dia.day }}</td>
+            <td>{{ dia.lunchMealName ?? '—' }}</td>
+            <td>{{ dia.dinnerMealName ?? '—' }}</td>
+            <td>
+              <button class="btn btn-sm btn-danger"
+                (click)="quitarDia(dia.day)">✕</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
 
 </div>
